@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=16.13.0"
   },
   "scripts": {
     "dev": "parcel static/index.html --open --port 3000",
