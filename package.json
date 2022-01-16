@@ -8,8 +8,9 @@
   },
   "scripts": {
     "dev": "parcel static/index.html --open --port 3000",
+    "start": "parcel static/index.html -p 3000",
     "build": "parcel build",
-    "start": "node server.js"
+    "server": "node server.js"
   },
   "keywords": [],
   "author": "",
