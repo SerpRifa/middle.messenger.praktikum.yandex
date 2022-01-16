@@ -1,0 +1,22 @@
+<div class={{styles.conteiner}}>
+    <section class={{styles.panel-left}}>
+        {{> TextField placeholder='Search...' className=styles.search-input }}
+        <ul class={{styles.chat-list}}>
+            {{#each data.contactList}}
+                <li>
+                    {{> Contact contactContext}}
+                </li>
+            {{/each}}
+        </ul>
+    </section>
+    <section class={{styles.chat}}>
+        <ul class={{styles.messages}}>
+            {{#each data.messagesList}}
+                <li>
+                    {{> Message  messageContext }}
+                </li>
+            {{/each}}
+        </ul>
+        {{> TextField placeholder='Type text...' name='message' }}
+    </section>
+</div>

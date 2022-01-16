@@ -1,0 +1,22 @@
+<div class={{styles.main}}>
+    <div class={{styles.conteiner}}>
+        <section class={{styles.info}}>
+            <h1>Sign Up to </h1>
+            <h2>Satan not anonymous messenger</h2>
+            <p class={{styles.description}}>
+                If you already have an account
+                You can <a href="/login">Login here</a> !
+            </p>
+        </section>
+        <form class={{styles.form}}>
+            <h2>Sign Up</h2>
+            {{> TextField placeholder='First Name' name='first_name' className='' }}
+            {{> TextField placeholder='Second Name' name='second_name' className=styles.text-field }}
+            {{> TextField placeholder='Create User name' name='login' className=styles.text-field }}
+            {{> EmailField placeholder='Enter Emai' name='email' className=styles.text-field }}
+            {{> PasswordField placeholder='Password' name='password' className=styles.text-field }}
+            {{> TextField placeholder='Phone' name='phone' className=styles.text-field }}
+            {{> Button title='renderRegister' className='' }}
+        </form>
+    </div>
+</div>

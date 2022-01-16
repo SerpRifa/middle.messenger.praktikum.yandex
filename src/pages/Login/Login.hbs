@@ -1,0 +1,18 @@
+<div class={{styles.main}}>
+    <div class={{styles.conteiner}}>
+        <section class={{styles.info}}>
+            <h1>Sign in to</h1>
+            <h2>Satan not anonymous messenger</h2>
+            <p class={{styles.description}}>
+                If you don’t have an account register
+                You can <a href="/register">Register</a> !
+            </p>
+        </section>
+        <form class={{styles.form}}>
+            <h2>Sign in</h2>
+            {{> TextField placeholder='Enter email or user name' name='login' className='' }}
+            {{> TextField placeholder='Password' name='password' className=styles.text-field }}
+            {{> Button title='Sign in'  className='' }}
+        </form>
+    </div>
+</div>
