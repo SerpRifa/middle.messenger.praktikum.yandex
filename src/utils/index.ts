@@ -10,11 +10,7 @@ class Button extends Block {
   }
 }
 
-function render(query, block) {
-  const root = document.querySelector(query);
-  root.appendChild(block.getContent());
-  return root;
-}
+
 
 let button = new Button({
   text: 'Click me',
@@ -26,8 +22,7 @@ button = new Proxy(button, {
   }
 })
 
-// app — это class дива в корне DOM
-render(".app", button);
+
 
 // Через секунду контент изменится сам, достаточно обновить пропсы
 setTimeout(() => {

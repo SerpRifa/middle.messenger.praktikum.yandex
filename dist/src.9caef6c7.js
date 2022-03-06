@@ -3239,6 +3239,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.BaseBlock = void 0;
+/**
+ * Для ревьюера: console.log чтобы было жизненый цикл был виден,
+ * что он не нужен в продакшене я знаю)
+ */
 
 var event_bus_1 = require("./event-bus");
 
@@ -3357,7 +3361,7 @@ var BaseBlock = /*#__PURE__*/function () {
         propsWithCompile[componentName] = (_b = component === null || component === void 0 ? void 0 : component.element) === null || _b === void 0 ? void 0 : _b.outerHTML;
       });
       console.log('propsWithCompile', propsWithCompile);
-      return template(Object.assign(Object.assign({}, propsWithCompile), this.props));
+      return template(Object.assign(Object.assign({}, this.props), propsWithCompile));
     }
   }, {
     key: "element",
@@ -4730,7 +4734,8 @@ var emailField = new componets_1.EmailField({
 });
 var passwordField = new componets_1.PasswordField({
   placeholder: 'Password',
-  name: 'password'
+  name: 'password',
+  className: styles['text-field']
 });
 var button = new componets_1.Button({
   title: 'Sign in'
@@ -4784,12 +4789,18 @@ var _handlebars = _interopRequireDefault(require("handlebars/dist/handlebars.run
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 var templateFunction = _handlebars.default.template({
   "compiler": [8, ">= 4.3.0"],
   "main": function main(container, depth0, helpers, partials, data) {
     var stack1,
+        helper,
         alias1 = container.lambda,
         alias2 = container.escapeExpression,
+        alias3 = depth0 != null ? depth0 : container.nullContext || {},
+        alias4 = container.hooks.helperMissing,
+        alias5 = "function",
         lookupProperty = container.lookupProperty || function (parent, propertyName) {
       if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
         return parent[propertyName];
@@ -4798,92 +4809,106 @@ var templateFunction = _handlebars.default.template({
       return undefined;
     };
 
-    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "main") : stack1, depth0)) + ">\r\n    <div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n        <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "info") : stack1, depth0)) + ">\r\n            <h1>Sign Up to </h1>\r\n            <h2>Satan not anonymous messenger</h2>\r\n            <p class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "description") : stack1, depth0)) + ">\r\n                If you already have an account\r\n                You can <a href=\"/login\">Login here</a> !\r\n            </p>\r\n        </section>\r\n        <form class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "form") : stack1, depth0)) + ">\r\n            <h2>Sign Up</h2>\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": "",
-        "name": "first_name",
-        "placeholder": "First Name"
-      },
+    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "main") : stack1, depth0)) + ">\r\n    <div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n        <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "info") : stack1, depth0)) + ">\r\n            <h1>Sign Up to </h1>\r\n            <h2>Satan not anonymous messenger</h2>\r\n            <p class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "description") : stack1, depth0)) + ">\r\n                If you already have an account\r\n                You can <a href=\"/login\">Login here</a> !\r\n            </p>\r\n        </section>\r\n        <form class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "form") : stack1, depth0)) + ">\r\n            <h2>Sign Up</h2>\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "firstName",
+      "hash": {},
       "data": data,
-      "indent": "            ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "second_name",
-        "placeholder": "Second Name"
-      },
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 12
+        },
+        "end": {
+          "line": 13,
+          "column": 27
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "secondName") || (depth0 != null ? lookupProperty(depth0, "secondName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "secondName",
+      "hash": {},
       "data": data,
-      "indent": "            ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "login",
-        "placeholder": "Create User name"
-      },
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 12
+        },
+        "end": {
+          "line": 14,
+          "column": 28
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "login") || (depth0 != null ? lookupProperty(depth0, "login") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "login",
+      "hash": {},
       "data": data,
-      "indent": "            ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "EmailField"), depth0, {
-      "name": "EmailField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "email",
-        "placeholder": "Enter Emai"
-      },
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 12
+        },
+        "end": {
+          "line": 15,
+          "column": 23
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "email") || (depth0 != null ? lookupProperty(depth0, "email") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "email",
+      "hash": {},
       "data": data,
-      "indent": "            ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "PasswordField"), depth0, {
-      "name": "PasswordField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "password",
-        "placeholder": "Password"
-      },
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 12
+        },
+        "end": {
+          "line": 16,
+          "column": 23
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "password") || (depth0 != null ? lookupProperty(depth0, "password") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "password",
+      "hash": {},
       "data": data,
-      "indent": "            ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "phone",
-        "placeholder": "Phone"
-      },
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 12
+        },
+        "end": {
+          "line": 17,
+          "column": 26
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "phone") || (depth0 != null ? lookupProperty(depth0, "phone") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "phone",
+      "hash": {},
       "data": data,
-      "indent": "            ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "Button"), depth0, {
-      "name": "Button",
-      "hash": {
-        "className": "",
-        "title": "renderRegister"
-      },
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 12
+        },
+        "end": {
+          "line": 18,
+          "column": 23
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "button") || (depth0 != null ? lookupProperty(depth0, "button") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "button",
+      "hash": {},
       "data": data,
-      "indent": "            ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "        </form>\r\n    </div>\r\n</div>\r\n";
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 12
+        },
+        "end": {
+          "line": 19,
+          "column": 24
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        </form>\r\n    </div>\r\n</div>\r\n";
   },
-  "usePartial": true,
   "useData": true
 });
 
@@ -4891,6 +4916,28 @@ var _default = templateFunction;
 exports.default = _default;
 },{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/pages/Register/index.ts":[function(require,module,exports) {
 "use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
@@ -4941,20 +4988,99 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderRegister = void 0;
+exports.renderRegister = exports.Register = void 0;
 
 var Register_hbs_1 = __importDefault(require("./Register.hbs"));
 
 var styles = __importStar(require("../Login/Login.module.css"));
 
-var renderRegister = function renderRegister() {
-  return (0, Register_hbs_1.default)({
+var base_block_1 = require("../../utils/base-block");
+
+var render_1 = require("../../utils/render");
+
+var componets_1 = require("../../componets"); // {{> TextField placeholder='First Name' name='first_name' className='' }}
+// {{> TextField placeholder='Second Name' name='second_name' className=styles.text-field }}
+// {{> TextField placeholder='Create User name' name='login' className=styles.text-field }}
+// {{> EmailField placeholder='Enter Emai' name='email' className=styles.text-field }}
+// {{> PasswordField placeholder='Password' name='password' className=styles.text-field }}
+// {{> TextField placeholder='Phone' name='phone' className=styles.text-field }}
+// {{> Button title='renderRegister' className='' }}
+
+
+var firstName = new componets_1.TextField({
+  placeholder: 'First Name',
+  name: 'first_name'
+});
+var secondName = new componets_1.TextField({
+  placeholder: 'Second Name',
+  name: 'second_name',
+  className: styles['text-field']
+});
+var login = new componets_1.TextField({
+  placeholder: 'Create User name',
+  name: 'login',
+  className: styles['text-field']
+});
+var email = new componets_1.EmailField({
+  placeholder: 'Enter Emai',
+  name: 'email',
+  className: styles['text-field']
+});
+var password = new componets_1.PasswordField({
+  placeholder: 'Password',
+  name: 'password',
+  className: styles['text-field']
+});
+var phone = new componets_1.PasswordField({
+  placeholder: 'Phone',
+  name: 'phone',
+  className: styles['text-field']
+});
+var button = new componets_1.Button({
+  title: 'Register'
+});
+
+var Register = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(Register, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(Register);
+
+  function Register() {
+    _classCallCheck(this, Register);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Register, [{
+    key: "render",
+    value: function render() {
+      return this.compile(Register_hbs_1.default, this.props);
+    }
+  }]);
+
+  return Register;
+}(base_block_1.BaseBlock);
+
+exports.Register = Register;
+
+var renderRegister = function renderRegister(selector) {
+  var register = new Register({
+    components: {
+      firstName: firstName,
+      secondName: secondName,
+      login: login,
+      email: email,
+      password: password,
+      phone: phone,
+      button: button
+    },
     styles: styles
   });
+  (0, render_1.render)(selector, register);
 };
 
 exports.renderRegister = renderRegister;
-},{"./Register.hbs":"../src/pages/Register/Register.hbs","../Login/Login.module.css":"../src/pages/Login/Login.module.css"}],"../src/pages/Main/Main.hbs":[function(require,module,exports) {
+},{"./Register.hbs":"../src/pages/Register/Register.hbs","../Login/Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts","../../componets":"../src/componets/index.ts"}],"../src/pages/Main/Main.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5769,6 +5895,28 @@ module.exports = {
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/pages/Intro/index.ts":[function(require,module,exports) {
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
   var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -5818,20 +5966,48 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderIntro = void 0;
+exports.renderIntro = exports.Intro = void 0;
 
 var Intro_hbs_1 = __importDefault(require("./Intro.hbs"));
 
 var styles = __importStar(require("./Intro.module.css"));
 
-var renderIntro = function renderIntro() {
-  return (0, Intro_hbs_1.default)({
+var base_block_1 = require("../../utils/base-block");
+
+var render_1 = require("../../utils/render");
+
+var Intro = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(Intro, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(Intro);
+
+  function Intro() {
+    _classCallCheck(this, Intro);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Intro, [{
+    key: "render",
+    value: function render() {
+      return this.compile(Intro_hbs_1.default, this.props);
+    }
+  }]);
+
+  return Intro;
+}(base_block_1.BaseBlock);
+
+exports.Intro = Intro;
+
+var renderIntro = function renderIntro(selector) {
+  var intro = new Intro({
     styles: styles
   });
+  (0, render_1.render)(selector, intro);
 };
 
 exports.renderIntro = renderIntro;
-},{"./Intro.hbs":"../src/pages/Intro/Intro.hbs","./Intro.module.css":"../src/pages/Intro/Intro.module.css"}],"../src/pages/index.ts":[function(require,module,exports) {
+},{"./Intro.hbs":"../src/pages/Intro/Intro.hbs","./Intro.module.css":"../src/pages/Intro/Intro.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/index.ts":[function(require,module,exports) {
 "use strict";
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
@@ -5921,18 +6097,20 @@ var register_partials_1 = require("./utils/register-partials");
 
 (0, register_partials_1.registerPartials)();
 var pathname = window.location.pathname;
+var rootSelector = '#root';
 
 switch (pathname) {
   case '/':
-    (0, pages_1.renderIntro)();
+    (0, pages_1.renderIntro)(rootSelector);
     break;
 
   case '/login':
-    (0, pages_1.renderLogin)('#root');
+    (0, pages_1.renderLogin)(rootSelector);
     break;
-  // case '/register':
-  //   content = renderRegister()
-  //   break;
+
+  case '/register':
+    (0, pages_1.renderRegister)(rootSelector);
+    break;
   // case '/main':
   //   content = renderMain()
   //   break;
@@ -5977,7 +6155,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55173" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61293" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

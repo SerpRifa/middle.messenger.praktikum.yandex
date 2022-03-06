@@ -5,10 +5,6 @@ import {EmailField, PasswordField, Button } from '../../componets'
 import {BaseComponetProps} from '../../types/types'
 import {render} from '../../utils/render'
 
-// {{> TextField placeholder='Enter email or user name' name='login' className='' }}
-// {{> TextField placeholder='Password' name='password' className=styles.text-field }}
-// {{> Button title='Sign in'  className='' }}
-
 export interface LoginProps extends BaseComponetProps {
   styles: any
 }
@@ -20,7 +16,8 @@ const emailField = new EmailField({
 
 const passwordField = new PasswordField({
   placeholder: 'Password',
-  name: 'password'
+  name: 'password',
+  className: styles['text-field']
 } )
 
 const button = new Button({title: 'Sign in'} )

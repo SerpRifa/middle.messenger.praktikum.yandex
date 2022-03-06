@@ -1,3 +1,7 @@
+/**
+ * Для ревьюера: console.log чтобы было жизненый цикл был виден,
+ * что он не нужен в продакшене я знаю)
+ */
 import {EventBus} from "./event-bus"
 import {BaseComponetProps} from "../types/types"
 import { v4 as uuidv4 } from 'uuid'
@@ -82,7 +86,7 @@ export class BaseBlock<TProps = {}> {
       propsWithCompile[componentName] = component?.element?.outerHTML;
     })
     console.log('propsWithCompile', propsWithCompile)
-    return template({...propsWithCompile, ...this.props})
+    return template({...this.props, ...propsWithCompile})
 
   }
 
