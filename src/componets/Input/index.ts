@@ -1,14 +1,42 @@
 import inputTmpl from './Input.hbs'
 import * as styles from './Input.module.css'
 import classnames from '../../utils/classnames'
+import {BaseBlock} from '../../utils/base-block'
+import {BaseComponetProps} from '../../types/types'
 
-export const Input = (props) => {
-  const className = classnames(styles.input, props.className)
-  return inputTmpl({ placeholder: '', value: '', type: 'text', ...props, className})
+export interface InputProps extends BaseComponetProps {
+  placeholder?: string;
+  value?: string;
+  type?: string;
+  className?: string;
 }
 
-export const TextField = (props) => Input({...props, type: 'text'})
+export class Input extends BaseBlock<InputProps> {
+  render() {
+    const className = classnames(styles.input, this.props?.className)
+    return this.compile(inputTmpl, { placeholder: '', value: '', type: 'text', ...this.props, className})
+  }
+}
 
-export const PasswordField = (props) => Input({ ...props, type: 'password'})
+export class TextField extends BaseBlock<InputProps> {
+  render() {
+    const className = classnames(styles.input, this.props?.className)
+    return this.compile(inputTmpl, { placeholder: '', value: '', ...this.props, type: 'text', className})
+  }
+}
 
-export const EmailField = (props) => Input({ ...props, type: 'text'})
+export class PasswordField extends BaseBlock<InputProps> {
+  render() {
+    const className = classnames(styles.input, this.props?.className)
+    return this.compile(inputTmpl, { placeholder: '', value: '', ...this.props, type: 'password', className})
+  }
+}
+
+export class EmailField extends BaseBlock<InputProps> {
+  render() {
+    const className = classnames(styles.input, this.props?.className)
+    return this.compile(inputTmpl, { placeholder: '', value: '', ...this.props, type: 'text', className})
+  }
+}
+
+

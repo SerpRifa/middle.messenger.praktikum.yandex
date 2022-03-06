@@ -16,18 +16,22 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/handlebars": "^4.1.0",
+    "@types/uuid": "^8.3.4",
+    "autoprefixer": "^9.8.8",
     "express": "^4.17.1",
     "handlebars": "^4.7.7",
-    "parcel-bundler": "^1.12.5",
-    "path": "^0.12.7",
-    "autoprefixer": "^9.8.8",
     "handlebars-loader": "^1.7.1",
+    "parcel-bundler": "^1.12.5",
+    "parcel-plugin-handlebars-precompile": "^1.0.2",
+    "path": "^0.12.7",
     "postcss": "^7.0.39",
     "postcss-loader": "^6.2.1",
     "postcss-modules": "^3.2.2",
-    "parcel-plugin-handlebars-precompile": "^1.0.2"
+    "typescript": "^4.5.5"
   },
   "dependencies": {
-    "normalize.css": "^8.0.1"
+    "normalize.css": "^8.0.1",
+    "uuid": "^8.3.2"
   }
 }
