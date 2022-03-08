@@ -14,6 +14,7 @@ export interface IMessage {
   firstName: string
   lastName: string
   message: string
+  my: boolean
 }
 
 export interface IResponse {
@@ -60,27 +61,30 @@ export const messages: IMessage[] = [
     avatar: avatar,
     firstName: 'Ash',
     lastName: 'Slayer',
-    message: 'Призываю тебя, демон!'
-
+    message: 'Призываю тебя, демон!',
+    my: true,
   },
   {
     avatar: no_avatar,
     firstName: 'Demon',
     lastName: 'Demon',
-    message: 'Эшли! Как дела на грешной?'
+    message: 'Эшли! Как дела на грешной?',
+    my: false,
 
   },
   {
     avatar: avatar,
     firstName: 'Ash',
     lastName: 'Slayer',
-    message: 'Не кривляйся где мои деньги?'
+    message: 'Не кривляйся где мои деньги?',
+    my: true
   },
   {
     avatar: no_avatar,
     firstName: 'Demon',
     lastName: 'Demon',
-    message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. У тебя же сбер онлайн есть?'
+    message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. У тебя же сбер онлайн есть?',
+    my: false
 
   },
 ]

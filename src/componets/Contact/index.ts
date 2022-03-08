@@ -19,7 +19,7 @@ export class Contact extends BaseBlock<ContactProps> {
   render() {
     const className = classnames(styles.contact, this.props?.className)
     const components = {
-      avatar: new Avatar({avatar: this.props.avatar})
+      avatar: new Avatar({ avatar: this.props.avatar })
     }
     return this.compile(contactTmpl, {...this.props, className, components, styles})
   }

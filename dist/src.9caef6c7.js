@@ -3307,8 +3307,6 @@ var BaseBlock = /*#__PURE__*/function () {
   }, {
     key: "init",
     value: function init() {
-      console.log('init');
-
       this._createResources();
 
       this.eventBus().emit(BaseBlock.EVENTS.FLOW_RENDER);
@@ -3342,8 +3340,6 @@ var BaseBlock = /*#__PURE__*/function () {
   }, {
     key: "compile",
     value: function compile(template, props) {
-      console.log('compile');
-
       var _a = props,
           _a$components = _a.components,
           components = _a$components === void 0 ? {} : _a$components,
@@ -3369,7 +3365,6 @@ var BaseBlock = /*#__PURE__*/function () {
           propsWithCompile[componentName] = (_b = component === null || component === void 0 ? void 0 : component.element) === null || _b === void 0 ? void 0 : _b.outerHTML;
         }
       });
-      console.log('propsWithCompile', propsWithCompile);
       return template(Object.assign(Object.assign({}, this.props), propsWithCompile));
     }
   }, {
@@ -3380,7 +3375,6 @@ var BaseBlock = /*#__PURE__*/function () {
   }, {
     key: "_render",
     value: function _render() {
-      console.log('_render');
       var block = this.render();
       this._element.innerHTML = block;
     }
@@ -4231,8 +4225,8 @@ var templateFunction = _handlebars.default.template({
           "column": 24
         }
       }
-    }) : helper)) + ">\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "Avatar") || (depth0 != null ? lookupProperty(depth0, "Avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
-      "name": "Avatar",
+    }) : helper)) + ">\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "name": "avatar",
       "hash": {},
       "data": data,
       "loc": {
@@ -4675,11 +4669,12 @@ var Message = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   }
 
   _createClass(Message, [{
-    key: "return",
-    value: function _return() {
+    key: "render",
+    value: function render() {
       var _a;
 
       var className = (0, classnames_1.default)(styles.conteiner, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
+      console.log('props', this.props);
       return this.compile(Message_hbs_1.default, Object.assign(Object.assign({
         title: ''
       }, this.props), {
@@ -5219,9 +5214,6 @@ var templateFunction = _handlebars.default.template({
     var stack1;
     return "                <li>\r\n                    " + ((stack1 = container.lambda(depth0, depth0)) != null ? stack1 : "") + "\r\n                </li>\r\n";
   },
-  "3": function _(container, depth0, helpers, partials, data) {
-    return "                <li>\r\n                    Привет\r\n                </li>\r\n";
-  },
   "compiler": [8, ">= 4.3.0"],
   "main": function main(container, depth0, helpers, partials, data) {
     var stack1,
@@ -5272,7 +5264,7 @@ var templateFunction = _handlebars.default.template({
     })) != null ? stack1 : "") + "        </ul>\r\n    </section>\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat") : stack1, depth0)) + ">\r\n        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "messages") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, depth0 != null ? lookupProperty(depth0, "messages") : depth0, {
       "name": "each",
       "hash": {},
-      "fn": container.program(3, data, 0),
+      "fn": container.program(1, data, 0),
       "inverse": container.noop,
       "data": data,
       "loc": {
@@ -5315,7 +5307,8 @@ module.exports = {
   "conteiner": "src-pages-Main-__Main-module__conteiner__2Cc_I",
   "panel-left": "src-pages-Main-__Main-module__panel-left__3U_Jh",
   "chat": "src-pages-Main-__Main-module__chat__tvVJg",
-  "search-input": "src-pages-Main-__Main-module__search-input__S_OxY"
+  "search-input": "src-pages-Main-__Main-module__search-input__S_OxY",
+  "chat-list": "src-pages-Main-__Main-module__chat-list__3D7aH"
 };
 },{"./..\\..\\..\\static\\img\\ashvsevildead.jpg":[["ashvsevildead.dcdc5c03.jpg","img/ashvsevildead.jpg"],"img/ashvsevildead.jpg"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"img/avatar.png":[function(require,module,exports) {
 module.exports = "/avatar.22de90d3.png";
@@ -5366,22 +5359,26 @@ exports.messages = [{
   avatar: avatar_png_1.default,
   firstName: 'Ash',
   lastName: 'Slayer',
-  message: 'Призываю тебя, демон!'
+  message: 'Призываю тебя, демон!',
+  my: true
 }, {
   avatar: no_avatar_jpg_1.default,
   firstName: 'Demon',
   lastName: 'Demon',
-  message: 'Эшли! Как дела на грешной?'
+  message: 'Эшли! Как дела на грешной?',
+  my: false
 }, {
   avatar: avatar_png_1.default,
   firstName: 'Ash',
   lastName: 'Slayer',
-  message: 'Не кривляйся где мои деньги?'
+  message: 'Не кривляйся где мои деньги?',
+  my: true
 }, {
   avatar: no_avatar_jpg_1.default,
   firstName: 'Demon',
   lastName: 'Demon',
-  message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. У тебя же сбер онлайн есть?'
+  message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. У тебя же сбер онлайн есть?',
+  my: false
 }];
 exports.data = {
   contacts: exports.contacts,
@@ -6434,7 +6431,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61793" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59124" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

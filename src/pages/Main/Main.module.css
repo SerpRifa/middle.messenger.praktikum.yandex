@@ -26,3 +26,8 @@
 .search-input {
   margin: 8px;
 }
+
+.chat-list {
+  padding-inline-start: 0px;
+  list-style: none;
+}

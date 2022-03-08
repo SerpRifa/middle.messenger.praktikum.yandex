@@ -14,8 +14,9 @@ export interface MessageProps extends BaseComponetProps {
 }
 
 export class Message extends BaseBlock<MessageProps> {
-  return() {
+  render() {
     const className = classnames(styles.conteiner, this.props?.className)
+    console.log('props', this.props)
     return this.compile(messageTmpl, { title: '', ...this.props, styles, className} )
   }
 }

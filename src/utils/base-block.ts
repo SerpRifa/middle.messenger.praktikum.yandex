@@ -51,7 +51,6 @@ export class BaseBlock<TProps = {}> {
   }
 
   init() {
-    console.log('init')
     this._createResources();
     this.eventBus().emit(BaseBlock.EVENTS.FLOW_RENDER);
   }
@@ -78,9 +77,9 @@ export class BaseBlock<TProps = {}> {
   }
 
   compile(template: any, props: TProps) {
-    console.log('compile')
+
     const { components = {}, ...restProps }  = (props as BaseComponetProps)
-    let propsWithCompile: any = {...restProps}
+    let propsWithCompile: any = { ...restProps }
     Object.entries(components).forEach(([componentName, component]) => {
       if(Array.isArray(component)) {
         propsWithCompile[componentName] = []
@@ -93,7 +92,6 @@ export class BaseBlock<TProps = {}> {
       }
 
     })
-    console.log('propsWithCompile', propsWithCompile)
     return template({...this.props, ...propsWithCompile})
 
   }
@@ -111,7 +109,6 @@ export class BaseBlock<TProps = {}> {
   }
 
   _render() {
-    console.log('_render')
     const block = this.render();
 
     this._element.innerHTML = block;
