@@ -1,13 +1,22 @@
 import messageTmpl from './Message.hbs'
 import * as styles from './Message.module.css'
 import classnames from '../../utils/classnames'
+import { BaseComponetProps } from '../../types/types'
+import { BaseBlock } from '../../utils/base-block'
 
-export const Message = function(props) {
-  const className = classnames(styles.conteiner, props.className)
-  return messageTmpl({
-    title: '',
-    styles,
-    ...props,
-    className
-  })
+export interface MessageProps extends BaseComponetProps {
+  avatar: any
+  firstName: string
+  lastName: string
+  message: string
+  title?: string
+  styles?: any
 }
+
+export class Message extends BaseBlock<MessageProps> {
+  return() {
+    const className = classnames(styles.conteiner, this.props?.className)
+    return this.compile(messageTmpl, { title: '', ...this.props, styles, className} )
+  }
+}
+

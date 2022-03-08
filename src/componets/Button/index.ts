@@ -4,8 +4,8 @@ import classnames from '../../utils/classnames'
 import {BaseBlock} from '../../utils/base-block'
 
 export interface ButtonProps {
-  className?: string;
-  title?: string;
+  className?: string
+  title?: string
 }
 
 export class Button extends BaseBlock<ButtonProps> {

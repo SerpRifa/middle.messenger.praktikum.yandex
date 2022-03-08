@@ -82,15 +82,23 @@ export class BaseBlock<TProps = {}> {
     const { components = {}, ...restProps }  = (props as BaseComponetProps)
     let propsWithCompile: any = {...restProps}
     Object.entries(components).forEach(([componentName, component]) => {
-      component.element?.setAttribute('data-id', component.id)
-      propsWithCompile[componentName] = component?.element?.outerHTML;
+      if(Array.isArray(component)) {
+        propsWithCompile[componentName] = []
+        component.forEach(item => {
+          propsWithCompile[componentName].push(item?.element?.outerHTML)
+        })
+      } else {
+        component.element?.setAttribute('data-id', component.id)
+        propsWithCompile[componentName] = component?.element?.outerHTML;
+      }
+
     })
     console.log('propsWithCompile', propsWithCompile)
     return template({...this.props, ...propsWithCompile})
 
   }
 
-  setProps = nextProps => {
+  setProps = (nextProps: TProps) => {
     if (!nextProps) {
       return;
     }

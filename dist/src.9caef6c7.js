@@ -3357,8 +3357,17 @@ var BaseBlock = /*#__PURE__*/function () {
 
         var _a, _b;
 
-        (_a = component.element) === null || _a === void 0 ? void 0 : _a.setAttribute('data-id', component.id);
-        propsWithCompile[componentName] = (_b = component === null || component === void 0 ? void 0 : component.element) === null || _b === void 0 ? void 0 : _b.outerHTML;
+        if (Array.isArray(component)) {
+          propsWithCompile[componentName] = [];
+          component.forEach(function (item) {
+            var _a;
+
+            propsWithCompile[componentName].push((_a = item === null || item === void 0 ? void 0 : item.element) === null || _a === void 0 ? void 0 : _a.outerHTML);
+          });
+        } else {
+          (_a = component.element) === null || _a === void 0 ? void 0 : _a.setAttribute('data-id', component.id);
+          propsWithCompile[componentName] = (_b = component === null || component === void 0 ? void 0 : component.element) === null || _b === void 0 ? void 0 : _b.outerHTML;
+        }
       });
       console.log('propsWithCompile', propsWithCompile);
       return template(Object.assign(Object.assign({}, this.props), propsWithCompile));
@@ -3621,13 +3630,13 @@ var Avatar = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _createClass(Avatar, [{
     key: "render",
     value: function render() {
-      var _a;
+      var _a, _b;
 
       var className = (0, classnames_1.default)(styles.avatar, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
-      return this.compile(Avatar_hbs_1.default, Object.assign(Object.assign({
-        avatar: no_avatar_jpg_1.default
-      }, this.props), {
-        className: className
+      var avatar = (_b = this.props.avatar) !== null && _b !== void 0 ? _b : no_avatar_jpg_1.default;
+      return this.compile(Avatar_hbs_1.default, Object.assign(Object.assign({}, this.props), {
+        className: className,
+        avatar: avatar
       }));
     }
   }]);
@@ -4222,14 +4231,21 @@ var templateFunction = _handlebars.default.template({
           "column": 24
         }
       }
-    }) : helper)) + ">\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "Avatar"), depth0 != null ? lookupProperty(depth0, "avatarContext") : depth0, {
+    }) : helper)) + ">\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "Avatar") || (depth0 != null ? lookupProperty(depth0, "Avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
       "name": "Avatar",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "        <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "center") : stack1, depth0)) + ">\r\n            <span class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "user") : stack1, depth0)) + ">" + alias4((helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 8
+        },
+        "end": {
+          "line": 3,
+          "column": 20
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "center") : stack1, depth0)) + ">\r\n            <span class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "user") : stack1, depth0)) + ">" + alias4((helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
       "name": "firstName",
       "hash": {},
       "data": data,
@@ -4289,7 +4305,6 @@ var templateFunction = _handlebars.default.template({
       }
     })) != null ? stack1 : "") + "</div>\r\n";
   },
-  "usePartial": true,
   "useData": true
 });
 
@@ -4311,6 +4326,28 @@ module.exports = {
 };
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/Contact/index.ts":[function(require,module,exports) {
 "use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
@@ -4369,18 +4406,45 @@ var styles = __importStar(require("./Contact.module.css"));
 
 var classnames_1 = __importDefault(require("../../utils/classnames"));
 
-var Contact = function Contact(props) {
-  var className = (0, classnames_1.default)(styles.contact, props.className);
-  return (0, Contact_hbs_1.default)(Object.assign(Object.assign({
-    title: '',
-    styles: styles
-  }, props), {
-    className: className
-  }));
-};
+var base_block_1 = require("../../utils/base-block");
+
+var Avatar_1 = require("../Avatar");
+
+var Contact = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(Contact, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(Contact);
+
+  function Contact() {
+    _classCallCheck(this, Contact);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Contact, [{
+    key: "render",
+    value: function render() {
+      var _a;
+
+      var className = (0, classnames_1.default)(styles.contact, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
+      var components = {
+        avatar: new Avatar_1.Avatar({
+          avatar: this.props.avatar
+        })
+      };
+      return this.compile(Contact_hbs_1.default, Object.assign(Object.assign({}, this.props), {
+        className: className,
+        components: components,
+        styles: styles
+      }));
+    }
+  }]);
+
+  return Contact;
+}(base_block_1.BaseBlock);
 
 exports.Contact = Contact;
-},{"./Contact.hbs":"../src/componets/Contact/Contact.hbs","./Contact.module.css":"../src/componets/Contact/Contact.module.css","../../utils/classnames":"../src/utils/classnames.ts"}],"../src/componets/Message/Message.hbs":[function(require,module,exports) {
+},{"./Contact.hbs":"../src/componets/Contact/Contact.hbs","./Contact.module.css":"../src/componets/Contact/Contact.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts","../Avatar":"../src/componets/Avatar/index.ts"}],"../src/componets/Message/Message.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4426,24 +4490,31 @@ var templateFunction = _handlebars.default.template({
           "column": 24
         }
       }
-    }) : helper)) + ">\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "avatar") : stack1, depth0)) + ">\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "Avatar"), depth0 != null ? lookupProperty(depth0, "avatarContext") : depth0, {
-      "name": "Avatar",
+    }) : helper)) + ">\r\n    " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "name": "avatar",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "    </div>\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "message") : stack1, depth0)) + ">\r\n        <span class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "user") : stack1, depth0)) + ">" + alias4((helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 4
+        },
+        "end": {
+          "line": 2,
+          "column": 16
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "message") : stack1, depth0)) + ">\r\n        <span class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "user") : stack1, depth0)) + ">" + alias4((helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
       "name": "firstName",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 4,
           "column": 36
         },
         "end": {
-          "line": 6,
+          "line": 4,
           "column": 49
         }
       }
@@ -4453,11 +4524,11 @@ var templateFunction = _handlebars.default.template({
       "data": data,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 4,
           "column": 50
         },
         "end": {
-          "line": 6,
+          "line": 4,
           "column": 62
         }
       }
@@ -4467,11 +4538,11 @@ var templateFunction = _handlebars.default.template({
       "data": data,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 5,
           "column": 20
         },
         "end": {
-          "line": 7,
+          "line": 5,
           "column": 36
         }
       }
@@ -4481,17 +4552,16 @@ var templateFunction = _handlebars.default.template({
       "data": data,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 5,
           "column": 37
         },
         "end": {
-          "line": 7,
+          "line": 5,
           "column": 48
         }
       }
     }) : helper)) + "</span>\r\n    </div>\r\n</div>\r\n";
   },
-  "usePartial": true,
   "useData": true
 });
 
@@ -4511,6 +4581,28 @@ module.exports = {
 };
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/Message/index.ts":[function(require,module,exports) {
 "use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
@@ -4569,18 +4661,39 @@ var styles = __importStar(require("./Message.module.css"));
 
 var classnames_1 = __importDefault(require("../../utils/classnames"));
 
-var Message = function Message(props) {
-  var className = (0, classnames_1.default)(styles.conteiner, props.className);
-  return (0, Message_hbs_1.default)(Object.assign(Object.assign({
-    title: '',
-    styles: styles
-  }, props), {
-    className: className
-  }));
-};
+var base_block_1 = require("../../utils/base-block");
+
+var Message = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(Message, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(Message);
+
+  function Message() {
+    _classCallCheck(this, Message);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Message, [{
+    key: "return",
+    value: function _return() {
+      var _a;
+
+      var className = (0, classnames_1.default)(styles.conteiner, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
+      return this.compile(Message_hbs_1.default, Object.assign(Object.assign({
+        title: ''
+      }, this.props), {
+        styles: styles,
+        className: className
+      }));
+    }
+  }]);
+
+  return Message;
+}(base_block_1.BaseBlock);
 
 exports.Message = Message;
-},{"./Message.hbs":"../src/componets/Message/Message.hbs","./Message.module.css":"../src/componets/Message/Message.module.css","../../utils/classnames":"../src/utils/classnames.ts"}],"../src/componets/index.ts":[function(require,module,exports) {
+},{"./Message.hbs":"../src/componets/Message/Message.hbs","./Message.module.css":"../src/componets/Message/Message.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts"}],"../src/componets/index.ts":[function(require,module,exports) {
 "use strict";
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
@@ -4893,8 +5006,8 @@ var templateFunction = _handlebars.default.template({
           "column": 23
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "button") || (depth0 != null ? lookupProperty(depth0, "button") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
-      "name": "button",
+    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "contacts") || (depth0 != null ? lookupProperty(depth0, "contacts") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "contacts",
       "hash": {},
       "data": data,
       "loc": {
@@ -4904,6 +5017,20 @@ var templateFunction = _handlebars.default.template({
         },
         "end": {
           "line": 19,
+          "column": 26
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "button") || (depth0 != null ? lookupProperty(depth0, "button") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "button",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 12
+        },
+        "end": {
+          "line": 20,
           "column": 24
         }
       }
@@ -4998,14 +5125,7 @@ var base_block_1 = require("../../utils/base-block");
 
 var render_1 = require("../../utils/render");
 
-var componets_1 = require("../../componets"); // {{> TextField placeholder='First Name' name='first_name' className='' }}
-// {{> TextField placeholder='Second Name' name='second_name' className=styles.text-field }}
-// {{> TextField placeholder='Create User name' name='login' className=styles.text-field }}
-// {{> EmailField placeholder='Enter Emai' name='email' className=styles.text-field }}
-// {{> PasswordField placeholder='Password' name='password' className=styles.text-field }}
-// {{> TextField placeholder='Phone' name='phone' className=styles.text-field }}
-// {{> Button title='renderRegister' className='' }}
-
+var componets_1 = require("../../componets");
 
 var firstName = new componets_1.TextField({
   placeholder: 'First Name',
@@ -5092,51 +5212,25 @@ var _handlebars = _interopRequireDefault(require("handlebars/dist/handlebars.run
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 var templateFunction = _handlebars.default.template({
   "1": function _(container, depth0, helpers, partials, data) {
-    var stack1,
-        lookupProperty = container.lookupProperty || function (parent, propertyName) {
-      if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-        return parent[propertyName];
-      }
-
-      return undefined;
-    };
-
-    return "                <li>\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "Contact"), depth0 != null ? lookupProperty(depth0, "contactContext") : depth0, {
-      "name": "Contact",
-      "data": data,
-      "indent": "                    ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "                </li>\r\n";
+    var stack1;
+    return "                <li>\r\n                    " + ((stack1 = container.lambda(depth0, depth0)) != null ? stack1 : "") + "\r\n                </li>\r\n";
   },
   "3": function _(container, depth0, helpers, partials, data) {
-    var stack1,
-        lookupProperty = container.lookupProperty || function (parent, propertyName) {
-      if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-        return parent[propertyName];
-      }
-
-      return undefined;
-    };
-
-    return "                <li>\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "Message"), depth0 != null ? lookupProperty(depth0, "messageContext") : depth0, {
-      "name": "Message",
-      "data": data,
-      "indent": "                    ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "                </li>\r\n";
+    return "                <li>\r\n                    Привет\r\n                </li>\r\n";
   },
   "compiler": [8, ">= 4.3.0"],
   "main": function main(container, depth0, helpers, partials, data) {
     var stack1,
+        helper,
         alias1 = container.lambda,
         alias2 = container.escapeExpression,
         alias3 = depth0 != null ? depth0 : container.nullContext || {},
+        alias4 = container.hooks.helperMissing,
+        alias5 = "function",
         lookupProperty = container.lookupProperty || function (parent, propertyName) {
       if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
         return parent[propertyName];
@@ -5145,18 +5239,21 @@ var templateFunction = _handlebars.default.template({
       return undefined;
     };
 
-    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "panel-left") : stack1, depth0)) + ">\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "search-input") : stack1,
-        "placeholder": "Search..."
-      },
+    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "panel-left") : stack1, depth0)) + ">\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "search") || (depth0 != null ? lookupProperty(depth0, "search") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "search",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat-list") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, (stack1 = depth0 != null ? lookupProperty(depth0, "data") : depth0) != null ? lookupProperty(stack1, "contactList") : stack1, {
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 8
+        },
+        "end": {
+          "line": 3,
+          "column": 20
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat-list") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, depth0 != null ? lookupProperty(depth0, "contacts") : depth0, {
       "name": "each",
       "hash": {},
       "fn": container.program(1, data, 0),
@@ -5172,7 +5269,7 @@ var templateFunction = _handlebars.default.template({
           "column": 21
         }
       }
-    })) != null ? stack1 : "") + "        </ul>\r\n    </section>\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat") : stack1, depth0)) + ">\r\n        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "messages") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, (stack1 = depth0 != null ? lookupProperty(depth0, "data") : depth0) != null ? lookupProperty(stack1, "messagesList") : stack1, {
+    })) != null ? stack1 : "") + "        </ul>\r\n    </section>\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat") : stack1, depth0)) + ">\r\n        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "messages") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, depth0 != null ? lookupProperty(depth0, "messages") : depth0, {
       "name": "each",
       "hash": {},
       "fn": container.program(3, data, 0),
@@ -5188,20 +5285,22 @@ var templateFunction = _handlebars.default.template({
           "column": 21
         }
       }
-    })) != null ? stack1 : "") + "        </ul>\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "name": "message",
-        "placeholder": "Type text..."
-      },
+    })) != null ? stack1 : "") + "        </ul>\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "message") || (depth0 != null ? lookupProperty(depth0, "message") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "message",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "    </section>\r\n</div>\r\n";
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 8
+        },
+        "end": {
+          "line": 20,
+          "column": 21
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n    </section>\r\n</div>\r\n";
   },
-  "usePartial": true,
   "useData": true
 });
 
@@ -5232,96 +5331,86 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.data = exports.messagesList = exports.contactList = void 0;
+exports.data = exports.messages = exports.contacts = void 0;
 
 var avatar_png_1 = __importDefault(require("../../../static/img/avatar.png"));
 
 var no_avatar_jpg_1 = __importDefault(require("../../../static/img/no_avatar.jpg"));
 
-exports.contactList = [{
-  contactContext: {
-    avatarContext: {
-      avatar: avatar_png_1.default
-    },
-    firstName: 'Ash',
-    lastName: 'Slayer',
-    message: 'message',
-    unreadMessages: 1
-  }
+exports.contacts = [{
+  avatar: avatar_png_1.default,
+  firstName: 'Ash',
+  lastName: 'Slayer',
+  message: 'message',
+  unreadMessages: 1
 }, {
-  contactContext: {
-    avatarContext: {
-      avatar: no_avatar_jpg_1.default
-    },
-    firstName: 'Demon1',
-    lastName: 'Demon1',
-    message: 'message',
-    unreadMessages: 6
-  }
+  avatar: no_avatar_jpg_1.default,
+  firstName: 'Demon1',
+  lastName: 'Demon1',
+  message: 'message',
+  unreadMessages: 6
 }, {
-  contactContext: {
-    avatarContext: {
-      avatar: no_avatar_jpg_1.default
-    },
-    firstName: 'Demon2',
-    lastName: 'Demon2',
-    message: 'message',
-    unreadMessages: 6
-  }
+  avatar: no_avatar_jpg_1.default,
+  firstName: 'Demon2',
+  lastName: 'Demon2',
+  message: 'message',
+  unreadMessages: 6
 }, {
-  contactContext: {
-    avatarContext: {
-      avatar: no_avatar_jpg_1.default
-    },
-    firstName: 'Demon2',
-    lastName: 'Demon2',
-    message: 'message',
-    unreadMessages: 0
-  }
+  avatar: no_avatar_jpg_1.default,
+  firstName: 'Demon2',
+  lastName: 'Demon2',
+  message: 'message',
+  unreadMessages: 0
 }];
-exports.messagesList = [{
-  messageContext: {
-    avatarContext: {
-      avatar: avatar_png_1.default
-    },
-    firstName: 'Ash',
-    lastName: 'Slayer',
-    message: 'Призываю тебя, демон!'
-  }
+exports.messages = [{
+  avatar: avatar_png_1.default,
+  firstName: 'Ash',
+  lastName: 'Slayer',
+  message: 'Призываю тебя, демон!'
 }, {
-  messageContext: {
-    avatarContext: {
-      avatar: no_avatar_jpg_1.default
-    },
-    firstName: 'Demon',
-    lastName: 'Demon',
-    message: 'Эшли! Как дела на грешной?'
-  }
+  avatar: no_avatar_jpg_1.default,
+  firstName: 'Demon',
+  lastName: 'Demon',
+  message: 'Эшли! Как дела на грешной?'
 }, {
-  messageContext: {
-    avatarContext: {
-      avatar: avatar_png_1.default
-    },
-    firstName: 'Ash',
-    lastName: 'Slayer',
-    message: 'Не кривляйся где мои деньги?'
-  }
+  avatar: avatar_png_1.default,
+  firstName: 'Ash',
+  lastName: 'Slayer',
+  message: 'Не кривляйся где мои деньги?'
 }, {
-  messageContext: {
-    avatarContext: {
-      avatar: no_avatar_jpg_1.default
-    },
-    firstName: 'Demon',
-    lastName: 'Demon',
-    message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. У тебя же сбер онлайн есть?'
-  }
+  avatar: no_avatar_jpg_1.default,
+  firstName: 'Demon',
+  lastName: 'Demon',
+  message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. У тебя же сбер онлайн есть?'
 }];
 exports.data = {
-  contactList: exports.contactList,
-  messagesList: exports.messagesList
+  contacts: exports.contacts,
+  messages: exports.messages
 };
 },{"../../../static/img/avatar.png":"img/avatar.png","../../../static/img/no_avatar.jpg":"img/no_avatar.jpg"}],"../src/pages/Main/index.ts":[function(require,module,exports) {
 "use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
@@ -5372,7 +5461,7 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderMain = void 0;
+exports.renderMain = exports.Main = void 0;
 
 var Main_hbs_1 = __importDefault(require("./Main.hbs"));
 
@@ -5380,15 +5469,71 @@ var styles = __importStar(require("./Main.module.css"));
 
 var mock_1 = require("./mock");
 
-var renderMain = function renderMain() {
-  return (0, Main_hbs_1.default)({
+var base_block_1 = require("../../utils/base-block");
+
+var componets_1 = require("../../componets");
+
+var render_1 = require("../../utils/render");
+
+var search = new componets_1.TextField({
+  placeholder: 'Search...',
+  name: 'search',
+  className: styles['search-input']
+});
+var message = new componets_1.TextField({
+  placeholder: 'Type text...',
+  name: 'message'
+});
+
+var Main = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(Main, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(Main);
+
+  function Main() {
+    _classCallCheck(this, Main);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Main, [{
+    key: "render",
+    value: function render() {
+      var messages = mock_1.data.messages.map(function (message) {
+        return new componets_1.Message(Object.assign({}, message));
+      });
+      var contacts = mock_1.data.contacts.map(function (contact) {
+        return new componets_1.Contact(Object.assign({}, contact));
+      });
+      var components = Object.assign(Object.assign({}, this.props.components), {
+        messages: messages,
+        contacts: contacts
+      });
+      return this.compile(Main_hbs_1.default, Object.assign(Object.assign({}, this.props), {
+        components: components
+      }));
+    }
+  }]);
+
+  return Main;
+}(base_block_1.BaseBlock);
+
+exports.Main = Main;
+
+var renderMain = function renderMain(selector) {
+  var main = new Main({
+    components: {
+      search: search,
+      message: message
+    },
     data: mock_1.data,
     styles: styles
   });
+  (0, render_1.render)(selector, main);
 };
 
 exports.renderMain = renderMain;
-},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","./mock":"../src/pages/Main/mock.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
+},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","./mock":"../src/pages/Main/mock.ts","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5400,12 +5545,18 @@ var _handlebars = _interopRequireDefault(require("handlebars/dist/handlebars.run
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 var templateFunction = _handlebars.default.template({
   "compiler": [8, ">= 4.3.0"],
   "main": function main(container, depth0, helpers, partials, data) {
     var stack1,
+        helper,
         alias1 = container.lambda,
         alias2 = container.escapeExpression,
+        alias3 = depth0 != null ? depth0 : container.nullContext || {},
+        alias4 = container.hooks.helperMissing,
+        alias5 = "function",
         lookupProperty = container.lookupProperty || function (parent, propertyName) {
       if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
         return parent[propertyName];
@@ -5414,138 +5565,148 @@ var templateFunction = _handlebars.default.template({
       return undefined;
     };
 
-    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "main") : stack1, depth0)) + ">\r\n    <form class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\r\n        <a href='#' title=\"Изменить аватар\" class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "avatar") : stack1, depth0)) + ">\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "Avatar"), depth0, {
-      "name": "Avatar",
-      "hash": {
-        "title": "Изменить аватар",
-        "name": "avatar"
-      },
+    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "main") : stack1, depth0)) + ">\r\n    <form class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\r\n        <a href='#' title=\"Изменить аватар\" class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "avatar") : stack1, depth0)) + ">\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "avatar",
+      "hash": {},
       "data": data,
-      "indent": "            ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "        </a>\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "first_name",
-        "placeholder": "First Name"
-      },
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 12
+        },
+        "end": {
+          "line": 4,
+          "column": 24
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        </a>\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "firstName",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "second_name",
-        "placeholder": "Secon name"
-      },
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 8
+        },
+        "end": {
+          "line": 6,
+          "column": 23
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "secondName") || (depth0 != null ? lookupProperty(depth0, "secondName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "secondName",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "display_name",
-        "placeholder": "Display name"
-      },
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 8
+        },
+        "end": {
+          "line": 7,
+          "column": 24
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "displayName") || (depth0 != null ? lookupProperty(depth0, "displayName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "displayName",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "login",
-        "placeholder": "Login"
-      },
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 8
+        },
+        "end": {
+          "line": 8,
+          "column": 25
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "email") || (depth0 != null ? lookupProperty(depth0, "email") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "email",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "EmailField"), depth0, {
-      "name": "EmailField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "email",
-        "placeholder": "Enter Emai"
-      },
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 8
+        },
+        "end": {
+          "line": 9,
+          "column": 19
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "phone") || (depth0 != null ? lookupProperty(depth0, "phone") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "phone",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "TextField"), depth0, {
-      "name": "TextField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "phone",
-        "placeholder": "Phone"
-      },
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 8
+        },
+        "end": {
+          "line": 10,
+          "column": 19
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "oldPassword") || (depth0 != null ? lookupProperty(depth0, "oldPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "oldPassword",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "PasswordField"), depth0, {
-      "name": "PasswordField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "oldPassword",
-        "placeholder": "Password"
-      },
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 8
+        },
+        "end": {
+          "line": 11,
+          "column": 25
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "newPassword") || (depth0 != null ? lookupProperty(depth0, "newPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "newPassword",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "PasswordField"), depth0, {
-      "name": "PasswordField",
-      "hash": {
-        "className": (stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "text-field") : stack1,
-        "name": "newPassword",
-        "placeholder": "New Password"
-      },
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 8
+        },
+        "end": {
+          "line": 12,
+          "column": 25
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "save") || (depth0 != null ? lookupProperty(depth0, "save") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "save",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "\r\n" + ((stack1 = container.invokePartial(lookupProperty(partials, "Button"), depth0, {
-      "name": "Button",
-      "hash": {
-        "className": "",
-        "title": "Save"
-      },
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 8
+        },
+        "end": {
+          "line": 14,
+          "column": 18
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "cancel") || (depth0 != null ? lookupProperty(depth0, "cancel") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "cancel",
+      "hash": {},
       "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + ((stack1 = container.invokePartial(lookupProperty(partials, "Button"), depth0, {
-      "name": "Button",
-      "hash": {
-        "className": "",
-        "title": "Cancel"
-      },
-      "data": data,
-      "indent": "        ",
-      "helpers": helpers,
-      "partials": partials,
-      "decorators": container.decorators
-    })) != null ? stack1 : "") + "    </form>\r\n</div>\r\n";
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 8
+        },
+        "end": {
+          "line": 15,
+          "column": 20
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n    </form>\r\n</div>\r\n";
   },
-  "usePartial": true,
   "useData": true
 });
 
@@ -5565,6 +5726,28 @@ module.exports = {
 },{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/pages/Profile/index.ts":[function(require,module,exports) {
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
   var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -5614,20 +5797,114 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderProfile = void 0;
+exports.renderProfile = exports.Profile = void 0;
 
 var Profile_hbs_1 = __importDefault(require("./Profile.hbs"));
 
 var styles = __importStar(require("./Profile.module.css"));
 
-var renderProfile = function renderProfile() {
-  return (0, Profile_hbs_1.default)({
+var base_block_1 = require("../../utils/base-block");
+
+var render_1 = require("../../utils/render");
+
+var componets_1 = require("../../componets");
+
+var avatar = new componets_1.Avatar({
+  name: 'avatar',
+  title: 'Изменить аватар'
+});
+var firstName = new componets_1.TextField({
+  placeholder: 'First Name',
+  name: 'first_name',
+  className: styles['text-field']
+});
+var secondName = new componets_1.TextField({
+  placeholder: 'Second Name',
+  name: 'second_name',
+  className: styles['text-field']
+});
+var displayName = new componets_1.TextField({
+  placeholder: 'Display name',
+  name: 'display_name',
+  className: styles['text-field']
+});
+var login = new componets_1.TextField({
+  placeholder: 'Create User name',
+  name: 'login',
+  className: styles['text-field']
+});
+var email = new componets_1.EmailField({
+  placeholder: 'Enter Emai',
+  name: 'email',
+  className: styles['text-field']
+});
+var oldPassword = new componets_1.PasswordField({
+  placeholder: 'Password',
+  name: 'oldPassword',
+  className: styles['text-field']
+});
+var newPassword = new componets_1.PasswordField({
+  placeholder: 'New Password',
+  name: 'newPassword',
+  className: styles['text-field']
+});
+var phone = new componets_1.TextField({
+  placeholder: 'Phone',
+  name: 'phone',
+  className: styles['text-field']
+});
+var save = new componets_1.Button({
+  title: 'Save'
+});
+var cancel = new componets_1.Button({
+  title: 'Cancel'
+});
+
+var Profile = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(Profile, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(Profile);
+
+  function Profile() {
+    _classCallCheck(this, Profile);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Profile, [{
+    key: "render",
+    value: function render() {
+      return this.compile(Profile_hbs_1.default, this.props);
+    }
+  }]);
+
+  return Profile;
+}(base_block_1.BaseBlock);
+
+exports.Profile = Profile;
+
+var renderProfile = function renderProfile(selector) {
+  var profile = new Profile({
+    components: {
+      avatar: avatar,
+      firstName: firstName,
+      secondName: secondName,
+      displayName: displayName,
+      login: login,
+      email: email,
+      oldPassword: oldPassword,
+      newPassword: newPassword,
+      phone: phone,
+      save: save,
+      cancel: cancel
+    },
     styles: styles
   });
+  (0, render_1.render)(selector, profile);
 };
 
 exports.renderProfile = renderProfile;
-},{"./Profile.hbs":"../src/pages/Profile/Profile.hbs","./Profile.module.css":"../src/pages/Profile/Profile.module.css"}],"../src/pages/404/404.hbs":[function(require,module,exports) {
+},{"./Profile.hbs":"../src/pages/Profile/Profile.hbs","./Profile.module.css":"../src/pages/Profile/Profile.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts","../../componets":"../src/componets/index.ts"}],"../src/pages/404/404.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6111,12 +6388,14 @@ switch (pathname) {
   case '/register':
     (0, pages_1.renderRegister)(rootSelector);
     break;
-  // case '/main':
-  //   content = renderMain()
-  //   break;
-  // case '/profile':
-  //   content = renderProfile()
-  //   break;
+
+  case '/main':
+    (0, pages_1.renderMain)(rootSelector);
+    break;
+
+  case '/profile':
+    (0, pages_1.renderProfile)(rootSelector);
+    break;
   // case '/404':
   //   content = render404()
   //   break;
@@ -6155,7 +6434,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61293" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61793" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

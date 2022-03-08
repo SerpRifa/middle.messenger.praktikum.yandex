@@ -1,5 +1,5 @@
 import 'normalize.css';
-import { renderIntro,  renderLogin, renderRegister } from './pages'
+import { renderIntro,  renderLogin, renderRegister, renderProfile, renderMain } from './pages'
 import { registerPartials } from './utils/register-partials'
 
 registerPartials()
@@ -17,12 +17,12 @@ switch (pathname) {
    case '/register':
      renderRegister(rootSelector)
     break;
-  // case '/main':
-  //   content = renderMain()
-  //   break;
-  // case '/profile':
-  //   content = renderProfile()
-  //   break;
+  case '/main':
+    renderMain(rootSelector)
+    break;
+  case '/profile':
+    renderProfile(rootSelector)
+    break;
   // case '/404':
   //   content = render404()
   //   break;
