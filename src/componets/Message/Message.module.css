@@ -1,0 +1,37 @@
+.conteiner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 240px;
+  background-color: transparent;
+  height: 70px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  margin: 12px;
+}
+
+.avatar {
+  width: 40px;
+  align-self: end;
+}
+
+.message {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #C4C4C4;
+  min-height: 70px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border-bottom-left-radius: 0px;
+}
+
+.user {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.text {
+  font-size: 16px;
+}

@@ -1,0 +1,33 @@
+{
+  "name": "messenger",
+  "version": "0.1.0",
+  "description": "",
+  "main": "./src/index.js",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "scripts": {
+    "dev": "parcel static/index.html --open --port 3000",
+    "start": "parcel static/index.html -p 3000",
+    "build": "parcel build",
+    "server": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "handlebars": "^4.7.7",
+    "parcel-bundler": "^1.12.5",
+    "path": "^0.12.7",
+    "autoprefixer": "^9.8.8",
+    "handlebars-loader": "^1.7.1",
+    "postcss": "^7.0.39",
+    "postcss-loader": "^6.2.1",
+    "postcss-modules": "^3.2.2",
+    "parcel-plugin-handlebars-precompile": "^1.0.2"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1"
+  }
+}

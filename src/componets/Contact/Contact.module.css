@@ -1,0 +1,59 @@
+.contact {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 240px;
+  background-color: #FFF;
+  height: 70px;
+  padding: 12px 12px;
+  width: 100%;
+  border-bottom: 1px solid #BDBDBD;
+  box-sizing: border-box;
+}
+
+.contact:hover {
+  background-color: #E0E1E5;
+}
+
+.center {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+}
+
+.user {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+}
+.message {
+  display: block;
+  font-size: 16px;
+}
+
+.conteiner {
+  display: flex;
+  flex-direction: row;
+}
+
+.end {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+}
+
+.unread {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  background-color: #2D9CDB;
+  color: #FFFFFF;
+  text-align: center;
+  padding: 2px;
+  min-width: 16px;
+  height: 16px;
+}

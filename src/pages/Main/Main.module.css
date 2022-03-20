@@ -1,0 +1,28 @@
+.conteiner {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.panel-left {
+  display: flex;
+  flex-direction: column;
+  background-color: #FFFF;
+  border-right: 1px solid #BDBDBD;
+}
+
+.chat {
+  background: url('../../../static/img/ashvsevildead.jpg') no-repeat;
+  background-size: 100%;
+  padding-left: 4px;
+  padding-right: 4px;
+  user-select: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.search-input {
+  margin: 8px;
+}

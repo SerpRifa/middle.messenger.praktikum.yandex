@@ -1,0 +1,36 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.conteiner {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  min-width: 720px;
+  max-width: 1224px;
+}
+
+.description {
+  margin-top: 50px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.text-field {
+  margin-top: 24px;
+}

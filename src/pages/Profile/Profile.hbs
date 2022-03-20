@@ -1,0 +1,18 @@
+<div class={{styles.main}}>
+    <form class={{styles.field-conteiner}}>
+        <a href='#' title="Изменить аватар" class={{styles.avatar}}>
+            {{> Avatar name='avatar' title='Изменить аватар' }}
+        </a>
+        {{> TextField placeholder='First Name' name='first_name' className=styles.text-field }}
+        {{> TextField placeholder='Secon name' name='second_name' className=styles.text-field }}
+        {{> TextField placeholder='Display name' name='display_name' className=styles.text-field }}
+        {{> TextField placeholder='Login' name='login' className=styles.text-field }}
+        {{> EmailField placeholder='Enter Emai' name='email' className=styles.text-field }}
+        {{> TextField placeholder='Phone' name='phone' className=styles.text-field }}
+        {{> PasswordField placeholder='Password' name='oldPassword' className=styles.text-field }}
+        {{> PasswordField placeholder='New Password' name='newPassword' className=styles.text-field }}
+
+        {{> Button title='Save' className='' }}
+        {{> Button title='Cancel' className='' }}
+    </form>
+</div>
