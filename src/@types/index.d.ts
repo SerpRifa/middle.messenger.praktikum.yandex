@@ -26,4 +26,4 @@ declare module 'handlebars/dist/handlebars.runtime' {
   export default Handlebars;
 }
 
-declare module "*.module.css";
+declare module '*.module.css';

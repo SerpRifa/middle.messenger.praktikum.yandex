@@ -1,38 +1,40 @@
-/**
- * Для ревьюера: console.log чтобы было жизненый цикл был виден,
- * что он не нужен в продакшене я знаю)
- */
-import {EventBus} from "./event-bus"
-import {BaseComponetProps} from "../types/types"
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
+import { EventBus } from './event-bus';
+import { BaseComponetProps } from '../types/types';
 
-export class BaseBlock<TProps = {}> {
+export class BaseBlock<TProps = any> {
   static EVENTS = {
-    INIT: "init",
-    FLOW_CDM: "flow:component-did-mount",
-    FLOW_CDU: "flow:component-did-update",
-    FLOW_RENDER: "flow:render",
+    INIT: 'init',
+    FLOW_CDM: 'flow:component-did-mount',
+    FLOW_CDU: 'flow:component-did-update',
+    FLOW_RENDER: 'flow:render',
     FLOW_CAR: 'flow: component-after-render',
   };
 
-  _element:  HTMLElement | null = null;
+  _element: HTMLElement | null = null;
+
   _meta = null;
-  props: TProps;
+
+  _events = {};
+
+  props: any;
+
   eventBus = null;
+
   id: string = '';
 
-  constructor(props: TProps, tagName = "div") {
-    const eventBus = new EventBus()
-    this._meta  = {
+  constructor(props: TProps, tagName = 'div') {
+    const eventBus = new EventBus();
+    this._meta = {
       tagName,
-      props
+      props,
     };
 
-    this.props = this._makePropsProxy(props)
-    this.id = uuidv4()
-    this.eventBus = () => eventBus
+    this.props = this._makePropsProxy(props);
+    this.id = uuidv4();
+    this.eventBus = () => eventBus;
 
-    this._element = this._createDocumentElement(tagName)
+    this._element = this._createDocumentElement(tagName);
 
     this._registerEvents(eventBus);
     eventBus.emit(BaseBlock.EVENTS.INIT);
@@ -43,9 +45,16 @@ export class BaseBlock<TProps = {}> {
     eventBus.on(BaseBlock.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(BaseBlock.EVENTS.FLOW_RENDER, this._render.bind(this));
     eventBus.on(BaseBlock.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(BaseBlock.EVENTS.FLOW_CAR, this._componentAfterRender.bind(this));
   }
 
-  _createResources() {
+  private _componentAfterRender() {
+    this.componentAfterRender();
+  }
+
+  componentAfterRender() {}
+
+  private _createResources() {
     const { tagName } = this._meta;
     this._element = this._createDocumentElement(tagName);
   }
@@ -55,12 +64,12 @@ export class BaseBlock<TProps = {}> {
     this.eventBus().emit(BaseBlock.EVENTS.FLOW_RENDER);
   }
 
-  _componentDidMount() {
+  private _componentDidMount() {
     this.componentDidMount();
     this.eventBus().emit(BaseBlock.EVENTS.FLOW_CDM);
   }
 
-  componentDidMount(oldProps = {}) {
+  componentDidMount() {
 
   }
 
@@ -68,32 +77,64 @@ export class BaseBlock<TProps = {}> {
     this.eventBus().emit(BaseBlock.EVENTS.FLOW_CDM);
   }
 
-  _componentDidUpdate(oldProps, newProps) {
+  _componentDidUpdate(oldProps: TProps, newProps: TProps) {
     const response = this.componentDidUpdate(oldProps, newProps);
+    return response;
   }
 
-  componentDidUpdate(oldProps, newProps) {
-    return true;
+  componentDidUpdate(oldProps: TProps, newProps: TProps) {
+    return oldProps !== newProps;
+  }
+
+  private _addEvents() {
+    const { events = {} } = this.props;
+    this._events = events;
+    const element = this._element;
+    Object.entries(events).forEach(([name, callback]) => {
+      element?.addEventListener(name, callback as any);
+    });
+  }
+
+  private _removeEvents() {
+    if (this._events) {
+      Object.keys(this._events).forEach((eventName) => {
+        this._element?.removeEventListener(eventName, this._events[eventName]);
+      });
+
+      this._events = {};
+    }
   }
 
   compile(template: any, props: TProps) {
-
-    const { components = {}, ...restProps }  = (props as BaseComponetProps)
-    let propsWithCompile: any = { ...restProps }
+    const { components = {}, ...restProps } = (props as BaseComponetProps);
+    const propsWithCompile: any = { ...restProps };
     Object.entries(components).forEach(([componentName, component]) => {
-      if(Array.isArray(component)) {
-        propsWithCompile[componentName] = []
-        component.forEach(item => {
-          propsWithCompile[componentName].push(item?.element?.outerHTML)
-        })
+      if (Array.isArray(component)) {
+        propsWithCompile[componentName] = [];
+        component.forEach((item) => {
+          propsWithCompile[componentName].push(item?.element?.outerHTML);
+        });
       } else {
-        component.element?.setAttribute('data-id', component.id)
+        component.element?.setAttribute('data-id', component.id);
         propsWithCompile[componentName] = component?.element?.outerHTML;
       }
+    });
 
-    })
-    return template({...this.props, ...propsWithCompile})
+    const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
+    fragment.innerHTML = template({ ...this.props, ...propsWithCompile });
 
+    Object.entries(components).forEach(([componentName, component]) => {
+      if (Array.isArray(component)) {
+        component.forEach((item) => {
+          propsWithCompile[componentName].push(item?.element?.outerHTML);
+        });
+      } else {
+        const target = fragment.content.querySelector(`[data-id="${component.id}"]`);
+        target?.replaceWith(component.getContent());
+      }
+    });
+
+    return fragment.content;
   }
 
   setProps = (nextProps: TProps) => {
@@ -108,21 +149,29 @@ export class BaseBlock<TProps = {}> {
     return this._element;
   }
 
-  _render() {
+  private _render() {
     const block = this.render();
+    const newElement = block.firstChild as HTMLElement;
 
-    this._element.innerHTML = block;
+    this._removeEvents();
+    if (this._element) {
+      this._element.innerHTML = '';
+      this._element.replaceWith(newElement);
+      this._element = newElement;
+
+      this._addEvents();
+    }
+    this.eventBus().emit(BaseBlock.EVENTS.FLOW_CAR);
   }
 
-  render() {}
+  render(): any {}
 
   getContent(): any {
     return this.element;
   }
 
-  _makePropsProxy(props) {
-    const self = this;
-    props = new Proxy(props,{})
+  _makePropsProxy(props: any) {
+    props = new Proxy(props, {});
     return props;
   }
 
@@ -131,10 +180,10 @@ export class BaseBlock<TProps = {}> {
   }
 
   show() {
-    this.getContent().style.display = "block";
+    this.getContent().style.display = 'block';
   }
 
   hide() {
-    this.getContent().style.display = "none";
+    this.getContent().style.display = 'none';
   }
 }

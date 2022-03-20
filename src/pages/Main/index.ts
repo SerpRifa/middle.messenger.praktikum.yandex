@@ -1,10 +1,11 @@
-import mainTmpl from './Main.hbs'
-import * as styles from './Main.module.css'
-import { data, IResponse } from './mock'
-import { BaseBlock } from '../../utils/base-block'
-import { BaseComponetProps } from '../../types/types'
-import {Contact, Message, TextField} from '../../componets'
-import { render } from '../../utils/render'
+import mainTmpl from './Main.hbs';
+import * as styles from './Main.module.css';
+import { data, IResponse } from './mock';
+import { BaseBlock } from '../../utils/base-block';
+import { BaseComponetProps } from '../../types/types';
+import { Contact, Message, TextField } from '../../componets';
+import { render } from '../../utils/render';
+import { messageValidator } from '../../utils/validators';
 
 export interface MainProps extends BaseComponetProps {
   data: IResponse
@@ -15,23 +16,23 @@ const search = new TextField({
   placeholder: 'Search...',
   name: 'search',
   className: styles['search-input'],
-})
+});
 
 const message = new TextField({
   placeholder: 'Type text...',
   name: 'message',
-})
+}, [messageValidator]);
 
 export class Main extends BaseBlock<MainProps> {
   render() {
-    const messages = data.messages.map((message) => new Message({ ...message }))
-    const contacts = data.contacts.map((contact) => new Contact({ ...contact }))
+    const messages = data.messages.map((message) => new Message({ ...message }));
+    const contacts = data.contacts.map((contact) => new Contact({ ...contact }));
     const components = {
       ...this.props.components,
       messages,
-      contacts
-    }
-    return this.compile(mainTmpl, {...this.props, components})
+      contacts,
+    };
+    return this.compile(mainTmpl, { ...this.props, components });
   }
 }
 
@@ -42,8 +43,8 @@ export const renderMain = (selector: string) => {
       message,
     },
     data,
-    styles
-  })
+    styles,
+  });
 
-  render(selector, main)
-}
+  render(selector, main);
+};

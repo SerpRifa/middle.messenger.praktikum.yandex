@@ -1,33 +1,32 @@
 import 'normalize.css';
-import { renderIntro,  renderLogin, renderRegister, renderProfile, renderMain } from './pages'
-import { registerPartials } from './utils/register-partials'
+import {
+  renderIntro, renderLogin, renderRegister, renderProfile, renderMain, render404, render500,
+} from './pages';
 
-registerPartials()
-
-const pathname = window.location.pathname
-const rootSelector = '#root'
+const { pathname } = window.location;
+const rootSelector = '#root';
 
 switch (pathname) {
   case '/':
-     renderIntro(rootSelector)
+    renderIntro(rootSelector);
     break;
   case '/login':
-     renderLogin(rootSelector)
+    renderLogin(rootSelector);
     break;
-   case '/register':
-     renderRegister(rootSelector)
+  case '/register':
+    renderRegister(rootSelector);
     break;
   case '/main':
-    renderMain(rootSelector)
+    renderMain(rootSelector);
     break;
   case '/profile':
-    renderProfile(rootSelector)
+    renderProfile(rootSelector);
     break;
-  // case '/404':
-  //   content = render404()
-  //   break;
-  // case '/500':
-  //   content = render500()
-  //   break;
-  default: renderLogin('#root')
+  case '/404':
+    render404(rootSelector);
+    break;
+  case '/500':
+    render500(rootSelector);
+    break;
+  default: renderLogin('#root');
 }

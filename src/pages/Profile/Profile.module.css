@@ -3,14 +3,17 @@
   justify-content: center;
   padding-top: 36px;
 }
+
 .field-conteiner {
   display: flex;
   flex-direction: column;
-  width: 720px
+  width: 720px;
 }
+
 .text-field {
   margin-top: 24px;
 }
+
 .avatar {
   align-self: center;
 }

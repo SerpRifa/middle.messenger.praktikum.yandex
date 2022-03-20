@@ -1,13 +1,14 @@
 .wrapper {
   background-color: #000;
 }
+
 .main {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url('../../../static/img/404/stars.png');
+  background: url("../../../static/img/404/stars.png");
   width: 100%;
 }
 
@@ -22,15 +23,15 @@
 .picture {
   width: 392px;
   height: 286px;
-  background:  url('../../../static/img/404/satan.png');
+  background: url("../../../static/img/404/satan.png");
   background-size: 100%;
 }
 
 .title {
-  color: #FFFFFF;
+  color: #fff;
 }
 
 .home {
-  color: #FFFFFF;
+  color: #fff;
   font-size: 20px;
 }

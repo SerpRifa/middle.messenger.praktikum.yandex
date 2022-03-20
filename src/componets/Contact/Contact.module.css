@@ -4,16 +4,16 @@
   justify-content: space-between;
   align-items: center;
   min-width: 240px;
-  background-color: #FFF;
+  background-color: #fff;
   height: 70px;
-  padding: 12px 12px;
+  padding: 12px;
   width: 100%;
-  border-bottom: 1px solid #BDBDBD;
+  border-bottom: 1px solid #bdbdbd;
   box-sizing: border-box;
 }
 
 .contact:hover {
-  background-color: #E0E1E5;
+  background-color: #e0e1e5;
 }
 
 .center {
@@ -27,6 +27,7 @@
   font-size: 16px;
   font-weight: 600;
 }
+
 .message {
   display: block;
   font-size: 16px;
@@ -50,8 +51,8 @@
   justify-content: center;
   border-radius: 50%;
   font-size: 14px;
-  background-color: #2D9CDB;
-  color: #FFFFFF;
+  background-color: #2d9cdb;
+  color: #fff;
   text-align: center;
   padding: 2px;
   min-width: 16px;

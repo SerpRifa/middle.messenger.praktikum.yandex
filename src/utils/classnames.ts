@@ -1,1 +1,1 @@
-export default (...rest) => rest.join(' ')
+export default (...rest: any[]) => rest.join(' ');

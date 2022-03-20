@@ -2299,69 +2299,7 @@ module.exports = {
   "form": "src-pages-Login-__Login-module__form__mEHCT",
   "text-field": "src-pages-Login-__Login-module__text-field__2ABQg"
 };
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/utils/event-bus.ts":[function(require,module,exports) {
-"use strict";
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.EventBus = void 0;
-
-var EventBus = /*#__PURE__*/function () {
-  function EventBus() {
-    _classCallCheck(this, EventBus);
-
-    this.listeners = {};
-  }
-
-  _createClass(EventBus, [{
-    key: "on",
-    value: function on(event, callback) {
-      if (!this.listeners[event]) {
-        this.listeners[event] = [];
-      }
-
-      this.listeners[event].push(callback);
-    }
-  }, {
-    key: "off",
-    value: function off(event, callback) {
-      if (!this.listeners[event]) {
-        throw new Error("\u041D\u0435\u0442 \u0441\u043E\u0431\u044B\u0442\u0438\u044F: ".concat(event));
-      }
-
-      this.listeners[event] = this.listeners[event].filter(function (listener) {
-        return listener !== callback;
-      });
-    }
-  }, {
-    key: "emit",
-    value: function emit(event) {
-      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-      }
-
-      if (!this.listeners[event]) {
-        throw new Error("\u041D\u0435\u0442 \u0441\u043E\u0431\u044B\u0442\u0438\u044F: ".concat(event));
-      }
-
-      this.listeners[event].forEach(function (listener) {
-        listener.apply(void 0, args);
-      });
-    }
-  }]);
-
-  return EventBus;
-}();
-
-exports.EventBus = EventBus;
-},{}],"../node_modules/uuid/dist/esm-browser/rng.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/uuid/dist/esm-browser/rng.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3201,7 +3139,69 @@ var _stringify = _interopRequireDefault(require("./stringify.js"));
 var _parse = _interopRequireDefault(require("./parse.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"./v1.js":"../node_modules/uuid/dist/esm-browser/v1.js","./v3.js":"../node_modules/uuid/dist/esm-browser/v3.js","./v4.js":"../node_modules/uuid/dist/esm-browser/v4.js","./v5.js":"../node_modules/uuid/dist/esm-browser/v5.js","./nil.js":"../node_modules/uuid/dist/esm-browser/nil.js","./version.js":"../node_modules/uuid/dist/esm-browser/version.js","./validate.js":"../node_modules/uuid/dist/esm-browser/validate.js","./stringify.js":"../node_modules/uuid/dist/esm-browser/stringify.js","./parse.js":"../node_modules/uuid/dist/esm-browser/parse.js"}],"../src/utils/base-block.ts":[function(require,module,exports) {
+},{"./v1.js":"../node_modules/uuid/dist/esm-browser/v1.js","./v3.js":"../node_modules/uuid/dist/esm-browser/v3.js","./v4.js":"../node_modules/uuid/dist/esm-browser/v4.js","./v5.js":"../node_modules/uuid/dist/esm-browser/v5.js","./nil.js":"../node_modules/uuid/dist/esm-browser/nil.js","./version.js":"../node_modules/uuid/dist/esm-browser/version.js","./validate.js":"../node_modules/uuid/dist/esm-browser/validate.js","./stringify.js":"../node_modules/uuid/dist/esm-browser/stringify.js","./parse.js":"../node_modules/uuid/dist/esm-browser/parse.js"}],"../src/utils/event-bus.ts":[function(require,module,exports) {
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EventBus = void 0;
+
+var EventBus = /*#__PURE__*/function () {
+  function EventBus() {
+    _classCallCheck(this, EventBus);
+
+    this.listeners = {};
+  }
+
+  _createClass(EventBus, [{
+    key: "on",
+    value: function on(event, callback) {
+      if (!this.listeners[event]) {
+        this.listeners[event] = [];
+      }
+
+      this.listeners[event].push(callback);
+    }
+  }, {
+    key: "off",
+    value: function off(event, callback) {
+      if (!this.listeners[event]) {
+        throw new Error("\u041D\u0435\u0442 \u0441\u043E\u0431\u044B\u0442\u0438\u044F: ".concat(event));
+      }
+
+      this.listeners[event] = this.listeners[event].filter(function (listener) {
+        return listener !== callback;
+      });
+    }
+  }, {
+    key: "emit",
+    value: function emit(event) {
+      for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        args[_key - 1] = arguments[_key];
+      }
+
+      if (!this.listeners[event]) {
+        throw new Error("\u041D\u0435\u0442 \u0441\u043E\u0431\u044B\u0442\u0438\u044F: ".concat(event));
+      }
+
+      this.listeners[event].forEach(function (listener) {
+        listener.apply(void 0, args);
+      });
+    }
+  }]);
+
+  return EventBus;
+}();
+
+exports.EventBus = EventBus;
+},{}],"../src/utils/base-block.ts":[function(require,module,exports) {
 "use strict";
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -3239,25 +3239,22 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.BaseBlock = void 0;
-/**
- * Для ревьюера: console.log чтобы было жизненый цикл был виден,
- * что он не нужен в продакшене я знаю)
- */
-
-var event_bus_1 = require("./event-bus");
 
 var uuid_1 = require("uuid");
+
+var event_bus_1 = require("./event-bus");
 
 var BaseBlock = /*#__PURE__*/function () {
   function BaseBlock(props) {
     var _this = this;
 
-    var tagName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "div";
+    var tagName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'div';
 
     _classCallCheck(this, BaseBlock);
 
     this._element = null;
     this._meta = null;
+    this._events = {};
     this.eventBus = null;
     this.id = '';
 
@@ -3297,7 +3294,16 @@ var BaseBlock = /*#__PURE__*/function () {
       eventBus.on(BaseBlock.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
       eventBus.on(BaseBlock.EVENTS.FLOW_RENDER, this._render.bind(this));
       eventBus.on(BaseBlock.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+      eventBus.on(BaseBlock.EVENTS.FLOW_CAR, this._componentAfterRender.bind(this));
     }
+  }, {
+    key: "_componentAfterRender",
+    value: function _componentAfterRender() {
+      this.componentAfterRender();
+    }
+  }, {
+    key: "componentAfterRender",
+    value: function componentAfterRender() {}
   }, {
     key: "_createResources",
     value: function _createResources() {
@@ -3319,9 +3325,7 @@ var BaseBlock = /*#__PURE__*/function () {
     }
   }, {
     key: "componentDidMount",
-    value: function componentDidMount() {
-      var oldProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    }
+    value: function componentDidMount() {}
   }, {
     key: "dispatchComponentDidMount",
     value: function dispatchComponentDidMount() {
@@ -3331,11 +3335,41 @@ var BaseBlock = /*#__PURE__*/function () {
     key: "_componentDidUpdate",
     value: function _componentDidUpdate(oldProps, newProps) {
       var response = this.componentDidUpdate(oldProps, newProps);
+      return response;
     }
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(oldProps, newProps) {
-      return true;
+      return oldProps !== newProps;
+    }
+  }, {
+    key: "_addEvents",
+    value: function _addEvents() {
+      var _this$props$events = this.props.events,
+          events = _this$props$events === void 0 ? {} : _this$props$events;
+      this._events = events;
+      var element = this._element;
+      Object.entries(events).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            name = _ref2[0],
+            callback = _ref2[1];
+
+        element === null || element === void 0 ? void 0 : element.addEventListener(name, callback);
+      });
+    }
+  }, {
+    key: "_removeEvents",
+    value: function _removeEvents() {
+      var _this2 = this;
+
+      if (this._events) {
+        Object.keys(this._events).forEach(function (eventName) {
+          var _a;
+
+          (_a = _this2._element) === null || _a === void 0 ? void 0 : _a.removeEventListener(eventName, _this2._events[eventName]);
+        });
+        this._events = {};
+      }
     }
   }, {
     key: "compile",
@@ -3346,10 +3380,10 @@ var BaseBlock = /*#__PURE__*/function () {
           restProps = __rest(_a, ["components"]);
 
       var propsWithCompile = Object.assign({}, restProps);
-      Object.entries(components).forEach(function (_ref) {
-        var _ref2 = _slicedToArray(_ref, 2),
-            componentName = _ref2[0],
-            component = _ref2[1];
+      Object.entries(components).forEach(function (_ref3) {
+        var _ref4 = _slicedToArray(_ref3, 2),
+            componentName = _ref4[0],
+            component = _ref4[1];
 
         var _a, _b;
 
@@ -3365,7 +3399,27 @@ var BaseBlock = /*#__PURE__*/function () {
           propsWithCompile[componentName] = (_b = component === null || component === void 0 ? void 0 : component.element) === null || _b === void 0 ? void 0 : _b.outerHTML;
         }
       });
-      return template(Object.assign(Object.assign({}, this.props), propsWithCompile));
+
+      var fragment = this._createDocumentElement('template');
+
+      fragment.innerHTML = template(Object.assign(Object.assign({}, this.props), propsWithCompile));
+      Object.entries(components).forEach(function (_ref5) {
+        var _ref6 = _slicedToArray(_ref5, 2),
+            componentName = _ref6[0],
+            component = _ref6[1];
+
+        if (Array.isArray(component)) {
+          component.forEach(function (item) {
+            var _a;
+
+            propsWithCompile[componentName].push((_a = item === null || item === void 0 ? void 0 : item.element) === null || _a === void 0 ? void 0 : _a.outerHTML);
+          });
+        } else {
+          var target = fragment.content.querySelector("[data-id=\"".concat(component.id, "\"]"));
+          target === null || target === void 0 ? void 0 : target.replaceWith(component.getContent());
+        }
+      });
+      return fragment.content;
     }
   }, {
     key: "element",
@@ -3376,7 +3430,21 @@ var BaseBlock = /*#__PURE__*/function () {
     key: "_render",
     value: function _render() {
       var block = this.render();
-      this._element.innerHTML = block;
+      var newElement = block.firstChild;
+
+      this._removeEvents();
+
+      if (this._element) {
+        this._element.innerHTML = '';
+
+        this._element.replaceWith(newElement);
+
+        this._element = newElement;
+
+        this._addEvents();
+      }
+
+      this.eventBus().emit(BaseBlock.EVENTS.FLOW_CAR);
     }
   }, {
     key: "render",
@@ -3389,7 +3457,6 @@ var BaseBlock = /*#__PURE__*/function () {
   }, {
     key: "_makePropsProxy",
     value: function _makePropsProxy(props) {
-      var self = this;
       props = new Proxy(props, {});
       return props;
     }
@@ -3401,12 +3468,12 @@ var BaseBlock = /*#__PURE__*/function () {
   }, {
     key: "show",
     value: function show() {
-      this.getContent().style.display = "block";
+      this.getContent().style.display = 'block';
     }
   }, {
     key: "hide",
     value: function hide() {
-      this.getContent().style.display = "none";
+      this.getContent().style.display = 'none';
     }
   }]);
 
@@ -3415,13 +3482,13 @@ var BaseBlock = /*#__PURE__*/function () {
 
 exports.BaseBlock = BaseBlock;
 BaseBlock.EVENTS = {
-  INIT: "init",
-  FLOW_CDM: "flow:component-did-mount",
-  FLOW_CDU: "flow:component-did-update",
-  FLOW_RENDER: "flow:render",
+  INIT: 'init',
+  FLOW_CDM: 'flow:component-did-mount',
+  FLOW_CDU: 'flow:component-did-update',
+  FLOW_RENDER: 'flow:render',
   FLOW_CAR: 'flow: component-after-render'
 };
-},{"./event-bus":"../src/utils/event-bus.ts","uuid":"../node_modules/uuid/dist/esm-browser/index.js"}],"img/no_avatar.jpg":[function(require,module,exports) {
+},{"uuid":"../node_modules/uuid/dist/esm-browser/index.js","./event-bus":"../src/utils/event-bus.ts"}],"img/no_avatar.jpg":[function(require,module,exports) {
 module.exports = "/no_avatar.2d9919a2.jpg";
 },{}],"../src/componets/Avatar/Avatar.hbs":[function(require,module,exports) {
 "use strict";
@@ -3683,18 +3750,18 @@ var templateFunction = _handlebars.default.template({
           "column": 27
         }
       }
-    }) : helper)) + ">" + alias4((helper = (helper = lookupProperty(helpers, "title") || (depth0 != null ? lookupProperty(depth0, "title") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+    }) : helper)) + " type=\"submit\">" + alias4((helper = (helper = lookupProperty(helpers, "title") || (depth0 != null ? lookupProperty(depth0, "title") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
       "name": "title",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
           "line": 1,
-          "column": 28
+          "column": 42
         },
         "end": {
           "line": 1,
-          "column": 37
+          "column": 51
         }
       }
     }) : helper)) + "</button>\r\n";
@@ -3940,7 +4007,81 @@ module.hot.accept(reloadCSS);
 module.exports = {
   "input": "src-componets-Input-__Input-module__input__3Vocx"
 };
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/Input/index.ts":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/utils/validators.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.messageValidator = exports.phoneValidator = exports.passwordValidator = exports.emailValidator = exports.loginValidator = exports.nameValidator = exports.createError = void 0;
+var errorLabelClass = 'error-label';
+
+var createError = function createError(target, validMessage) {
+  if (validMessage) {
+    target.classList.add('invalid');
+
+    if (target.nextElementSibling === null || target.nextElementSibling.className !== errorLabelClass) {
+      var element = createErrorElement(validMessage);
+      target.after(element);
+    }
+  }
+
+  if (target.nextElementSibling !== null && target.nextElementSibling.className === errorLabelClass && !validMessage) {
+    target.classList.remove('invalid');
+    target.nextElementSibling.remove();
+  }
+};
+
+exports.createError = createError;
+
+var createErrorElement = function createErrorElement(message) {
+  var errorElement = document.createElement('div');
+  errorElement.classList.add(errorLabelClass);
+  errorElement.textContent = message;
+  return errorElement;
+};
+
+var nameValidator = function nameValidator(str) {
+  var regex = /^[A-ZА-Я][A-Za-zА-Яа-я\\-]+$/;
+  return regex.test(str) ? null : 'Некорректное имя';
+};
+
+exports.nameValidator = nameValidator;
+
+var loginValidator = function loginValidator(str) {
+  var regex = /^(?=[\S]+)(?=.*[^0-9 ].*)[a-zA-Z0-9_-]{3,20}$/;
+  return regex.test(str) ? null : 'Некорректный логин';
+};
+
+exports.loginValidator = loginValidator;
+
+var emailValidator = function emailValidator(str) {
+  var regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  return regex.test(str) ? null : 'Некорректный адрес электронной почты';
+};
+
+exports.emailValidator = emailValidator;
+
+var passwordValidator = function passwordValidator(str) {
+  var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,40}$/;
+  return regex.test(str) ? null : 'Введеный пароль не удовлетворяет требованиям';
+};
+
+exports.passwordValidator = passwordValidator;
+
+var phoneValidator = function phoneValidator(str) {
+  var regex = /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{2})[-. ]*(\d{2})(?: *x(\d+))?\s*$/;
+  return regex.test(str) ? null : 'Некорректный номер телефона';
+};
+
+exports.phoneValidator = phoneValidator;
+
+var messageValidator = function messageValidator(str) {
+  return str.length > 0 ? null : 'Некорректный текст';
+};
+
+exports.messageValidator = messageValidator;
+},{}],"../src/componets/Input/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -4024,15 +4165,24 @@ var classnames_1 = __importDefault(require("../../utils/classnames"));
 
 var base_block_1 = require("../../utils/base-block");
 
+var validators_1 = require("../../utils/validators");
+
 var Input = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Input, _base_block_1$BaseBlo);
 
   var _super = _createSuper(Input);
 
-  function Input() {
+  function Input(props) {
+    var _this;
+
+    var validators = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
     _classCallCheck(this, Input);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    _this.validators = [];
+    _this.validators = validators;
+    return _this;
   }
 
   _createClass(Input, [{
@@ -4049,6 +4199,31 @@ var Input = /*#__PURE__*/function (_base_block_1$BaseBlo) {
         className: className
       }));
     }
+  }, {
+    key: "componentAfterRender",
+    value: function componentAfterRender() {
+      var _this2 = this;
+
+      var _a, _b;
+
+      (_a = this.element) === null || _a === void 0 ? void 0 : _a.addEventListener('focus', function () {
+        return _this2.validateInput();
+      });
+      (_b = this.element) === null || _b === void 0 ? void 0 : _b.addEventListener('blur', function () {
+        return _this2.validateInput();
+      });
+    }
+  }, {
+    key: "validateInput",
+    value: function validateInput() {
+      var _this3 = this;
+
+      var value = this.element.value;
+      this.validators.forEach(function (callback) {
+        var error = callback(value);
+        (0, validators_1.createError)(_this3.element, error);
+      });
+    }
   }]);
 
   return Input;
@@ -4056,8 +4231,8 @@ var Input = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 
 exports.Input = Input;
 
-var TextField = /*#__PURE__*/function (_base_block_1$BaseBlo2) {
-  _inherits(TextField, _base_block_1$BaseBlo2);
+var TextField = /*#__PURE__*/function (_Input) {
+  _inherits(TextField, _Input);
 
   var _super2 = _createSuper(TextField);
 
@@ -4084,12 +4259,12 @@ var TextField = /*#__PURE__*/function (_base_block_1$BaseBlo2) {
   }]);
 
   return TextField;
-}(base_block_1.BaseBlock);
+}(Input);
 
 exports.TextField = TextField;
 
-var PasswordField = /*#__PURE__*/function (_base_block_1$BaseBlo3) {
-  _inherits(PasswordField, _base_block_1$BaseBlo3);
+var PasswordField = /*#__PURE__*/function (_TextField) {
+  _inherits(PasswordField, _TextField);
 
   var _super3 = _createSuper(PasswordField);
 
@@ -4116,12 +4291,12 @@ var PasswordField = /*#__PURE__*/function (_base_block_1$BaseBlo3) {
   }]);
 
   return PasswordField;
-}(base_block_1.BaseBlock);
+}(TextField);
 
 exports.PasswordField = PasswordField;
 
-var EmailField = /*#__PURE__*/function (_base_block_1$BaseBlo4) {
-  _inherits(EmailField, _base_block_1$BaseBlo4);
+var EmailField = /*#__PURE__*/function (_TextField2) {
+  _inherits(EmailField, _TextField2);
 
   var _super4 = _createSuper(EmailField);
 
@@ -4148,10 +4323,10 @@ var EmailField = /*#__PURE__*/function (_base_block_1$BaseBlo4) {
   }]);
 
   return EmailField;
-}(base_block_1.BaseBlock);
+}(TextField);
 
 exports.EmailField = EmailField;
-},{"./Input.hbs":"../src/componets/Input/Input.hbs","./Input.module.css":"../src/componets/Input/Input.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts"}],"../src/componets/Contact/Contact.hbs":[function(require,module,exports) {
+},{"./Input.hbs":"../src/componets/Input/Input.hbs","./Input.module.css":"../src/componets/Input/Input.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/componets/Contact/Contact.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4657,6 +4832,8 @@ var classnames_1 = __importDefault(require("../../utils/classnames"));
 
 var base_block_1 = require("../../utils/base-block");
 
+var Avatar_1 = require("../Avatar");
+
 var Message = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Message, _base_block_1$BaseBlo);
 
@@ -4674,10 +4851,15 @@ var Message = /*#__PURE__*/function (_base_block_1$BaseBlo) {
       var _a;
 
       var className = (0, classnames_1.default)(styles.conteiner, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
-      console.log('props', this.props);
+      var components = {
+        avatar: new Avatar_1.Avatar({
+          avatar: this.props.avatar
+        })
+      };
       return this.compile(Message_hbs_1.default, Object.assign(Object.assign({
         title: ''
       }, this.props), {
+        components: components,
         styles: styles,
         className: className
       }));
@@ -4688,7 +4870,7 @@ var Message = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 }(base_block_1.BaseBlock);
 
 exports.Message = Message;
-},{"./Message.hbs":"../src/componets/Message/Message.hbs","./Message.module.css":"../src/componets/Message/Message.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts"}],"../src/componets/index.ts":[function(require,module,exports) {
+},{"./Message.hbs":"../src/componets/Message/Message.hbs","./Message.module.css":"../src/componets/Message/Message.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts","../Avatar":"../src/componets/Avatar/index.ts"}],"../src/componets/index.ts":[function(require,module,exports) {
 "use strict";
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
@@ -4739,7 +4921,6 @@ exports.render = void 0;
 
 var render = function render(rootSelector, component) {
   var root = document.querySelector(rootSelector);
-  console.log('root', root);
 
   if (root != null) {
     root.appendChild(component.getContent());
@@ -4836,15 +5017,17 @@ var componets_1 = require("../../componets");
 
 var render_1 = require("../../utils/render");
 
+var validators_1 = require("../../utils/validators");
+
 var emailField = new componets_1.EmailField({
   placeholder: 'Enter email or user name',
   name: 'login'
-});
+}, [validators_1.emailValidator]);
 var passwordField = new componets_1.PasswordField({
   placeholder: 'Password',
   name: 'password',
   className: styles['text-field']
-});
+}, [validators_1.passwordValidator]);
 var button = new componets_1.Button({
   title: 'Sign in'
 });
@@ -4879,13 +5062,25 @@ var renderLogin = function renderLogin(selector) {
       PasswordField: passwordField,
       Button: button
     },
-    styles: styles
+    styles: styles,
+    events: {
+      submit: function submit(e) {
+        e.preventDefault();
+        emailField.validateInput();
+        passwordField.validateInput();
+        var data = {};
+        var inputFields = document.querySelectorAll('input');
+        inputFields.forEach(function (input) {
+          data[input.name] = input.value;
+        });
+      }
+    }
   });
   (0, render_1.render)(selector, login);
 };
 
 exports.renderLogin = renderLogin;
-},{"./Login.hbs":"../src/pages/Login/Login.hbs","./Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/Register/Register.hbs":[function(require,module,exports) {
+},{"./Login.hbs":"../src/pages/Login/Login.hbs","./Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/Register/Register.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5122,35 +5317,38 @@ var render_1 = require("../../utils/render");
 
 var componets_1 = require("../../componets");
 
-var firstName = new componets_1.TextField({
+var validators_1 = require("../../utils/validators");
+
+var firstName = new componets_1.Input({
   placeholder: 'First Name',
-  name: 'first_name'
-});
+  name: 'first_name',
+  className: styles['text-field']
+}, [validators_1.nameValidator]);
 var secondName = new componets_1.TextField({
   placeholder: 'Second Name',
   name: 'second_name',
   className: styles['text-field']
-});
+}, [validators_1.nameValidator]);
 var login = new componets_1.TextField({
   placeholder: 'Create User name',
   name: 'login',
   className: styles['text-field']
-});
+}, [validators_1.loginValidator]);
 var email = new componets_1.EmailField({
   placeholder: 'Enter Emai',
   name: 'email',
   className: styles['text-field']
-});
+}, [validators_1.emailValidator]);
 var password = new componets_1.PasswordField({
   placeholder: 'Password',
   name: 'password',
   className: styles['text-field']
-});
+}, [validators_1.passwordValidator]);
 var phone = new componets_1.PasswordField({
   placeholder: 'Phone',
   name: 'phone',
   className: styles['text-field']
-});
+}, [validators_1.phoneValidator]);
 var button = new componets_1.Button({
   title: 'Register'
 });
@@ -5189,13 +5387,29 @@ var renderRegister = function renderRegister(selector) {
       phone: phone,
       button: button
     },
-    styles: styles
+    styles: styles,
+    events: {
+      submit: function submit(e) {
+        e.preventDefault();
+        firstName.validateInput();
+        secondName.validateInput();
+        login.validateInput();
+        email.validateInput();
+        password.validateInput();
+        phone.validateInput();
+        var data = {};
+        var inputFields = document.querySelectorAll('input');
+        inputFields.forEach(function (input) {
+          data[input.name] = input.value;
+        });
+      }
+    }
   });
   (0, render_1.render)(selector, register);
 };
 
 exports.renderRegister = renderRegister;
-},{"./Register.hbs":"../src/pages/Register/Register.hbs","../Login/Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts","../../componets":"../src/componets/index.ts"}],"../src/pages/Main/Main.hbs":[function(require,module,exports) {
+},{"./Register.hbs":"../src/pages/Register/Register.hbs","../Login/Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/Main/Main.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5261,7 +5475,7 @@ var templateFunction = _handlebars.default.template({
           "column": 21
         }
       }
-    })) != null ? stack1 : "") + "        </ul>\r\n    </section>\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat") : stack1, depth0)) + ">\r\n        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "messages") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, depth0 != null ? lookupProperty(depth0, "messages") : depth0, {
+    })) != null ? stack1 : "") + "        </ul>\r\n    </section>\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat") : stack1, depth0)) + ">\r\n        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat-list") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, depth0 != null ? lookupProperty(depth0, "messages") : depth0, {
       "name": "each",
       "hash": {},
       "fn": container.program(1, data, 0),
@@ -5377,7 +5591,7 @@ exports.messages = [{
   avatar: no_avatar_jpg_1.default,
   firstName: 'Demon',
   lastName: 'Demon',
-  message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. У тебя же сбер онлайн есть?',
+  message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. ' + 'У тебя же сбер онлайн есть?',
   my: false
 }];
 exports.data = {
@@ -5472,6 +5686,8 @@ var componets_1 = require("../../componets");
 
 var render_1 = require("../../utils/render");
 
+var validators_1 = require("../../utils/validators");
+
 var search = new componets_1.TextField({
   placeholder: 'Search...',
   name: 'search',
@@ -5480,7 +5696,7 @@ var search = new componets_1.TextField({
 var message = new componets_1.TextField({
   placeholder: 'Type text...',
   name: 'message'
-});
+}, [validators_1.messageValidator]);
 
 var Main = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Main, _base_block_1$BaseBlo);
@@ -5530,7 +5746,7 @@ var renderMain = function renderMain(selector) {
 };
 
 exports.renderMain = renderMain;
-},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","./mock":"../src/pages/Main/mock.ts","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
+},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","./mock":"../src/pages/Main/mock.ts","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5806,20 +6022,22 @@ var render_1 = require("../../utils/render");
 
 var componets_1 = require("../../componets");
 
+var validators_1 = require("../../utils/validators");
+
 var avatar = new componets_1.Avatar({
   name: 'avatar',
   title: 'Изменить аватар'
 });
-var firstName = new componets_1.TextField({
+var firstName = new componets_1.Input({
   placeholder: 'First Name',
   name: 'first_name',
   className: styles['text-field']
-});
+}, [validators_1.nameValidator]);
 var secondName = new componets_1.TextField({
   placeholder: 'Second Name',
   name: 'second_name',
   className: styles['text-field']
-});
+}, [validators_1.nameValidator]);
 var displayName = new componets_1.TextField({
   placeholder: 'Display name',
   name: 'display_name',
@@ -5829,27 +6047,27 @@ var login = new componets_1.TextField({
   placeholder: 'Create User name',
   name: 'login',
   className: styles['text-field']
-});
+}, [validators_1.loginValidator]);
 var email = new componets_1.EmailField({
   placeholder: 'Enter Emai',
   name: 'email',
   className: styles['text-field']
-});
+}, [validators_1.emailValidator]);
 var oldPassword = new componets_1.PasswordField({
   placeholder: 'Password',
   name: 'oldPassword',
   className: styles['text-field']
-});
+}, [validators_1.passwordValidator]);
 var newPassword = new componets_1.PasswordField({
   placeholder: 'New Password',
   name: 'newPassword',
   className: styles['text-field']
-});
+}, [validators_1.passwordValidator]);
 var phone = new componets_1.TextField({
   placeholder: 'Phone',
   name: 'phone',
   className: styles['text-field']
-});
+}, [validators_1.phoneValidator]);
 var save = new componets_1.Button({
   title: 'Save'
 });
@@ -5895,13 +6113,30 @@ var renderProfile = function renderProfile(selector) {
       save: save,
       cancel: cancel
     },
-    styles: styles
+    styles: styles,
+    events: {
+      submit: function submit(e) {
+        e.preventDefault();
+        firstName.validateInput();
+        secondName.validateInput();
+        login.validateInput();
+        email.validateInput();
+        oldPassword.validateInput();
+        newPassword.validateInput();
+        phone.validateInput();
+        var data = {};
+        var inputFields = document.querySelectorAll('input');
+        inputFields.forEach(function (input) {
+          data[input.name] = input.value;
+        });
+      }
+    }
   });
   (0, render_1.render)(selector, profile);
 };
 
 exports.renderProfile = renderProfile;
-},{"./Profile.hbs":"../src/pages/Profile/Profile.hbs","./Profile.module.css":"../src/pages/Profile/Profile.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts","../../componets":"../src/componets/index.ts"}],"../src/pages/404/404.hbs":[function(require,module,exports) {
+},{"./Profile.hbs":"../src/pages/Profile/Profile.hbs","./Profile.module.css":"../src/pages/Profile/Profile.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/404/404.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5950,6 +6185,28 @@ module.exports = {
 },{"./..\\..\\..\\static\\img\\404\\stars.png":[["stars.9b65da37.png","img/404/stars.png"],"img/404/stars.png"],"./..\\..\\..\\static\\img\\404\\satan.png":[["satan.084eb1ab.png","img/404/satan.png"],"img/404/satan.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/pages/404/index.ts":[function(require,module,exports) {
 "use strict";
 
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
   var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -5999,20 +6256,48 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.render404 = void 0;
+exports.render404 = exports.Page404 = void 0;
 
 var _404_hbs_1 = __importDefault(require("./404.hbs"));
 
 var styles = __importStar(require("./404.module.css"));
 
-var render404 = function render404() {
-  return (0, _404_hbs_1.default)({
+var base_block_1 = require("../../utils/base-block");
+
+var render_1 = require("../../utils/render");
+
+var Page404 = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(Page404, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(Page404);
+
+  function Page404() {
+    _classCallCheck(this, Page404);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Page404, [{
+    key: "render",
+    value: function render() {
+      return this.compile(_404_hbs_1.default, this.props);
+    }
+  }]);
+
+  return Page404;
+}(base_block_1.BaseBlock);
+
+exports.Page404 = Page404;
+
+var render404 = function render404(selector) {
+  var intro = new Page404({
     styles: styles
   });
+  (0, render_1.render)(selector, intro);
 };
 
 exports.render404 = render404;
-},{"./404.hbs":"../src/pages/404/404.hbs","./404.module.css":"../src/pages/404/404.module.css"}],"../src/pages/500/500.hbs":[function(require,module,exports) {
+},{"./404.hbs":"../src/pages/404/404.hbs","./404.module.css":"../src/pages/404/404.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/500/500.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6045,21 +6330,43 @@ var templateFunction = _handlebars.default.template({
 
 var _default = templateFunction;
 exports.default = _default;
-},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/pages/500/500.css":[function(require,module,exports) {
+},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/pages/500/500.module.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
 module.exports = {
-  "wrapper": "src-pages-500-__500__wrapper__1aHd7",
-  "main": "src-pages-500-__500__main__FatX6",
-  "conteiner": "src-pages-500-__500__conteiner__21qnM",
-  "picture": "src-pages-500-__500__picture__1Lt25",
-  "title": "src-pages-500-__500__title__2x_LT",
-  "home": "src-pages-500-__500__home__3QKak"
+  "wrapper": "src-pages-500-__500-module__wrapper__3YBMd",
+  "main": "src-pages-500-__500-module__main__3gjYb",
+  "conteiner": "src-pages-500-__500-module__conteiner__2ht6b",
+  "picture": "src-pages-500-__500-module__picture__10vEV",
+  "title": "src-pages-500-__500-module__title__1m0Ox",
+  "home": "src-pages-500-__500-module__home__3X5_N"
 };
 },{"./..\\..\\..\\static\\img\\404\\stars.png":[["stars.9b65da37.png","img/404/stars.png"],"img/404/stars.png"],"./..\\..\\..\\static\\img\\404\\satan.png":[["satan.084eb1ab.png","img/404/satan.png"],"img/404/satan.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/pages/500/index.ts":[function(require,module,exports) {
 "use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
   if (k2 === undefined) k2 = k;
@@ -6110,20 +6417,48 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.render500 = void 0;
+exports.render500 = exports.Page500 = void 0;
 
 var _500_hbs_1 = __importDefault(require("./500.hbs"));
 
-var styles = __importStar(require("./500.css"));
+var styles = __importStar(require("./500.module.css"));
 
-var render500 = function render500() {
-  return (0, _500_hbs_1.default)({
+var base_block_1 = require("../../utils/base-block");
+
+var render_1 = require("../../utils/render");
+
+var Page500 = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(Page500, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(Page500);
+
+  function Page500() {
+    _classCallCheck(this, Page500);
+
+    return _super.apply(this, arguments);
+  }
+
+  _createClass(Page500, [{
+    key: "render",
+    value: function render() {
+      return this.compile(_500_hbs_1.default, this.props);
+    }
+  }]);
+
+  return Page500;
+}(base_block_1.BaseBlock);
+
+exports.Page500 = Page500;
+
+var render500 = function render500(selector) {
+  var page500 = new Page500({
     styles: styles
   });
+  (0, render_1.render)(selector, page500);
 };
 
 exports.render500 = render500;
-},{"./500.hbs":"../src/pages/500/500.hbs","./500.css":"../src/pages/500/500.css"}],"../src/pages/Intro/Intro.hbs":[function(require,module,exports) {
+},{"./500.hbs":"../src/pages/500/500.hbs","./500.module.css":"../src/pages/500/500.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/Intro/Intro.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6326,37 +6661,7 @@ __exportStar(require("./404"), exports);
 __exportStar(require("./500"), exports);
 
 __exportStar(require("./Intro"), exports);
-},{"./Login":"../src/pages/Login/index.ts","./Register":"../src/pages/Register/index.ts","./Main":"../src/pages/Main/index.ts","./Profile":"../src/pages/Profile/index.ts","./404":"../src/pages/404/index.ts","./500":"../src/pages/500/index.ts","./Intro":"../src/pages/Intro/index.ts"}],"../src/utils/register-partials.ts":[function(require,module,exports) {
-"use strict";
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.registerPartials = void 0;
-
-var handlebars_runtime_1 = __importDefault(require("handlebars/dist/handlebars.runtime"));
-
-var componets_1 = require("../componets");
-
-var registerPartials = function registerPartials() {
-  handlebars_runtime_1.default.registerPartial('Input', componets_1.Input);
-  handlebars_runtime_1.default.registerPartial('Avatar', componets_1.Avatar);
-  handlebars_runtime_1.default.registerPartial('Button', componets_1.Button);
-  handlebars_runtime_1.default.registerPartial('Contact', componets_1.Contact);
-  handlebars_runtime_1.default.registerPartial('Message', componets_1.Message);
-  handlebars_runtime_1.default.registerPartial('TextField', componets_1.TextField);
-  handlebars_runtime_1.default.registerPartial('PasswordField', componets_1.PasswordField);
-  handlebars_runtime_1.default.registerPartial('EmailField', componets_1.EmailField);
-};
-
-exports.registerPartials = registerPartials;
-},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js","../componets":"../src/componets/index.ts"}],"../src/index.ts":[function(require,module,exports) {
+},{"./Login":"../src/pages/Login/index.ts","./Register":"../src/pages/Register/index.ts","./Main":"../src/pages/Main/index.ts","./Profile":"../src/pages/Profile/index.ts","./404":"../src/pages/404/index.ts","./500":"../src/pages/500/index.ts","./Intro":"../src/pages/Intro/index.ts"}],"../src/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6367,9 +6672,6 @@ require("normalize.css");
 
 var pages_1 = require("./pages");
 
-var register_partials_1 = require("./utils/register-partials");
-
-(0, register_partials_1.registerPartials)();
 var pathname = window.location.pathname;
 var rootSelector = '#root';
 
@@ -6393,17 +6695,19 @@ switch (pathname) {
   case '/profile':
     (0, pages_1.renderProfile)(rootSelector);
     break;
-  // case '/404':
-  //   content = render404()
-  //   break;
-  // case '/500':
-  //   content = render500()
-  //   break;
+
+  case '/404':
+    (0, pages_1.render404)(rootSelector);
+    break;
+
+  case '/500':
+    (0, pages_1.render500)(rootSelector);
+    break;
 
   default:
     (0, pages_1.renderLogin)('#root');
 }
-},{"normalize.css":"../node_modules/normalize.css/normalize.css","./pages":"../src/pages/index.ts","./utils/register-partials":"../src/utils/register-partials.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"normalize.css":"../node_modules/normalize.css/normalize.css","./pages":"../src/pages/index.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -6431,7 +6735,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59124" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49202" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,5 +1,5 @@
-import avatar from '../../../static/img/avatar.png'
-import no_avatar from '../../../static/img/no_avatar.jpg'
+import avatar from '../../../static/img/avatar.png';
+import noAvatar from '../../../static/img/no_avatar.jpg';
 
 export interface IContact {
   avatar: any
@@ -24,48 +24,48 @@ export interface IResponse {
 
 export const contacts: IContact[] = [
   {
-      avatar: avatar,
-      firstName: 'Ash',
-      lastName: 'Slayer',
-      message: 'message',
-      unreadMessages: 1
+    avatar,
+    firstName: 'Ash',
+    lastName: 'Slayer',
+    message: 'message',
+    unreadMessages: 1,
   },
   {
-    avatar: no_avatar,
+    avatar: noAvatar,
     firstName: 'Demon1',
     lastName: 'Demon1',
     message: 'message',
-    unreadMessages: 6
+    unreadMessages: 6,
 
   },
   {
-    avatar: no_avatar,
+    avatar: noAvatar,
     firstName: 'Demon2',
     lastName: 'Demon2',
     message: 'message',
-    unreadMessages: 6
+    unreadMessages: 6,
 
   },
   {
-    avatar: no_avatar,
+    avatar: noAvatar,
     firstName: 'Demon2',
     lastName: 'Demon2',
     message: 'message',
-    unreadMessages: 0
+    unreadMessages: 0,
 
   },
-]
+];
 
 export const messages: IMessage[] = [
   {
-    avatar: avatar,
+    avatar,
     firstName: 'Ash',
     lastName: 'Slayer',
     message: 'Призываю тебя, демон!',
     my: true,
   },
   {
-    avatar: no_avatar,
+    avatar: noAvatar,
     firstName: 'Demon',
     lastName: 'Demon',
     message: 'Эшли! Как дела на грешной?',
@@ -73,23 +73,24 @@ export const messages: IMessage[] = [
 
   },
   {
-    avatar: avatar,
+    avatar,
     firstName: 'Ash',
     lastName: 'Slayer',
     message: 'Не кривляйся где мои деньги?',
-    my: true
+    my: true,
   },
   {
-    avatar: no_avatar,
+    avatar: noAvatar,
     firstName: 'Demon',
     lastName: 'Demon',
-    message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. У тебя же сбер онлайн есть?',
-    my: false
+    message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. '
+      + 'У тебя же сбер онлайн есть?',
+    my: false,
 
   },
-]
+];
 
 export const data: IResponse = {
   contacts,
-  messages
-}
+  messages,
+};
