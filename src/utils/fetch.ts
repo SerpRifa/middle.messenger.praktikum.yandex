@@ -5,44 +5,47 @@ export enum HTTPMethods {
   DELETE = 'DELETE',
 }
 
+interface IOptions {
+  [key: string]: any;
+}
+
 export class Fetch {
-  get<T>(url: string, options: { [key: string]: any } = {}): Promise<T> {
-    return this.sendRequest(`${url}${this.queryStringify(options.data)}`, {
-      method: HTTPMethods.GET,
-    });
+  public get<G>(url: string, options: IOptions = {}): Promise<G> {
+    const queryString = this.getQueryString(options.data);
+    return this.sendRequest(`${url}${queryString}`, { method: HTTPMethods.GET });
   }
 
-  put<T>(url: string, options: { [key: string]: any } = {}): Promise<T> {
-    return this.sendRequest(`${url}`, { method: HTTPMethods.PUT, data: options.data });
+  public post<G>(url: string, options: IOptions): Promise<G> {
+    return this.sendRequest(url, { method: HTTPMethods.POST, data: options.data });
   }
 
-  post<T>(url: string, options: { [key: string]: any } = {}): Promise<T> {
-    return this.sendRequest(`${url}`, { method: HTTPMethods.POST, data: options.data });
+  public put<G>(url: string, options: IOptions): Promise<G> {
+    return this.sendRequest(url, { method: HTTPMethods.PUT, data: options.data });
   }
 
-  delete<T>(url: string, options: { [key: string]: any } = {}): Promise<T> {
+  public delete<G>(url: string, options: IOptions): Promise<G> {
     return this.sendRequest(url, { method: HTTPMethods.DELETE, data: options.data });
   }
 
-  private sendRequest<T>(
+  private sendRequest<G>(
     url: string,
-    options: { [key: string]: string } = { method: HTTPMethods.GET },
-  ): Promise<T> {
+    options: { method: string; data?: string } = { method: HTTPMethods.GET },
+  ): Promise<G> {
     const { method, data } = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-
       xhr.open(method, url);
 
-      xhr.onload = () => {
+      xhr.onload = function () {
         resolve(JSON.parse(xhr.responseText));
       };
 
       xhr.onabort = reject;
       xhr.onerror = reject;
+      xhr.ontimeout = reject;
 
-      if (!data) {
+      if (method === HTTPMethods.GET || !data) {
         xhr.send();
       } else {
         xhr.send(data);
@@ -50,15 +53,11 @@ export class Fetch {
     });
   }
 
-  private queryStringify(data: { [key: string]: string | null }): string {
-    const params: string[] = [];
-
-    Object.keys(data).forEach((key) => {
-      if (data[key] !== null && data[key] !== undefined) {
-        params.push(`${key}=${data[key]}`);
-      }
-    });
-
-    return params.length > 0 ? `?${params.join('&')}` : '';
+  private getQueryString(options: IOptions): string {
+    const result = Object.keys(options).reduce(
+      (total, key) => (total !== '' ? `${total}&${options[key]}` : options[key]),
+      '',
+    );
+    return result ? `?${result}` : '';
   }
 }

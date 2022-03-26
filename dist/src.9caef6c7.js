@@ -3534,18 +3534,18 @@ var templateFunction = _handlebars.default.template({
           "column": 24
         }
       }
-    }) : helper)) + ">\r\n    <img src=\"" + alias4((helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+    }) : helper)) + ">\r\n    <img alt=\"avatar\" src=\"" + alias4((helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
       "name": "avatar",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
           "line": 2,
-          "column": 14
+          "column": 27
         },
         "end": {
           "line": 2,
-          "column": 24
+          "column": 37
         }
       }
     }) : helper)) + "\" class=" + alias4((helper = (helper = lookupProperty(helpers, "className") || (depth0 != null ? lookupProperty(depth0, "className") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
@@ -3555,11 +3555,11 @@ var templateFunction = _handlebars.default.template({
       "loc": {
         "start": {
           "line": 2,
-          "column": 32
+          "column": 45
         },
         "end": {
           "line": 2,
-          "column": 45
+          "column": 58
         }
       }
     }) : helper)) + " />\r\n</div>\r\n";
@@ -5686,8 +5686,6 @@ var componets_1 = require("../../componets");
 
 var render_1 = require("../../utils/render");
 
-var validators_1 = require("../../utils/validators");
-
 var search = new componets_1.TextField({
   placeholder: 'Search...',
   name: 'search',
@@ -5696,7 +5694,7 @@ var search = new componets_1.TextField({
 var message = new componets_1.TextField({
   placeholder: 'Type text...',
   name: 'message'
-}, [validators_1.messageValidator]);
+});
 
 var Main = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Main, _base_block_1$BaseBlo);
@@ -5746,7 +5744,7 @@ var renderMain = function renderMain(selector) {
 };
 
 exports.renderMain = renderMain;
-},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","./mock":"../src/pages/Main/mock.ts","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
+},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","./mock":"../src/pages/Main/mock.ts","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6735,7 +6733,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49202" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62728" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

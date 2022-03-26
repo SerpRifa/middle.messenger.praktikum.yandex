@@ -5,7 +5,6 @@ import { BaseBlock } from '../../utils/base-block';
 import { BaseComponetProps } from '../../types/types';
 import { Contact, Message, TextField } from '../../componets';
 import { render } from '../../utils/render';
-import { messageValidator } from '../../utils/validators';
 
 export interface MainProps extends BaseComponetProps {
   data: IResponse
@@ -21,7 +20,7 @@ const search = new TextField({
 const message = new TextField({
   placeholder: 'Type text...',
   name: 'message',
-}, [messageValidator]);
+});
 
 export class Main extends BaseBlock<MainProps> {
   render() {
