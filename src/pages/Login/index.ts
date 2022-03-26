@@ -49,6 +49,8 @@ export const renderLogin = (selector: string) => {
         inputFields.forEach((input: HTMLInputElement) => {
           data[input.name] = input.value;
         });
+
+        console.log(data)
       },
     },
   });
