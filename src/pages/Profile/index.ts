@@ -1,83 +1,97 @@
-import profileTmpl from './Profile.hbs';
-import * as styles from './Profile.module.css';
-import { BaseBlock } from '../../utils/base-block';
-import { BaseComponetProps } from '../../types/types';
-import { render } from '../../utils/render';
+import profileTmpl from "./Profile.hbs";
+import * as styles from "./Profile.module.css";
+import { BaseBlock } from "../../utils/base-block";
+import { BaseComponetProps } from "../../types/types";
+import { render } from "../../utils/render";
+import { Avatar, Button, EmailField, Input, PasswordField, TextField } from "../../componets";
 import {
-  Avatar, Button, EmailField, Input, PasswordField, TextField,
-} from '../../componets';
-import {
-  emailValidator, loginValidator, nameValidator, passwordValidator, phoneValidator,
-} from '../../utils/validators';
+  emailValidator,
+  loginValidator,
+  nameValidator,
+  passwordValidator,
+  phoneValidator,
+} from "../../utils/validators";
 
 export interface ProfileProps extends BaseComponetProps {
-  styles: any
+  styles: any;
 }
 
 const avatar = new Avatar({
-  name: 'avatar',
-  title: 'Изменить аватар',
+  name: "avatar",
+  title: "Изменить аватар",
 });
 
 const firstName = new Input(
   {
-    placeholder: 'First Name',
-    name: 'first_name',
-    className: styles['text-field'],
+    placeholder: "First Name",
+    name: "first_name",
+    className: styles["text-field"],
   },
-  [nameValidator],
+  [nameValidator]
 );
 
 const secondName = new TextField(
   {
-    placeholder: 'Second Name',
-    name: 'second_name',
-    className: styles['text-field'],
+    placeholder: "Second Name",
+    name: "second_name",
+    className: styles["text-field"],
   },
-  [nameValidator],
+  [nameValidator]
 );
 
 const displayName = new TextField({
-  placeholder: 'Display name',
-  name: 'display_name',
-  className: styles['text-field'],
+  placeholder: "Display name",
+  name: "display_name",
+  className: styles["text-field"],
 });
 
 const login = new TextField(
   {
-    placeholder: 'Create User name',
-    name: 'login',
-    className: styles['text-field'],
+    placeholder: "Create User name",
+    name: "login",
+    className: styles["text-field"],
   },
-  [loginValidator],
+  [loginValidator]
 );
 
-const email = new EmailField({
-  placeholder: 'Enter Emai',
-  name: 'email',
-  className: styles['text-field'],
-}, [emailValidator]);
+const email = new EmailField(
+  {
+    placeholder: "Enter Emai",
+    name: "email",
+    className: styles["text-field"],
+  },
+  [emailValidator]
+);
 
-const oldPassword = new PasswordField({
-  placeholder: 'Password',
-  name: 'oldPassword',
-  className: styles['text-field'],
-}, [passwordValidator]);
+const oldPassword = new PasswordField(
+  {
+    placeholder: "Password",
+    name: "oldPassword",
+    className: styles["text-field"],
+  },
+  [passwordValidator]
+);
 
-const newPassword = new PasswordField({
-  placeholder: 'New Password',
-  name: 'newPassword',
-  className: styles['text-field'],
-}, [passwordValidator]);
+const newPassword = new PasswordField(
+  {
+    placeholder: "New Password",
+    name: "newPassword",
+    className: styles["text-field"],
+  },
+  [passwordValidator]
+);
 
-const phone = new TextField({
-  placeholder: 'Phone',
-  name: 'phone',
-  className: styles['text-field'],
-}, [phoneValidator]);
+const phone = new TextField(
+  {
+    placeholder: "Phone",
+    name: "phone",
+    className: styles["text-field"],
+  },
+  [phoneValidator]
+);
 
-const save = new Button({ title: 'Save' });
-const cancel = new Button({ title: 'Cancel' });
+const save = new Button({ title: "Save" });
+const cancel = new Button({ title: "Cancel" });
 
 export class Profile extends BaseBlock<ProfileProps> {
   render() {
@@ -114,13 +128,13 @@ export const renderProfile = (selector: string) => {
 
         const data: Record<string, string> = {};
 
-        const inputFields = document.querySelectorAll('input');
+        const inputFields = document.querySelectorAll("input");
 
         inputFields.forEach((input: HTMLInputElement) => {
           data[input.name] = input.value;
         });
 
-        console.log(data)
+        console.log(data);
       },
     },
   });

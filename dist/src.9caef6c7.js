@@ -3457,7 +3457,19 @@ var BaseBlock = /*#__PURE__*/function () {
   }, {
     key: "_makePropsProxy",
     value: function _makePropsProxy(props) {
-      props = new Proxy(props, {});
+      var _this3 = this;
+
+      props = new Proxy(props, {
+        set: function set(target, propName, value) {
+          if (target[propName] !== value) {
+            target[propName] = value;
+
+            _this3.eventBus().emit(BaseBlock.EVENTS.FLOW_CDU);
+          }
+
+          return true;
+        }
+      });
       return props;
     }
   }, {
@@ -3771,7 +3783,13 @@ var templateFunction = _handlebars.default.template({
 
 var _default = templateFunction;
 exports.default = _default;
-},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/componets/Button/Button.module.css":[function(require,module,exports) {
+},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/styles/main.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+module.exports = {};
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/Button/Button.module.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -3779,7 +3797,7 @@ module.hot.accept(reloadCSS);
 module.exports = {
   "button": "src-componets-Button-__Button-module__button__2N7tr"
 };
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/Button/index.ts":[function(require,module,exports) {
+},{"../../styles/main.css":"../src/styles/main.css","_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/Button/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -4493,7 +4511,7 @@ module.exports = {
   "end": "src-componets-Contact-__Contact-module__end__EY3ey",
   "unread": "src-componets-Contact-__Contact-module__unread__1ms01"
 };
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/Contact/index.ts":[function(require,module,exports) {
+},{"../../styles/main.css":"../src/styles/main.css","_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/Contact/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -5073,6 +5091,7 @@ var renderLogin = function renderLogin(selector) {
         inputFields.forEach(function (input) {
           data[input.name] = input.value;
         });
+        console.log(data);
       }
     }
   });
@@ -5402,6 +5421,7 @@ var renderRegister = function renderRegister(selector) {
         inputFields.forEach(function (input) {
           data[input.name] = input.value;
         });
+        console.log(data);
       }
     }
   });
@@ -6023,54 +6043,54 @@ var componets_1 = require("../../componets");
 var validators_1 = require("../../utils/validators");
 
 var avatar = new componets_1.Avatar({
-  name: 'avatar',
-  title: 'Изменить аватар'
+  name: "avatar",
+  title: "Изменить аватар"
 });
 var firstName = new componets_1.Input({
-  placeholder: 'First Name',
-  name: 'first_name',
-  className: styles['text-field']
+  placeholder: "First Name",
+  name: "first_name",
+  className: styles["text-field"]
 }, [validators_1.nameValidator]);
 var secondName = new componets_1.TextField({
-  placeholder: 'Second Name',
-  name: 'second_name',
-  className: styles['text-field']
+  placeholder: "Second Name",
+  name: "second_name",
+  className: styles["text-field"]
 }, [validators_1.nameValidator]);
 var displayName = new componets_1.TextField({
-  placeholder: 'Display name',
-  name: 'display_name',
-  className: styles['text-field']
+  placeholder: "Display name",
+  name: "display_name",
+  className: styles["text-field"]
 });
 var login = new componets_1.TextField({
-  placeholder: 'Create User name',
-  name: 'login',
-  className: styles['text-field']
+  placeholder: "Create User name",
+  name: "login",
+  className: styles["text-field"]
 }, [validators_1.loginValidator]);
 var email = new componets_1.EmailField({
-  placeholder: 'Enter Emai',
-  name: 'email',
-  className: styles['text-field']
+  placeholder: "Enter Emai",
+  name: "email",
+  className: styles["text-field"]
 }, [validators_1.emailValidator]);
 var oldPassword = new componets_1.PasswordField({
-  placeholder: 'Password',
-  name: 'oldPassword',
-  className: styles['text-field']
+  placeholder: "Password",
+  name: "oldPassword",
+  className: styles["text-field"]
 }, [validators_1.passwordValidator]);
 var newPassword = new componets_1.PasswordField({
-  placeholder: 'New Password',
-  name: 'newPassword',
-  className: styles['text-field']
+  placeholder: "New Password",
+  name: "newPassword",
+  className: styles["text-field"]
 }, [validators_1.passwordValidator]);
 var phone = new componets_1.TextField({
-  placeholder: 'Phone',
-  name: 'phone',
-  className: styles['text-field']
+  placeholder: "Phone",
+  name: "phone",
+  className: styles["text-field"]
 }, [validators_1.phoneValidator]);
 var save = new componets_1.Button({
-  title: 'Save'
+  title: "Save"
 });
 var cancel = new componets_1.Button({
-  title: 'Cancel'
+  title: "Cancel"
 });
 
 var Profile = /*#__PURE__*/function (_base_block_1$BaseBlo) {
@@ -6123,10 +6143,11 @@ var renderProfile = function renderProfile(selector) {
         newPassword.validateInput();
         phone.validateInput();
         var data = {};
-        var inputFields = document.querySelectorAll('input');
+        var inputFields = document.querySelectorAll("input");
         inputFields.forEach(function (input) {
           data[input.name] = input.value;
         });
+        console.log(data);
       }
     }
   });
@@ -6733,7 +6754,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62728" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55418" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

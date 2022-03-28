@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { EventBus } from './event-bus';
 import { BaseComponetProps } from '../types/types';
 
-export class BaseBlock<TProps = any> {
+export class BaseBlock<TProps> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -17,7 +17,7 @@ export class BaseBlock<TProps = any> {
 
   _events = {};
 
-  props: any;
+  props: TProps;
 
   eventBus = null;
 
@@ -40,7 +40,7 @@ export class BaseBlock<TProps = any> {
     eventBus.emit(BaseBlock.EVENTS.INIT);
   }
 
-  _registerEvents(eventBus) {
+  private _registerEvents(eventBus) {
     eventBus.on(BaseBlock.EVENTS.INIT, this.init.bind(this));
     eventBus.on(BaseBlock.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(BaseBlock.EVENTS.FLOW_RENDER, this._render.bind(this));
@@ -171,7 +171,15 @@ export class BaseBlock<TProps = any> {
   }
 
   _makePropsProxy(props: any) {
-    props = new Proxy(props, {});
+    props = new Proxy(props, {
+      set: (target, propName: string, value) => {
+        if (target[propName] !== value) {
+          target[propName] = value
+          this.eventBus().emit(BaseBlock.EVENTS.FLOW_CDU);
+        }
+        return true
+      }
+    });
     return props;
   }
 
