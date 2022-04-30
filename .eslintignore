@@ -1,0 +1,7 @@
+.cache
+.vscode
+.idea
+.github
+node_modules
+dist
+src/@types

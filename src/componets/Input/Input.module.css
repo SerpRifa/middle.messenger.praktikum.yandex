@@ -1,14 +1,15 @@
 .input {
-  background-color: #F0EFFF;
+  background-color: #f0efff;
   box-sizing: border-box;
-  border-color: #F0EFFF;
-  border-width: 0px;
+  border-color: #f0efff;
+  border-width: 0;
   border-radius: 8px;
   padding: 0 26px;
   height: 62px;
+  width: 100%;
 }
 
 .input:placeholder-shown {
-  color: #A7A3FF;
+  color: #a7a3ff;
   padding: 0 26px;
 }

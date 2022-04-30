@@ -10,9 +10,9 @@
         </section>
         <form class={{styles.form}}>
             <h2>Sign in</h2>
-            {{> TextField placeholder='Enter email or user name' name='login' className='' }}
-            {{> TextField placeholder='Password' name='password' className=styles.text-field }}
-            {{> Button title='Sign in'  className='' }}
+            {{{EmailField}}}
+            {{{PasswordField}}}
+            {{{Button}}}
         </form>
     </div>
 </div>
