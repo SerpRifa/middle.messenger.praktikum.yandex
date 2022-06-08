@@ -1,6 +1,12 @@
+<div class={{styles.wrapper}}>
+<div class={{styles.tool-bar}} >
+    <div class={{styles.logout}}>{{{logout}}}</div>
+</div>
 <div class={{styles.conteiner}}>
     <section class={{styles.panel-left}}>
-        {{{search}}}
+        <div>
+            {{{addChatInput}}} {{{addChatButton}}}
+        </div>
         <ul class={{styles.chat-list}}>
             {{#each contacts}}
                 <li>
@@ -19,4 +25,5 @@
         </ul>
         {{{message}}}
     </section>
+</div>
 </div>

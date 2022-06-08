@@ -3265,6 +3265,10 @@ var BaseBlock = /*#__PURE__*/function () {
 
       _this.props = Object.assign(_this.props, nextProps);
 
+      _this._makePropsProxy(_this.props);
+
+      _this._render();
+
       _this.eventBus().emit(BaseBlock.EVENTS.FLOW_CDU);
     };
 
@@ -3321,7 +3325,6 @@ var BaseBlock = /*#__PURE__*/function () {
     key: "_componentDidMount",
     value: function _componentDidMount() {
       this.componentDidMount();
-      this.eventBus().emit(BaseBlock.EVENTS.FLOW_CDM);
     }
   }, {
     key: "componentDidMount",
@@ -3339,9 +3342,7 @@ var BaseBlock = /*#__PURE__*/function () {
     }
   }, {
     key: "componentDidUpdate",
-    value: function componentDidUpdate(oldProps, newProps) {
-      return oldProps !== newProps;
-    }
+    value: function componentDidUpdate(oldProps, newProps) {}
   }, {
     key: "_addEvents",
     value: function _addEvents() {
@@ -3353,6 +3354,10 @@ var BaseBlock = /*#__PURE__*/function () {
         var _ref2 = _slicedToArray(_ref, 2),
             name = _ref2[0],
             callback = _ref2[1];
+
+        if (name == 'click') {
+          window.selectedEement = element;
+        }
 
         element === null || element === void 0 ? void 0 : element.addEventListener(name, callback);
       });
@@ -3417,6 +3422,7 @@ var BaseBlock = /*#__PURE__*/function () {
         } else {
           var target = fragment.content.querySelector("[data-id=\"".concat(component.id, "\"]"));
           target === null || target === void 0 ? void 0 : target.replaceWith(component.getContent());
+          component.dispatchComponentDidMount();
         }
       });
       return fragment.content;
@@ -3603,6 +3609,155 @@ exports.default = function () {
 
   return rest.join(' ');
 };
+},{}],"../src/utils/fetch.ts":[function(require,module,exports) {
+"use strict";
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetch = exports.Fetch = exports.HTTPMethods = void 0;
+var HTTPMethods;
+
+(function (HTTPMethods) {
+  HTTPMethods["GET"] = "GET";
+  HTTPMethods["PUT"] = "PUT";
+  HTTPMethods["POST"] = "POST";
+  HTTPMethods["DELETE"] = "DELETE";
+})(HTTPMethods = exports.HTTPMethods || (exports.HTTPMethods = {}));
+
+var Fetch = /*#__PURE__*/function () {
+  function Fetch() {
+    _classCallCheck(this, Fetch);
+
+    this.resourceUrl = "http://ya-praktikum.tech/api/v2/resources";
+    this.baseUrl = "https://ya-praktikum.tech/api/v2";
+  }
+
+  _createClass(Fetch, [{
+    key: "get",
+    value: function get() {
+      var url = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.baseUrl;
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var queryString = this.getQueryString(options.data);
+      return this.sendRequest("".concat(this.baseUrl).concat(url).concat(queryString), {
+        method: HTTPMethods.GET
+      });
+    }
+  }, {
+    key: "post",
+    value: function post(path, options) {
+      return this.sendRequest("".concat(this.baseUrl).concat(path), {
+        method: HTTPMethods.POST,
+        data: options.data
+      });
+    }
+  }, {
+    key: "put",
+    value: function put() {
+      var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.baseUrl;
+      var options = arguments.length > 1 ? arguments[1] : undefined;
+      return this.sendRequest("".concat(this.baseUrl).concat(path), Object.assign({
+        method: HTTPMethods.PUT
+      }, options));
+    }
+  }, {
+    key: "delete",
+    value: function _delete() {
+      var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.baseUrl;
+      var options = arguments.length > 1 ? arguments[1] : undefined;
+      return this.sendRequest("".concat(this.baseUrl).concat(path), {
+        method: HTTPMethods.DELETE,
+        data: options.data
+      });
+    }
+  }, {
+    key: "sendRequest",
+    value: function sendRequest(url) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+        method: HTTPMethods.GET
+      };
+      var method = options.method,
+          data = options.data,
+          headers = options.headers,
+          file = options.file,
+          _options$withCredenti = options.withCredentials,
+          withCredentials = _options$withCredenti === void 0 ? true : _options$withCredenti;
+      return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+
+        xhr.onload = function () {
+          if (xhr.status < 400) {
+            resolve(xhr.response);
+          } else {
+            reject(xhr.response);
+          }
+        };
+
+        xhr.onabort = reject;
+        xhr.onerror = reject;
+        xhr.ontimeout = reject;
+
+        if (!file) {
+          xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        }
+
+        if (headers) {
+          Object.entries(headers).forEach(function (_ref) {
+            var _ref2 = _slicedToArray(_ref, 2),
+                key = _ref2[0],
+                value = _ref2[1];
+
+            return xhr.setRequestHeader(key, value);
+          });
+        }
+
+        xhr.withCredentials = withCredentials;
+        xhr.responseType = 'json';
+
+        if (method === HTTPMethods.GET || !data) {
+          xhr.send();
+        } else {
+          console.log('data', data);
+          xhr.send(Boolean(file) ? data : JSON.stringify(data));
+        }
+      });
+    }
+  }, {
+    key: "getQueryString",
+    value: function getQueryString() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var result = Object.keys(options).reduce(function (total, key) {
+        return total !== '' ? "".concat(total, "&").concat(options[key]) : options[key];
+      }, '');
+      console.log('result', result ? "?".concat(result) : '');
+      return result ? "?".concat(result) : '';
+    }
+  }]);
+
+  return Fetch;
+}();
+
+exports.Fetch = Fetch;
+exports.fetch = new Fetch();
 },{}],"../src/componets/Avatar/index.ts":[function(require,module,exports) {
 "use strict";
 
@@ -3689,6 +3844,8 @@ var classnames_1 = __importDefault(require("../../utils/classnames"));
 
 var base_block_1 = require("../../utils/base-block");
 
+var fetch_1 = require("../../utils/fetch");
+
 var Avatar = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Avatar, _base_block_1$BaseBlo);
 
@@ -3703,10 +3860,10 @@ var Avatar = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _createClass(Avatar, [{
     key: "render",
     value: function render() {
-      var _a, _b;
+      var _a;
 
       var className = (0, classnames_1.default)(styles.avatar, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
-      var avatar = (_b = this.props.avatar) !== null && _b !== void 0 ? _b : no_avatar_jpg_1.default;
+      var avatar = this.props.avatar ? fetch_1.fetch.resourceUrl + this.props.avatar : no_avatar_jpg_1.default;
       return this.compile(Avatar_hbs_1.default, Object.assign(Object.assign({}, this.props), {
         className: className,
         avatar: avatar
@@ -3718,7 +3875,7 @@ var Avatar = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 }(base_block_1.BaseBlock);
 
 exports.Avatar = Avatar;
-},{"../../../static/img/no_avatar.jpg":"img/no_avatar.jpg","./Avatar.hbs":"../src/componets/Avatar/Avatar.hbs","./Avatar.module.css":"../src/componets/Avatar/Avatar.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts"}],"../src/componets/Button/Button.hbs":[function(require,module,exports) {
+},{"../../../static/img/no_avatar.jpg":"img/no_avatar.jpg","./Avatar.hbs":"../src/componets/Avatar/Avatar.hbs","./Avatar.module.css":"../src/componets/Avatar/Avatar.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts","../../utils/fetch":"../src/utils/fetch.ts"}],"../src/componets/Button/Button.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4404,21 +4561,35 @@ var templateFunction = _handlebars.default.template({
       return undefined;
     };
 
-    return "<div class=" + alias4((helper = (helper = lookupProperty(helpers, "className") || (depth0 != null ? lookupProperty(depth0, "className") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+    return "<div class=\"" + alias4((helper = (helper = lookupProperty(helpers, "className") || (depth0 != null ? lookupProperty(depth0, "className") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
       "name": "className",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
           "line": 1,
-          "column": 11
+          "column": 12
         },
         "end": {
           "line": 1,
-          "column": 24
+          "column": 25
         }
       }
-    }) : helper)) + ">\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+    }) : helper)) + " contact\" data-id=\"" + alias4((helper = (helper = lookupProperty(helpers, "id") || (depth0 != null ? lookupProperty(depth0, "id") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "name": "id",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 44
+        },
+        "end": {
+          "line": 1,
+          "column": 50
+        }
+      }
+    }) : helper)) + "\">\r\n    <div class=" + alias4(alias5((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
       "name": "avatar",
       "hash": {},
       "data": data,
@@ -4625,6 +4796,11 @@ var Contact = /*#__PURE__*/function (_base_block_1$BaseBlo) {
         styles: styles
       }));
     }
+  }, {
+    key: "componentAfterRender",
+    value: function componentAfterRender() {
+      console.log(this.element);
+    }
   }]);
 
   return Contact;
@@ -4733,8 +4909,8 @@ var templateFunction = _handlebars.default.template({
           "column": 36
         }
       }
-    }) : helper)) + ">" + alias4((helper = (helper = lookupProperty(helpers, "message") || (depth0 != null ? lookupProperty(depth0, "message") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
-      "name": "message",
+    }) : helper)) + ">" + alias4((helper = (helper = lookupProperty(helpers, "content") || (depth0 != null ? lookupProperty(depth0, "content") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "name": "content",
       "hash": {},
       "data": data,
       "loc": {
@@ -4888,68 +5064,37 @@ var Message = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 }(base_block_1.BaseBlock);
 
 exports.Message = Message;
-},{"./Message.hbs":"../src/componets/Message/Message.hbs","./Message.module.css":"../src/componets/Message/Message.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts","../Avatar":"../src/componets/Avatar/index.ts"}],"../src/componets/index.ts":[function(require,module,exports) {
-"use strict";
-
-var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  var desc = Object.getOwnPropertyDescriptor(m, k);
-
-  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-    desc = {
-      enumerable: true,
-      get: function get() {
-        return m[k];
-      }
-    };
-  }
-
-  Object.defineProperty(o, k2, desc);
-} : function (o, m, k, k2) {
-  if (k2 === undefined) k2 = k;
-  o[k2] = m[k];
-});
-
-var __exportStar = this && this.__exportStar || function (m, exports) {
-  for (var p in m) {
-    if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-  }
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-__exportStar(require("./Avatar"), exports);
-
-__exportStar(require("./Button"), exports);
-
-__exportStar(require("./Input"), exports);
-
-__exportStar(require("./Contact"), exports);
-
-__exportStar(require("./Message"), exports);
-},{"./Avatar":"../src/componets/Avatar/index.ts","./Button":"../src/componets/Button/index.ts","./Input":"../src/componets/Input/index.ts","./Contact":"../src/componets/Contact/index.ts","./Message":"../src/componets/Message/index.ts"}],"../src/utils/render.ts":[function(require,module,exports) {
+},{"./Message.hbs":"../src/componets/Message/Message.hbs","./Message.module.css":"../src/componets/Message/Message.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts","../Avatar":"../src/componets/Avatar/index.ts"}],"../src/componets/ChangeAvatar/ChangeAvatar.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.render = void 0;
+exports.default = void 0;
 
-var render = function render(rootSelector, component) {
-  var root = document.querySelector(rootSelector);
+var _handlebars = _interopRequireDefault(require("handlebars/dist/handlebars.runtime"));
 
-  if (root != null) {
-    root.appendChild(component.getContent());
-    component.dispatchComponentDidMount();
-  }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-  return root;
+var templateFunction = _handlebars.default.template({
+  "compiler": [8, ">= 4.3.0"],
+  "main": function main(container, depth0, helpers, partials, data) {
+    return "<form id=\"avatarForm\">\r\n    <input id=\"avatar\" type=\"file\" name=\"avatar\" accept=\"image/*\">\r\n    <input type=\"submit\">\r\n</form>\r\n";
+  },
+  "useData": true
+});
+
+var _default = templateFunction;
+exports.default = _default;
+},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/componets/ChangeAvatar/ChangeAvatar.module.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+module.exports = {
+  "input": "src-componets-ChangeAvatar-__ChangeAvatar-module__input__2fenS"
 };
-
-exports.render = render;
-},{}],"../src/pages/Login/index.ts":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/componets/ChangeAvatar/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -5023,7 +5168,384 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderLogin = exports.Login = void 0;
+exports.ChangeAvatar = void 0;
+
+var ChangeAvatar_hbs_1 = __importDefault(require("./ChangeAvatar.hbs"));
+
+var styles = __importStar(require("./ChangeAvatar.module.css"));
+
+var classnames_1 = __importDefault(require("../../utils/classnames"));
+
+var base_block_1 = require("../../utils/base-block");
+
+var ChangeAvatar = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(ChangeAvatar, _base_block_1$BaseBlo);
+
+  var _super = _createSuper(ChangeAvatar);
+
+  function ChangeAvatar(props) {
+    _classCallCheck(this, ChangeAvatar);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(ChangeAvatar, [{
+    key: "render",
+    value: function render() {
+      var _a;
+
+      var className = (0, classnames_1.default)(styles.input, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
+      return this.compile(ChangeAvatar_hbs_1.default, {
+        className: className
+      });
+    }
+  }, {
+    key: "componentAfterRender",
+    value: function componentAfterRender() {}
+  }]);
+
+  return ChangeAvatar;
+}(base_block_1.BaseBlock);
+
+exports.ChangeAvatar = ChangeAvatar;
+},{"./ChangeAvatar.hbs":"../src/componets/ChangeAvatar/ChangeAvatar.hbs","./ChangeAvatar.module.css":"../src/componets/ChangeAvatar/ChangeAvatar.module.css","../../utils/classnames":"../src/utils/classnames.ts","../../utils/base-block":"../src/utils/base-block.ts"}],"../src/componets/index.ts":[function(require,module,exports) {
+"use strict";
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __exportStar = this && this.__exportStar || function (m, exports) {
+  for (var p in m) {
+    if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+  }
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+__exportStar(require("./Avatar"), exports);
+
+__exportStar(require("./Button"), exports);
+
+__exportStar(require("./Input"), exports);
+
+__exportStar(require("./Contact"), exports);
+
+__exportStar(require("./Message"), exports);
+
+__exportStar(require("./ChangeAvatar"), exports);
+},{"./Avatar":"../src/componets/Avatar/index.ts","./Button":"../src/componets/Button/index.ts","./Input":"../src/componets/Input/index.ts","./Contact":"../src/componets/Contact/index.ts","./Message":"../src/componets/Message/index.ts","./ChangeAvatar":"../src/componets/ChangeAvatar/index.ts"}],"../src/utils/render.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.render = void 0;
+
+var render = function render(rootSelector, component) {
+  var root = document.querySelector(rootSelector);
+
+  if (root != null) {
+    root.appendChild(component.getContent());
+    component.dispatchComponentDidMount();
+  }
+
+  return root;
+};
+
+exports.render = render;
+},{}],"../src/utils/Route.ts":[function(require,module,exports) {
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var render_1 = require("./render");
+
+var Route = /*#__PURE__*/function () {
+  function Route(pathname, view, props, componentProps) {
+    _classCallCheck(this, Route);
+
+    this.pathname = pathname;
+    this._blockClass = view;
+    this._props = props;
+    this._componentProps = componentProps;
+  }
+
+  _createClass(Route, [{
+    key: "navigate",
+    value: function navigate(pathname) {
+      if (pathname === this.pathname) {
+        this.pathname = pathname;
+        this.render();
+      }
+    }
+  }, {
+    key: "leave",
+    value: function leave() {
+      this._block.hide();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (!this._block) {
+        this._block = new this._blockClass(Object.assign({}, this._componentProps));
+        (0, render_1.render)(this._props.rootQuery, this._block);
+        return;
+      }
+
+      this._block.show();
+    }
+  }, {
+    key: "match",
+    value: function match(pathname) {
+      return pathname == this.pathname;
+    }
+  }]);
+
+  return Route;
+}();
+
+exports.default = Route;
+},{"./render":"../src/utils/render.ts"}],"../src/utils/router.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.withRouter = exports.Router = void 0;
+
+var Route_1 = __importDefault(require("./Route"));
+
+var Router = /*#__PURE__*/function () {
+  function Router() {
+    _classCallCheck(this, Router);
+
+    this.routes = [];
+    this.history = window.history;
+    this.currentRoute = undefined;
+
+    if (Router.__instance) {
+      return Router.__instance;
+    }
+
+    Router.__instance = this;
+  }
+
+  _createClass(Router, [{
+    key: "use",
+    value: function use(pathname, block, props) {
+      var route = new Route_1.default(pathname, block, {
+        rootQuery: '#root'
+      }, props);
+      this.routes.push(route);
+      return this;
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      var _this = this;
+
+      window.onpopstate = function () {
+        _this._onRoute(window.location.pathname);
+      };
+
+      this._onRoute(window.location.pathname);
+    }
+  }, {
+    key: "_onRoute",
+    value: function _onRoute(pathname) {
+      var route = this.getRoute(pathname);
+
+      if (!route) {
+        route = this.getRoute('/404');
+      }
+
+      if (this.currentRoute) {
+        this.currentRoute.leave();
+      }
+
+      this.currentRoute = route;
+      route === null || route === void 0 ? void 0 : route.render();
+    }
+  }, {
+    key: "go",
+    value: function go(pathname) {
+      this.history.pushState({}, '', pathname);
+
+      this._onRoute(pathname);
+    }
+  }, {
+    key: "getRoute",
+    value: function getRoute(pathname) {
+      return this.routes.find(function (route) {
+        return route.match(pathname);
+      });
+    }
+  }, {
+    key: "back",
+    value: function back() {
+      this.history.back();
+    }
+  }, {
+    key: "forward",
+    value: function forward() {
+      this.history.forward();
+    }
+  }]);
+
+  return Router;
+}();
+
+exports.Router = Router;
+
+function withRouter(Component) {
+  return /*#__PURE__*/function (_Component) {
+    _inherits(WithRouter, _Component);
+
+    var _super = _createSuper(WithRouter);
+
+    function WithRouter(props) {
+      _classCallCheck(this, WithRouter);
+
+      var router = new Router();
+      return _super.call(this, Object.assign(Object.assign({}, props), {
+        router: router
+      }));
+    }
+
+    return _createClass(WithRouter);
+  }(Component);
+}
+
+exports.withRouter = withRouter;
+},{"./Route":"../src/utils/Route.ts"}],"../src/pages/Login/index.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.loginProps = exports.Login = void 0;
 
 var Login_hbs_1 = __importDefault(require("./Login.hbs"));
 
@@ -5033,9 +5555,11 @@ var base_block_1 = require("../../utils/base-block");
 
 var componets_1 = require("../../componets");
 
-var render_1 = require("../../utils/render");
-
 var validators_1 = require("../../utils/validators");
+
+var router_1 = require("../../utils/router");
+
+var fetch_1 = require("../../utils/fetch");
 
 var emailField = new componets_1.EmailField({
   placeholder: 'Enter email or user name',
@@ -5072,34 +5596,40 @@ var Login = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 }(base_block_1.BaseBlock);
 
 exports.Login = Login;
-
-var renderLogin = function renderLogin(selector) {
-  var login = new Login({
-    components: {
-      EmailField: emailField,
-      PasswordField: passwordField,
-      Button: button
-    },
-    styles: styles,
-    events: {
-      submit: function submit(e) {
-        e.preventDefault();
-        emailField.validateInput();
-        passwordField.validateInput();
-        var data = {};
-        var inputFields = document.querySelectorAll('input');
-        inputFields.forEach(function (input) {
-          data[input.name] = input.value;
-        });
-        console.log(data);
-      }
+exports.loginProps = {
+  components: {
+    EmailField: emailField,
+    PasswordField: passwordField,
+    Button: button
+  },
+  styles: styles,
+  events: {
+    submit: function submit(e) {
+      e.preventDefault();
+      emailField.validateInput();
+      passwordField.validateInput();
+      var data = {};
+      var inputFields = document.querySelectorAll('input');
+      inputFields.forEach(function (input) {
+        data[input.name] = input.value;
+      });
+      console.log(data);
+      var fetch = new fetch_1.Fetch();
+      fetch.post('/auth/signin', {
+        data: data
+      }).then(function (response) {
+        console.log('response', response);
+        var router = new router_1.Router();
+        router.go('/main');
+      }).catch(function (e) {
+        return console.error(e);
+      });
     }
-  });
-  (0, render_1.render)(selector, login);
-};
+  }
+}; // @ts-ignore
 
-exports.renderLogin = renderLogin;
-},{"./Login.hbs":"../src/pages/Login/Login.hbs","./Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/Register/Register.hbs":[function(require,module,exports) {
+exports.default = (0, router_1.withRouter)(Login);
+},{"./Login.hbs":"../src/pages/Login/Login.hbs","./Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts"}],"../src/pages/Register/Register.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5250,7 +5780,21 @@ var templateFunction = _handlebars.default.template({
 
 var _default = templateFunction;
 exports.default = _default;
-},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/pages/Register/index.ts":[function(require,module,exports) {
+},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/utils/url.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getServerUrl = void 0;
+var BASE_URL = 'https://ya-praktikum.tech/api/v2';
+
+var getServerUrl = function getServerUrl(uri) {
+  return "".concat(BASE_URL).concat(uri);
+};
+
+exports.getServerUrl = getServerUrl;
+},{}],"../src/pages/Register/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -5324,7 +5868,7 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderRegister = exports.Register = void 0;
+exports.registerProp = exports.Register = void 0;
 
 var Register_hbs_1 = __importDefault(require("./Register.hbs"));
 
@@ -5332,11 +5876,15 @@ var styles = __importStar(require("../Login/Login.module.css"));
 
 var base_block_1 = require("../../utils/base-block");
 
-var render_1 = require("../../utils/render");
-
 var componets_1 = require("../../componets");
 
 var validators_1 = require("../../utils/validators");
+
+var url_1 = require("../../utils/url");
+
+var router_1 = require("../../utils/router");
+
+var fetch_1 = require("../../utils/fetch");
 
 var firstName = new componets_1.Input({
   placeholder: 'First Name',
@@ -5394,42 +5942,49 @@ var Register = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 }(base_block_1.BaseBlock);
 
 exports.Register = Register;
-
-var renderRegister = function renderRegister(selector) {
-  var register = new Register({
-    components: {
-      firstName: firstName,
-      secondName: secondName,
-      login: login,
-      email: email,
-      password: password,
-      phone: phone,
-      button: button
-    },
-    styles: styles,
-    events: {
-      submit: function submit(e) {
-        e.preventDefault();
-        firstName.validateInput();
-        secondName.validateInput();
-        login.validateInput();
-        email.validateInput();
-        password.validateInput();
-        phone.validateInput();
-        var data = {};
-        var inputFields = document.querySelectorAll('input');
-        inputFields.forEach(function (input) {
-          data[input.name] = input.value;
-        });
-        console.log(data);
-      }
+exports.registerProp = {
+  components: {
+    firstName: firstName,
+    secondName: secondName,
+    login: login,
+    email: email,
+    password: password,
+    phone: phone,
+    button: button
+  },
+  styles: styles,
+  events: {
+    submit: function submit(e) {
+      e.preventDefault();
+      firstName.validateInput();
+      secondName.validateInput();
+      login.validateInput();
+      email.validateInput();
+      password.validateInput();
+      phone.validateInput();
+      var data = {};
+      var inputFields = document.querySelectorAll('input');
+      inputFields.forEach(function (input) {
+        data[input.name] = input.value;
+      });
+      console.log(data);
+      var fetch = new fetch_1.Fetch();
+      var url = (0, url_1.getServerUrl)('/auth/signup');
+      fetch.post(url, {
+        data: data
+      }).then(function (response) {
+        console.log(response);
+        var router = new router_1.Router();
+        router.go('/main');
+      }).catch(function (e) {
+        return console.error(e);
+      });
     }
-  });
-  (0, render_1.render)(selector, register);
-};
+  }
+}; // @ts-ignore
 
-exports.renderRegister = renderRegister;
-},{"./Register.hbs":"../src/pages/Register/Register.hbs","../Login/Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/Main/Main.hbs":[function(require,module,exports) {
+exports.default = (0, router_1.withRouter)(Register);
+},{"./Register.hbs":"../src/pages/Register/Register.hbs","../Login/Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts","../../utils/url":"../src/utils/url.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts"}],"../src/pages/Main/Main.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5465,21 +6020,49 @@ var templateFunction = _handlebars.default.template({
       return undefined;
     };
 
-    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "panel-left") : stack1, depth0)) + ">\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "search") || (depth0 != null ? lookupProperty(depth0, "search") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
-      "name": "search",
+    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "wrapper") : stack1, depth0)) + ">\r\n<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "tool-bar") : stack1, depth0)) + " >\r\n    <div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "logout") : stack1, depth0)) + ">" + ((stack1 = (helper = (helper = lookupProperty(helpers, "logout") || (depth0 != null ? lookupProperty(depth0, "logout") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "logout",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
           "line": 3,
-          "column": 8
+          "column": 33
         },
         "end": {
           "line": 3,
-          "column": 20
+          "column": 45
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat-list") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, depth0 != null ? lookupProperty(depth0, "contacts") : depth0, {
+    }) : helper)) != null ? stack1 : "") + "</div>\r\n</div>\r\n<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "conteiner") : stack1, depth0)) + ">\r\n    <section class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "panel-left") : stack1, depth0)) + ">\r\n        <div>\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "addChatInput") || (depth0 != null ? lookupProperty(depth0, "addChatInput") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "addChatInput",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 12
+        },
+        "end": {
+          "line": 8,
+          "column": 30
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + " " + ((stack1 = (helper = (helper = lookupProperty(helpers, "addChatButton") || (depth0 != null ? lookupProperty(depth0, "addChatButton") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "addChatButton",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 31
+        },
+        "end": {
+          "line": 8,
+          "column": 50
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\r\n        </div>\r\n        <ul class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "chat-list") : stack1, depth0)) + ">\r\n" + ((stack1 = lookupProperty(helpers, "each").call(alias3, depth0 != null ? lookupProperty(depth0, "contacts") : depth0, {
       "name": "each",
       "hash": {},
       "fn": container.program(1, data, 0),
@@ -5487,11 +6070,11 @@ var templateFunction = _handlebars.default.template({
       "data": data,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 11,
           "column": 12
         },
         "end": {
-          "line": 9,
+          "line": 15,
           "column": 21
         }
       }
@@ -5503,11 +6086,11 @@ var templateFunction = _handlebars.default.template({
       "data": data,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 20,
           "column": 12
         },
         "end": {
-          "line": 18,
+          "line": 24,
           "column": 21
         }
       }
@@ -5517,15 +6100,15 @@ var templateFunction = _handlebars.default.template({
       "data": data,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 26,
           "column": 8
         },
         "end": {
-          "line": 20,
+          "line": 26,
           "column": 21
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n    </section>\r\n</div>\r\n";
+    }) : helper)) != null ? stack1 : "") + "\r\n    </section>\r\n</div>\r\n</div>\r\n";
   },
   "useData": true
 });
@@ -5542,83 +6125,413 @@ module.exports = {
   "panel-left": "src-pages-Main-__Main-module__panel-left__3U_Jh",
   "chat": "src-pages-Main-__Main-module__chat__tvVJg",
   "search-input": "src-pages-Main-__Main-module__search-input__S_OxY",
-  "chat-list": "src-pages-Main-__Main-module__chat-list__3D7aH"
+  "chat-list": "src-pages-Main-__Main-module__chat-list__3D7aH",
+  "tool-bar": "src-pages-Main-__Main-module__tool-bar__1ZvGo",
+  "wrapper": "src-pages-Main-__Main-module__wrapper__1TCy1",
+  "logout": "src-pages-Main-__Main-module__logout__32RR3"
 };
-},{"./..\\..\\..\\static\\img\\ashvsevildead.jpg":[["ashvsevildead.dcdc5c03.jpg","img/ashvsevildead.jpg"],"img/ashvsevildead.jpg"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"img/avatar.png":[function(require,module,exports) {
-module.exports = "/avatar.22de90d3.png";
-},{}],"../src/pages/Main/mock.ts":[function(require,module,exports) {
+},{"./..\\..\\..\\static\\img\\ashvsevildead.jpg":[["ashvsevildead.dcdc5c03.jpg","img/ashvsevildead.jpg"],"img/ashvsevildead.jpg"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/utils/merge.ts":[function(require,module,exports) {
 "use strict";
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
-};
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.data = exports.messages = exports.contacts = void 0;
+exports.merge = void 0;
 
-var avatar_png_1 = __importDefault(require("../../../static/img/avatar.png"));
+function merge(lhs, rhs) {
+  for (var p in rhs) {
+    if (!rhs.hasOwnProperty(p)) {
+      continue;
+    }
 
-var no_avatar_jpg_1 = __importDefault(require("../../../static/img/no_avatar.jpg"));
+    try {
+      if (rhs[p].constructor === Object) {
+        rhs[p] = merge(lhs[p], rhs[p]);
+      } else {
+        lhs[p] = rhs[p];
+      }
+    } catch (e) {
+      lhs[p] = rhs[p];
+    }
+  }
 
-exports.contacts = [{
-  avatar: avatar_png_1.default,
-  firstName: 'Ash',
-  lastName: 'Slayer',
-  message: 'message',
-  unreadMessages: 1
-}, {
-  avatar: no_avatar_jpg_1.default,
-  firstName: 'Demon1',
-  lastName: 'Demon1',
-  message: 'message',
-  unreadMessages: 6
-}, {
-  avatar: no_avatar_jpg_1.default,
-  firstName: 'Demon2',
-  lastName: 'Demon2',
-  message: 'message',
-  unreadMessages: 6
-}, {
-  avatar: no_avatar_jpg_1.default,
-  firstName: 'Demon2',
-  lastName: 'Demon2',
-  message: 'message',
-  unreadMessages: 0
-}];
-exports.messages = [{
-  avatar: avatar_png_1.default,
-  firstName: 'Ash',
-  lastName: 'Slayer',
-  message: 'Призываю тебя, демон!',
-  my: true
-}, {
-  avatar: no_avatar_jpg_1.default,
-  firstName: 'Demon',
-  lastName: 'Demon',
-  message: 'Эшли! Как дела на грешной?',
-  my: false
-}, {
-  avatar: avatar_png_1.default,
-  firstName: 'Ash',
-  lastName: 'Slayer',
-  message: 'Не кривляйся где мои деньги?',
-  my: true
-}, {
-  avatar: no_avatar_jpg_1.default,
-  firstName: 'Demon',
-  lastName: 'Demon',
-  message: 'В аду пока денег не платили, сорян... Как зарплата придет, я переведу. ' + 'У тебя же сбер онлайн есть?',
-  my: false
-}];
-exports.data = {
-  contacts: exports.contacts,
-  messages: exports.messages
+  return lhs;
+}
+
+exports.merge = merge;
+},{}],"../src/utils/set.ts":[function(require,module,exports) {
+"use strict";
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.set = void 0;
+
+var merge_1 = require("./merge");
+
+function set(obj, path, value) {
+  var result = path.split('.').reduceRight(function (acc, key) {
+    return _defineProperty({}, key, acc);
+  }, value);
+  return (0, merge_1.merge)(obj, result);
+}
+
+exports.set = set;
+},{"./merge":"../src/utils/merge.ts"}],"../src/store/shitstore.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.store = exports.StoreEvents = void 0;
+
+var event_bus_1 = require("../utils/event-bus");
+
+var set_1 = require("../utils/set");
+
+var StoreEvents;
+
+(function (StoreEvents) {
+  StoreEvents["Updated"] = "updated";
+})(StoreEvents = exports.StoreEvents || (exports.StoreEvents = {}));
+
+var defaultState = {
+  profile: {
+    avatar: null,
+    display_name: "",
+    email: "",
+    first_name: "",
+    id: 0,
+    login: "",
+    phone: "",
+    second_name: ""
+  },
+  chat: {
+    chats: [],
+    messages: []
+  }
 };
-},{"../../../static/img/avatar.png":"img/avatar.png","../../../static/img/no_avatar.jpg":"img/no_avatar.jpg"}],"../src/pages/Main/index.ts":[function(require,module,exports) {
+
+var Store = /*#__PURE__*/function (_event_bus_1$EventBus) {
+  _inherits(Store, _event_bus_1$EventBus);
+
+  var _super = _createSuper(Store);
+
+  function Store(defaultState) {
+    var _this;
+
+    _classCallCheck(this, Store);
+
+    _this = _super.call(this);
+    _this.state = defaultState;
+    return _this;
+  }
+
+  _createClass(Store, [{
+    key: "getState",
+    value: function getState() {
+      return this.state;
+    }
+  }, {
+    key: "set",
+    value: function set(prop, value) {
+      // @ts-ignore
+      this.state = (0, set_1.set)(this.state, prop, value);
+      this.emit(StoreEvents.Updated);
+    }
+  }, {
+    key: "addMassage",
+    value: function addMassage(addMessages) {
+      // @ts-ignore
+      this.state.chat.messages = [].concat(_toConsumableArray(this.state.chat.messages), _toConsumableArray(addMessages));
+      this.emit(StoreEvents.Updated);
+    }
+  }]);
+
+  return Store;
+}(event_bus_1.EventBus);
+
+exports.store = new Store(defaultState);
+},{"../utils/event-bus":"../src/utils/event-bus.ts","../utils/set":"../src/utils/set.ts"}],"../src/utils/is-object-like.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isObjectLike = void 0;
+
+function isObjectLike(value) {
+  return _typeof(value) === "object" && value !== null;
+}
+
+exports.isObjectLike = isObjectLike;
+},{}],"../src/utils/is-equal.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.isEqual = void 0;
+
+var is_object_like_1 = require("./is-object-like");
+
+function isEqual(a, b) {
+  if (!(0, is_object_like_1.isObjectLike)(a)) {
+    return (0, is_object_like_1.isObjectLike)(b) ? false : a === b;
+  }
+
+  if (!(0, is_object_like_1.isObjectLike)(b)) {
+    return (0, is_object_like_1.isObjectLike)(a) ? false : a === b;
+  }
+
+  var aKeys = Object.keys(a);
+
+  if (aKeys.length !== Object.keys(b).length) {
+    return false;
+  }
+
+  for (var _i = 0, _aKeys = aKeys; _i < _aKeys.length; _i++) {
+    var key = _aKeys[_i];
+
+    if ((0, is_object_like_1.isObjectLike)(a[key]) && (0, is_object_like_1.isObjectLike)(b[key])) {
+      if (isEqual(a[key], b[key])) {
+        continue;
+      }
+
+      return false;
+    } else if (a[key] !== b[key]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+exports.isEqual = isEqual;
+},{"./is-object-like":"../src/utils/is-object-like.ts"}],"../src/store/connect.ts":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.connect = void 0;
+
+var shitstore_1 = require("./shitstore");
+
+var is_equal_1 = require("../utils/is-equal");
+
+function connect(Component, mapStateToProps) {
+  return /*#__PURE__*/function (_Component) {
+    _inherits(_class, _Component);
+
+    var _super = _createSuper(_class);
+
+    function _class(props) {
+      var _this;
+
+      _classCallCheck(this, _class);
+
+      var state = mapStateToProps(shitstore_1.store.getState()); // @ts-ignore
+
+      _this = _super.call(this, Object.assign(Object.assign({}, props), state));
+      shitstore_1.store.on(shitstore_1.StoreEvents.Updated, function () {
+        var newState = mapStateToProps(shitstore_1.store.getState());
+
+        if (!(0, is_equal_1.isEqual)(state, newState)) {
+          console.log('newState', newState);
+
+          _this.setProps(Object.assign({}, mapStateToProps(shitstore_1.store.getState())));
+
+          state = newState;
+        }
+      });
+      return _this;
+    }
+
+    return _createClass(_class);
+  }(Component);
+}
+
+exports.connect = connect;
+},{"./shitstore":"../src/store/shitstore.ts","../utils/is-equal":"../src/utils/is-equal.ts"}],"../src/api/chat.ts":[function(require,module,exports) {
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.chatApi = exports.ChatApi = void 0;
+
+var fetch_1 = require("../utils/fetch");
+
+var ChatApi = /*#__PURE__*/function () {
+  function ChatApi() {
+    _classCallCheck(this, ChatApi);
+  }
+
+  _createClass(ChatApi, [{
+    key: "loadChats",
+    value: function loadChats() {
+      return fetch_1.fetch.get("/chats");
+    }
+  }, {
+    key: "createChat",
+    value: function createChat(data) {
+      return fetch_1.fetch.post("/chats", {
+        data: data
+      });
+    }
+  }, {
+    key: "addUsersToChat",
+    value: function addUsersToChat(users, chatId) {
+      return fetch_1.fetch.put("/chats/users", {
+        data: {
+          users: users,
+          chatId: chatId
+        }
+      });
+    }
+  }, {
+    key: "getChatUsers",
+    value: function getChatUsers(id) {
+      return fetch_1.fetch.get("/chats/".concat(id, "/users"));
+    }
+  }, {
+    key: "deleteUserFromChat",
+    value: function deleteUserFromChat(users, chatId) {
+      return fetch_1.fetch.delete("/chats/users", {
+        data: {
+          users: users,
+          chatId: chatId
+        }
+      });
+    }
+  }, {
+    key: "getChatToken",
+    value: function getChatToken(chatId) {
+      return fetch_1.fetch.post("/chats/token/".concat(chatId), {});
+    }
+  }]);
+
+  return ChatApi;
+}();
+
+exports.ChatApi = ChatApi;
+exports.chatApi = new ChatApi();
+},{"../utils/fetch":"../src/utils/fetch.ts"}],"../src/api/profile.ts":[function(require,module,exports) {
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.profileApi = exports.ProfileApi = void 0;
+
+var fetch_1 = require("../utils/fetch");
+
+var ProfileApi = /*#__PURE__*/function () {
+  function ProfileApi() {
+    _classCallCheck(this, ProfileApi);
+  }
+
+  _createClass(ProfileApi, [{
+    key: "loadProfile",
+    value: function loadProfile() {
+      return fetch_1.fetch.get("/auth/user");
+    }
+  }, {
+    key: "changeProfile",
+    value: function changeProfile(data) {
+      return fetch_1.fetch.put("/user/profile", {
+        data: data
+      });
+    }
+  }, {
+    key: "changeProfileAvatar",
+    value: function changeProfileAvatar(data) {
+      return fetch_1.fetch.put("/user/profile/avatar", {
+        data: data,
+        file: true
+      });
+    }
+  }]);
+
+  return ProfileApi;
+}();
+
+exports.ProfileApi = ProfileApi;
+exports.profileApi = new ProfileApi();
+},{"../utils/fetch":"../src/utils/fetch.ts"}],"../src/pages/Main/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -5692,49 +6605,114 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderMain = exports.Main = void 0;
+exports.Main = exports.mainProps = exports.MainBase = void 0;
 
 var Main_hbs_1 = __importDefault(require("./Main.hbs"));
 
 var styles = __importStar(require("./Main.module.css"));
 
-var mock_1 = require("./mock");
-
 var base_block_1 = require("../../utils/base-block");
 
 var componets_1 = require("../../componets");
 
-var render_1 = require("../../utils/render");
+var router_1 = require("../../utils/router");
 
-var search = new componets_1.TextField({
-  placeholder: 'Search...',
-  name: 'search',
-  className: styles['search-input']
+var fetch_1 = require("../../utils/fetch");
+
+var url_1 = require("../../utils/url");
+
+var connect_1 = require("../../store/connect");
+
+var chat_1 = require("../../api/chat");
+
+var shitstore_1 = require("../../store/shitstore");
+
+var profile_1 = require("../../api/profile");
+
+var addChatInput = new componets_1.TextField({
+  placeholder: "Добавить чат...",
+  name: "newChat",
+  className: styles["search-input"]
+});
+var addChatButton = new componets_1.Button({
+  title: "+",
+  name: "addChatButton",
+  events: {
+    click: function click(e) {
+      e.preventDefault();
+      var newChat = document.querySelector("[name=\"newChat\"]");
+
+      if (newChat === null || newChat === void 0 ? void 0 : newChat.value) {
+        chat_1.chatApi.createChat({
+          title: newChat === null || newChat === void 0 ? void 0 : newChat.value
+        }).then(function () {
+          return chat_1.chatApi.loadChats();
+        }).then(function (responce) {
+          return shitstore_1.store.set("chat.chats", responce);
+        });
+      }
+    }
+  }
 });
 var message = new componets_1.TextField({
-  placeholder: 'Type text...',
-  name: 'message'
+  placeholder: "Type text...",
+  name: "message"
+});
+var logout = new componets_1.Button({
+  title: "Log out",
+  name: "button",
+  className: styles["logout"],
+  events: {
+    click: function click(e) {
+      e.preventDefault();
+      var fetch = new fetch_1.Fetch();
+      var url = (0, url_1.getServerUrl)("/auth/logout");
+      fetch.post(url, {}).then(function (response) {
+        console.log(response);
+        var router = new router_1.Router();
+        router.go("/login");
+      }).catch(function (e) {
+        return console.error(e);
+      });
+    }
+  }
 });
 
-var Main = /*#__PURE__*/function (_base_block_1$BaseBlo) {
-  _inherits(Main, _base_block_1$BaseBlo);
+var MainBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(MainBase, _base_block_1$BaseBlo);
 
-  var _super = _createSuper(Main);
+  var _super = _createSuper(MainBase);
 
-  function Main() {
-    _classCallCheck(this, Main);
+  function MainBase() {
+    _classCallCheck(this, MainBase);
 
     return _super.apply(this, arguments);
   }
 
-  _createClass(Main, [{
+  _createClass(MainBase, [{
+    key: "getContact",
+    value: function getContact(chat) {
+      var _a, _b, _c, _d, _e;
+
+      return new componets_1.Contact({
+        firstName: chat.title,
+        lastName: (_c = (_b = (_a = chat === null || chat === void 0 ? void 0 : chat.last_message) === null || _a === void 0 ? void 0 : _a.user) === null || _b === void 0 ? void 0 : _b.second_name) !== null && _c !== void 0 ? _c : "",
+        message: (_e = (_d = chat === null || chat === void 0 ? void 0 : chat.last_message) === null || _d === void 0 ? void 0 : _d.content) !== null && _e !== void 0 ? _e : "",
+        avatar: chat.avatar,
+        unreadMessages: chat.unread_count,
+        id: chat.id
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var messages = mock_1.data.messages.map(function (message) {
+      var _this = this;
+
+      var messages = this.props.messages.map(function (message) {
         return new componets_1.Message(Object.assign({}, message));
       });
-      var contacts = mock_1.data.contacts.map(function (contact) {
-        return new componets_1.Contact(Object.assign({}, contact));
+      var contacts = this.props.contacts.map(function (contact) {
+        return _this.getContact(contact);
       });
       var components = Object.assign(Object.assign({}, this.props.components), {
         messages: messages,
@@ -5744,27 +6722,107 @@ var Main = /*#__PURE__*/function (_base_block_1$BaseBlo) {
         components: components
       }));
     }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      chat_1.chatApi.loadChats().then(function (responce) {
+        shitstore_1.store.set("chat.chats", responce);
+      }).then(function () {
+        return profile_1.profileApi.loadProfile();
+      }).then(function (profile) {
+        return shitstore_1.store.set("profile", profile);
+      }).then(function () {
+        return console.log("store", shitstore_1.store);
+      });
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      var _this2 = this;
+
+      var contacts = document.querySelectorAll(".contact");
+      console.log('componentDidUpdate');
+      contacts.forEach(function (contact) {
+        contact.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          var id = event.currentTarget.getAttribute("data-id");
+          var currentUser = shitstore_1.store.getState().profile;
+          console.log("currentUser", currentUser);
+          chat_1.chatApi.getChatToken(id).then(function (data) {
+            _this2.openSocket(currentUser.id, id, data.token);
+          });
+        });
+      });
+    }
+  }, {
+    key: "openSocket",
+    value: function openSocket(userId, chatId, token) {
+      var _this3 = this;
+
+      console.log("wss://ya-praktikum.tech/ws/chats/".concat(userId, "/").concat(chatId, "/").concat(token));
+      this.activeSocket = new WebSocket("wss://ya-praktikum.tech/ws/chats/".concat(userId, "/").concat(chatId, "/").concat(token));
+      this.activeSocket.addEventListener("open", function () {
+        console.log("Соединение установлено");
+
+        _this3.activeSocket.send(JSON.stringify({
+          content: '0',
+          type: 'get old'
+        }));
+      });
+      this.activeSocket.addEventListener("message", function (event) {
+        var response = JSON.parse(event.data);
+
+        if (response.type === "user connected") {
+          console.log("User connected: ", response.content);
+        } else {
+          var _shitstore_1$store$ge = shitstore_1.store.getState(),
+              profile = _shitstore_1$store$ge.profile;
+
+          var addmessages = Array.isArray(response) ? response.map(function (item) {
+            return _this3.getCustomMessage(item, profile);
+          }).reverse() : [_this3.getCustomMessage(response, profile)];
+          shitstore_1.store.addMassage(addmessages);
+          console.log(shitstore_1.store);
+        }
+      });
+      this.activeSocket.addEventListener("close", function () {
+        console.log("Соединение закрыто");
+      });
+    }
+  }, {
+    key: "getCustomMessage",
+    value: function getCustomMessage(message, user) {
+      return Object.assign(Object.assign({}, message), {
+        isCurrentUserMessage: user.id === message.user_id
+      });
+    }
   }]);
 
-  return Main;
+  return MainBase;
 }(base_block_1.BaseBlock);
 
-exports.Main = Main;
-
-var renderMain = function renderMain(selector) {
-  var main = new Main({
-    components: {
-      search: search,
-      message: message
-    },
-    data: mock_1.data,
-    styles: styles
-  });
-  (0, render_1.render)(selector, main);
+exports.MainBase = MainBase;
+exports.mainProps = {
+  components: {
+    addChatInput: addChatInput,
+    addChatButton: addChatButton,
+    message: message,
+    logout: logout
+  },
+  styles: styles
 };
 
-exports.renderMain = renderMain;
-},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","./mock":"../src/pages/Main/mock.ts","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
+function mapUserToProps(state) {
+  return {
+    contacts: state.chat.chats,
+    messages: state.chat.messages
+  };
+} // @ts-ignore
+
+
+exports.Main = (0, router_1.withRouter)((0, connect_1.connect)(MainBase, mapUserToProps));
+},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts","../../utils/url":"../src/utils/url.ts","../../store/connect":"../src/store/connect.ts","../../api/chat":"../src/api/chat.ts","../../store/shitstore":"../src/store/shitstore.ts","../../api/profile":"../src/api/profile.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5796,147 +6854,175 @@ var templateFunction = _handlebars.default.template({
       return undefined;
     };
 
-    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "main") : stack1, depth0)) + ">\r\n    <form class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\r\n        <a href='#' title=\"Изменить аватар\" class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "avatar") : stack1, depth0)) + ">\r\n            " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "main") : stack1, depth0)) + ">\n  <div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\n    <div title=\"Изменить аватар\" class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "avatar") : stack1, depth0)) + ">\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "avatar",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
           "line": 4,
-          "column": 12
+          "column": 6
         },
         "end": {
           "line": 4,
+          "column": 18
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "changeAvatar") || (depth0 != null ? lookupProperty(depth0, "changeAvatar") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "changeAvatar",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 6
+        },
+        "end": {
+          "line": 5,
           "column": 24
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        </a>\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n    </div>\n    <form class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "firstName",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 6,
-          "column": 8
+          "line": 8,
+          "column": 6
         },
         "end": {
-          "line": 6,
-          "column": 23
+          "line": 8,
+          "column": 21
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "secondName") || (depth0 != null ? lookupProperty(depth0, "secondName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "secondName") || (depth0 != null ? lookupProperty(depth0, "secondName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "secondName",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 7,
-          "column": 8
+          "line": 9,
+          "column": 6
         },
         "end": {
-          "line": 7,
-          "column": 24
+          "line": 9,
+          "column": 22
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "displayName") || (depth0 != null ? lookupProperty(depth0, "displayName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "displayName") || (depth0 != null ? lookupProperty(depth0, "displayName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "displayName",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 8,
-          "column": 8
+          "line": 10,
+          "column": 6
         },
         "end": {
-          "line": 8,
-          "column": 25
+          "line": 10,
+          "column": 23
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "email") || (depth0 != null ? lookupProperty(depth0, "email") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "login") || (depth0 != null ? lookupProperty(depth0, "login") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+      "name": "login",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 6
+        },
+        "end": {
+          "line": 11,
+          "column": 17
+        }
+      }
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "email") || (depth0 != null ? lookupProperty(depth0, "email") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "email",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 9,
-          "column": 8
+          "line": 12,
+          "column": 6
         },
         "end": {
-          "line": 9,
-          "column": 19
+          "line": 12,
+          "column": 17
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "phone") || (depth0 != null ? lookupProperty(depth0, "phone") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "phone") || (depth0 != null ? lookupProperty(depth0, "phone") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "phone",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 10,
-          "column": 8
+          "line": 13,
+          "column": 6
         },
         "end": {
-          "line": 10,
-          "column": 19
+          "line": 13,
+          "column": 17
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "oldPassword") || (depth0 != null ? lookupProperty(depth0, "oldPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "oldPassword") || (depth0 != null ? lookupProperty(depth0, "oldPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "oldPassword",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 11,
-          "column": 8
+          "line": 14,
+          "column": 6
         },
         "end": {
-          "line": 11,
-          "column": 25
+          "line": 14,
+          "column": 23
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "newPassword") || (depth0 != null ? lookupProperty(depth0, "newPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "newPassword") || (depth0 != null ? lookupProperty(depth0, "newPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "newPassword",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 12,
-          "column": 8
+          "line": 15,
+          "column": 6
         },
         "end": {
-          "line": 12,
-          "column": 25
+          "line": 15,
+          "column": 23
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "save") || (depth0 != null ? lookupProperty(depth0, "save") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "save") || (depth0 != null ? lookupProperty(depth0, "save") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "save",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 14,
-          "column": 8
+          "line": 17,
+          "column": 6
         },
         "end": {
-          "line": 14,
-          "column": 18
+          "line": 17,
+          "column": 16
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n        " + ((stack1 = (helper = (helper = lookupProperty(helpers, "cancel") || (depth0 != null ? lookupProperty(depth0, "cancel") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "cancel") || (depth0 != null ? lookupProperty(depth0, "cancel") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "cancel",
       "hash": {},
       "data": data,
       "loc": {
         "start": {
-          "line": 15,
-          "column": 8
+          "line": 18,
+          "column": 6
         },
         "end": {
-          "line": 15,
-          "column": 20
+          "line": 18,
+          "column": 18
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\r\n    </form>\r\n</div>\r\n";
+    }) : helper)) != null ? stack1 : "") + "\n    </form>\n  </div>\n</div>\n";
   },
   "useData": true
 });
@@ -6028,7 +7114,7 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderProfile = exports.Profile = void 0;
+exports.Profile = exports.propsProfile = void 0;
 
 var Profile_hbs_1 = __importDefault(require("./Profile.hbs"));
 
@@ -6036,15 +7122,33 @@ var styles = __importStar(require("./Profile.module.css"));
 
 var base_block_1 = require("../../utils/base-block");
 
-var render_1 = require("../../utils/render");
-
 var componets_1 = require("../../componets");
 
 var validators_1 = require("../../utils/validators");
 
+var router_1 = require("../../utils/router");
+
+var profile_1 = require("../../api/profile");
+
+var shitstore_1 = require("../../store/shitstore");
+
+var connect_1 = require("../../store/connect");
+
 var avatar = new componets_1.Avatar({
   name: "avatar",
   title: "Изменить аватар"
+});
+var changeAvatar = new componets_1.ChangeAvatar({
+  events: {
+    submit: function submit(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log("event.currentTarget", event.currentTarget);
+      var form = new FormData(event.currentTarget);
+      console.log("form", form);
+      profile_1.profileApi.changeProfileAvatar(form);
+    }
+  }
 });
 var firstName = new componets_1.Input({
   placeholder: "First Name",
@@ -6093,69 +7197,128 @@ var cancel = new componets_1.Button({
   title: "Cancel"
 });
 
-var Profile = /*#__PURE__*/function (_base_block_1$BaseBlo) {
-  _inherits(Profile, _base_block_1$BaseBlo);
+var ProfileBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
+  _inherits(ProfileBase, _base_block_1$BaseBlo);
 
-  var _super = _createSuper(Profile);
+  var _super = _createSuper(ProfileBase);
 
-  function Profile() {
-    _classCallCheck(this, Profile);
+  function ProfileBase(props) {
+    var _this;
 
-    return _super.apply(this, arguments);
+    _classCallCheck(this, ProfileBase);
+
+    _this = _super.call(this, props);
+    console.log("props", props);
+    return _this;
   }
 
-  _createClass(Profile, [{
+  _createClass(ProfileBase, [{
     key: "render",
     value: function render() {
       return this.compile(Profile_hbs_1.default, this.props);
     }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      profile_1.profileApi.loadProfile().then(function (responce) {
+        shitstore_1.store.set("profile", responce);
+      });
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      console.log('componentDidUpdate');
+      this.setComponents(this.props.profile);
+    }
+  }, {
+    key: "setComponents",
+    value: function setComponents(data) {
+      var _this$props$component = this.props.components,
+          avatar = _this$props$component.avatar,
+          firstName = _this$props$component.firstName,
+          secondName = _this$props$component.secondName,
+          displayName = _this$props$component.displayName,
+          login = _this$props$component.login,
+          email = _this$props$component.email,
+          phone = _this$props$component.phone;
+      avatar.setProps({
+        avatar: data.avatar
+      });
+      firstName.setProps({
+        value: data.first_name
+      });
+      firstName.setProps({
+        value: data.first_name
+      });
+      secondName.setProps({
+        value: data.second_name
+      });
+      displayName.setProps({
+        value: data.display_name
+      });
+      login.setProps({
+        value: data.login
+      });
+      email.setProps({
+        value: data.email
+      });
+      phone.setProps({
+        value: data.phone
+      });
+    }
   }]);
 
-  return Profile;
+  return ProfileBase;
 }(base_block_1.BaseBlock);
 
-exports.Profile = Profile;
-
-var renderProfile = function renderProfile(selector) {
-  var profile = new Profile({
-    components: {
-      avatar: avatar,
-      firstName: firstName,
-      secondName: secondName,
-      displayName: displayName,
-      login: login,
-      email: email,
-      oldPassword: oldPassword,
-      newPassword: newPassword,
-      phone: phone,
-      save: save,
-      cancel: cancel
-    },
-    styles: styles,
-    events: {
-      submit: function submit(e) {
-        e.preventDefault();
-        firstName.validateInput();
-        secondName.validateInput();
-        login.validateInput();
-        email.validateInput();
-        oldPassword.validateInput();
-        newPassword.validateInput();
-        phone.validateInput();
-        var data = {};
-        var inputFields = document.querySelectorAll("input");
-        inputFields.forEach(function (input) {
-          data[input.name] = input.value;
-        });
-        console.log(data);
-      }
+exports.propsProfile = {
+  components: {
+    avatar: avatar,
+    changeAvatar: changeAvatar,
+    firstName: firstName,
+    secondName: secondName,
+    displayName: displayName,
+    login: login,
+    email: email,
+    oldPassword: oldPassword,
+    newPassword: newPassword,
+    phone: phone,
+    save: save,
+    cancel: cancel
+  },
+  styles: styles,
+  events: {
+    submit: function submit(e) {
+      e.preventDefault();
+      firstName.validateInput();
+      secondName.validateInput();
+      login.validateInput();
+      email.validateInput();
+      oldPassword.validateInput();
+      newPassword.validateInput();
+      phone.validateInput();
+      var data = {};
+      var inputFields = document.querySelectorAll("input");
+      inputFields.forEach(function (input) {
+        data[input.name] = input.value;
+      });
+      console.log(data);
+      profile_1.profileApi.changeProfile(data).then(function (responce) {
+        console.log("responce", responce);
+      });
     }
-  });
-  (0, render_1.render)(selector, profile);
+  }
 };
 
-exports.renderProfile = renderProfile;
-},{"./Profile.hbs":"../src/pages/Profile/Profile.hbs","./Profile.module.css":"../src/pages/Profile/Profile.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/404/404.hbs":[function(require,module,exports) {
+function mapUserToProps(state) {
+  return {
+    profile: Object.assign({}, state.profile)
+  };
+} // @ts-ignore
+
+
+exports.Profile = (0, router_1.withRouter)((0, connect_1.connect)(ProfileBase, mapUserToProps));
+},{"./Profile.hbs":"../src/pages/Profile/Profile.hbs","./Profile.module.css":"../src/pages/Profile/Profile.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts","../../utils/router":"../src/utils/router.ts","../../api/profile":"../src/api/profile.ts","../../store/shitstore":"../src/store/shitstore.ts","../../store/connect":"../src/store/connect.ts"}],"../src/pages/404/404.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6275,7 +7438,7 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.render404 = exports.Page404 = void 0;
+exports.propsPage404 = exports.Page404 = void 0;
 
 var _404_hbs_1 = __importDefault(require("./404.hbs"));
 
@@ -6283,7 +7446,7 @@ var styles = __importStar(require("./404.module.css"));
 
 var base_block_1 = require("../../utils/base-block");
 
-var render_1 = require("../../utils/render");
+var router_1 = require("../../utils/router");
 
 var Page404 = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Page404, _base_block_1$BaseBlo);
@@ -6307,16 +7470,12 @@ var Page404 = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 }(base_block_1.BaseBlock);
 
 exports.Page404 = Page404;
+exports.propsPage404 = {
+  styles: styles
+}; // @ts-ignore
 
-var render404 = function render404(selector) {
-  var intro = new Page404({
-    styles: styles
-  });
-  (0, render_1.render)(selector, intro);
-};
-
-exports.render404 = render404;
-},{"./404.hbs":"../src/pages/404/404.hbs","./404.module.css":"../src/pages/404/404.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/500/500.hbs":[function(require,module,exports) {
+exports.default = (0, router_1.withRouter)(Page404);
+},{"./404.hbs":"../src/pages/404/404.hbs","./404.module.css":"../src/pages/404/404.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/router":"../src/utils/router.ts"}],"../src/pages/500/500.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6436,7 +7595,7 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.render500 = exports.Page500 = void 0;
+exports.propsPage500 = exports.Page500 = void 0;
 
 var _500_hbs_1 = __importDefault(require("./500.hbs"));
 
@@ -6444,7 +7603,7 @@ var styles = __importStar(require("./500.module.css"));
 
 var base_block_1 = require("../../utils/base-block");
 
-var render_1 = require("../../utils/render");
+var router_1 = require("../../utils/router");
 
 var Page500 = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Page500, _base_block_1$BaseBlo);
@@ -6468,16 +7627,12 @@ var Page500 = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 }(base_block_1.BaseBlock);
 
 exports.Page500 = Page500;
+exports.propsPage500 = {
+  styles: styles
+}; // @ts-ignore
 
-var render500 = function render500(selector) {
-  var page500 = new Page500({
-    styles: styles
-  });
-  (0, render_1.render)(selector, page500);
-};
-
-exports.render500 = render500;
-},{"./500.hbs":"../src/pages/500/500.hbs","./500.module.css":"../src/pages/500/500.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/Intro/Intro.hbs":[function(require,module,exports) {
+exports.default = (0, router_1.withRouter)(Page500);
+},{"./500.hbs":"../src/pages/500/500.hbs","./500.module.css":"../src/pages/500/500.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/router":"../src/utils/router.ts"}],"../src/pages/Intro/Intro.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6594,7 +7749,7 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.renderIntro = exports.Intro = void 0;
+exports.propsIntro = exports.Intro = void 0;
 
 var Intro_hbs_1 = __importDefault(require("./Intro.hbs"));
 
@@ -6602,7 +7757,7 @@ var styles = __importStar(require("./Intro.module.css"));
 
 var base_block_1 = require("../../utils/base-block");
 
-var render_1 = require("../../utils/render");
+var router_1 = require("../../utils/router");
 
 var Intro = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Intro, _base_block_1$BaseBlo);
@@ -6626,16 +7781,12 @@ var Intro = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 }(base_block_1.BaseBlock);
 
 exports.Intro = Intro;
+exports.propsIntro = {
+  styles: styles
+}; // @ts-ignore
 
-var renderIntro = function renderIntro(selector) {
-  var intro = new Intro({
-    styles: styles
-  });
-  (0, render_1.render)(selector, intro);
-};
-
-exports.renderIntro = renderIntro;
-},{"./Intro.hbs":"../src/pages/Intro/Intro.hbs","./Intro.module.css":"../src/pages/Intro/Intro.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/render":"../src/utils/render.ts"}],"../src/pages/index.ts":[function(require,module,exports) {
+exports.default = (0, router_1.withRouter)(Intro);
+},{"./Intro.hbs":"../src/pages/Intro/Intro.hbs","./Intro.module.css":"../src/pages/Intro/Intro.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/router":"../src/utils/router.ts"}],"../src/pages/index.ts":[function(require,module,exports) {
 "use strict";
 
 var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
@@ -6685,48 +7836,17 @@ __exportStar(require("./Intro"), exports);
 
 Object.defineProperty(exports, "__esModule", {
   value: true
-});
+}); // @ts-nocheck
 
 require("normalize.css");
 
 var pages_1 = require("./pages");
 
-var pathname = window.location.pathname;
-var rootSelector = '#root';
+var router_1 = require("./utils/router");
 
-switch (pathname) {
-  case '/':
-    (0, pages_1.renderIntro)(rootSelector);
-    break;
-
-  case '/login':
-    (0, pages_1.renderLogin)(rootSelector);
-    break;
-
-  case '/register':
-    (0, pages_1.renderRegister)(rootSelector);
-    break;
-
-  case '/main':
-    (0, pages_1.renderMain)(rootSelector);
-    break;
-
-  case '/profile':
-    (0, pages_1.renderProfile)(rootSelector);
-    break;
-
-  case '/404':
-    (0, pages_1.render404)(rootSelector);
-    break;
-
-  case '/500':
-    (0, pages_1.render500)(rootSelector);
-    break;
-
-  default:
-    (0, pages_1.renderLogin)('#root');
-}
-},{"normalize.css":"../node_modules/normalize.css/normalize.css","./pages":"../src/pages/index.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+var router = new router_1.Router();
+router.use('/login', pages_1.Login, pages_1.loginProps).use('/', pages_1.Intro, pages_1.propsIntro).use('/main', pages_1.Main, pages_1.mainProps).use('/profile', pages_1.Profile, pages_1.propsProfile).use('/register', pages_1.Register, pages_1.registerProp).use('/500', pages_1.Page500, pages_1.propsPage500).use('/404', pages_1.Page404, pages_1.propsPage404).start();
+},{"normalize.css":"../node_modules/normalize.css/normalize.css","./pages":"../src/pages/index.ts","./utils/router":"../src/utils/router.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -6754,7 +7874,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55418" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54641" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

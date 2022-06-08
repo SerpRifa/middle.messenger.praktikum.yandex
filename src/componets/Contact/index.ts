@@ -11,6 +11,7 @@ export interface ContactProps extends BaseComponetProps {
   className?: string
   message: string
   unreadMessages: number
+  id: number
   avatar?: any
   styles?: any
 }
@@ -24,5 +25,9 @@ export class Contact extends BaseBlock<ContactProps> {
     return this.compile(contactTmpl, {
       ...this.props, className, components, styles,
     });
+  }
+
+  componentAfterRender() {
+    console.log(this.element)
   }
 }

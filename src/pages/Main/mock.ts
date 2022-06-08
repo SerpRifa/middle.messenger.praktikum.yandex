@@ -18,42 +18,30 @@ export interface IMessage {
 }
 
 export interface IResponse {
-  contacts: IContact[]
+  contacts: Chat[]
   messages: IMessage[]
 }
 
-export const contacts: IContact[] = [
-  {
-    avatar,
-    firstName: 'Ash',
-    lastName: 'Slayer',
-    message: 'message',
-    unreadMessages: 1,
-  },
-  {
-    avatar: noAvatar,
-    firstName: 'Demon1',
-    lastName: 'Demon1',
-    message: 'message',
-    unreadMessages: 6,
+export interface Chat {
+  "id": number
+  "title": string
+  "avatar": string
+  "unread_count": number
+  "last_message": {
+    "user": {
+      "first_name": string,
+      "second_name": string,
+      "avatar": string,
+      "email": string,
+      "login": string,
+      "phone": string
+    },
+    "time": string,
+    "content": string,
+  }
+}
 
-  },
-  {
-    avatar: noAvatar,
-    firstName: 'Demon2',
-    lastName: 'Demon2',
-    message: 'message',
-    unreadMessages: 6,
-
-  },
-  {
-    avatar: noAvatar,
-    firstName: 'Demon2',
-    lastName: 'Demon2',
-    message: 'message',
-    unreadMessages: 0,
-
-  },
+export const contacts: Chat[] = [
 ];
 
 export const messages: IMessage[] = [
@@ -89,6 +77,7 @@ export const messages: IMessage[] = [
 
   },
 ];
+
 
 export const data: IResponse = {
   contacts,

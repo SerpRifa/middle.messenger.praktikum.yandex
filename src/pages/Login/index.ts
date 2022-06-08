@@ -3,8 +3,10 @@ import * as styles from './Login.module.css';
 import { BaseBlock } from '../../utils/base-block';
 import { EmailField, PasswordField, Button } from '../../componets';
 import { BaseComponetProps } from '../../types/types';
-import { render } from '../../utils/render';
 import { emailValidator, passwordValidator } from '../../utils/validators';
+import {Router, withRouter} from '../../utils/router';
+import {Fetch} from "../../utils/fetch";
+import {getServerUrl} from "../../utils/url";
 
 export interface LoginProps extends BaseComponetProps {
   styles: any
@@ -29,8 +31,8 @@ export class Login extends BaseBlock<LoginProps> {
   }
 }
 
-export const renderLogin = (selector: string) => {
-  const login = new Login({
+
+export const loginProps = {
     components: {
       EmailField: emailField,
       PasswordField: passwordField,
@@ -51,8 +53,20 @@ export const renderLogin = (selector: string) => {
         });
 
         console.log(data)
+
+        const fetch = new Fetch();
+        fetch
+          .post<any>('/auth/signin', {data})
+          .then((response) => {
+            console.log('response', response)
+            const router = new Router();
+            router.go('/main')
+          })
+          .catch((e) => console.error(e))
       },
     },
-  });
-  render(selector, login);
-};
+  };
+  // @ts-ignore
+  export default (withRouter(Login));
+
+

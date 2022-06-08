@@ -9,7 +9,7 @@ export interface MessageProps extends BaseComponetProps {
   avatar: any
   firstName: string
   lastName: string
-  message: string
+  content: string
   title?: string
   styles?: any
 }
