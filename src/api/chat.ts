@@ -20,6 +20,14 @@ export class ChatApi {
     });
   }
 
+  deleteChat(chatId: number): Promise<void> {
+    return fetch.delete("/chats", {
+      data: {
+        chatId,
+      }
+    });
+  }
+
   getChatUsers(id: number): Promise<IUserInfo> {
     return fetch.get(`/chats/${id}/users`);
   }

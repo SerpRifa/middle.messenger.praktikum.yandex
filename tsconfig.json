@@ -10,8 +10,11 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "sourceMap": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "esModuleInterop": true,
+        "noEmit": true,
+        "skipLibCheck": true,
     },
-    "include": ["./src/"],
+    "include": ["./src/", "./**/*.ts"],
     "exclude": ["node_modules"]
 }

@@ -6457,6 +6457,15 @@ var ChatApi = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "deleteChat",
+    value: function deleteChat(chatId) {
+      return fetch_1.fetch.delete("/chats", {
+        data: {
+          chatId: chatId
+        }
+      });
+    }
+  }, {
     key: "getChatUsers",
     value: function getChatUsers(id) {
       return fetch_1.fetch.get("/chats/".concat(id, "/users"));
@@ -6656,7 +6665,22 @@ var addChatButton = new componets_1.Button({
 });
 var message = new componets_1.TextField({
   placeholder: "Type text...",
-  name: "message"
+  name: "message",
+  events: {
+    keypress: function keypress(event) {// if (event.key === "Enter") {
+      //   event.target.value
+      //   if (this.activeSocket) {
+      //     this.activeSocket.send(
+      //       JSON.stringify({
+      //         content: message,
+      //         time: new Date(),
+      //         type: 'message',
+      //       })
+      //     );
+      //   }
+      // }
+    }
+  }
 });
 var logout = new componets_1.Button({
   title: "Log out",
@@ -6748,12 +6772,41 @@ var MainBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
           event.stopPropagation();
           var id = event.currentTarget.getAttribute("data-id");
           var currentUser = shitstore_1.store.getState().profile;
+          shitstore_1.store.set('chat.messages', []);
           console.log("currentUser", currentUser);
           chat_1.chatApi.getChatToken(id).then(function (data) {
             _this2.openSocket(currentUser.id, id, data.token);
           });
         });
+      }); // @ts-ignore
+
+      var message = document.querySelector("[name='message']");
+      message.outerHTML = message.outerHTML;
+      message = document.querySelector("[name='message']");
+      message === null || message === void 0 ? void 0 : message.addEventListener('keypress', function (e) {
+        var _a;
+
+        if (e.key === "Enter") {
+          e.preventDefault();
+          e.stopPropagation();
+
+          if ((_a = e === null || e === void 0 ? void 0 : e.target) === null || _a === void 0 ? void 0 : _a.value) {
+            var content = e.target.value;
+
+            if (_this2.activeSocket) {
+              _this2.activeSocket.send(JSON.stringify({
+                content: content,
+                time: new Date(),
+                type: 'message'
+              }));
+            }
+
+            ;
+            e.target.value = '';
+          }
+        }
       });
+      console.log('message', message);
     }
   }, {
     key: "openSocket",
@@ -6810,7 +6863,12 @@ exports.mainProps = {
     message: message,
     logout: logout
   },
-  styles: styles
+  styles: styles,
+  events: {
+    submit: function submit(e) {
+      e.preventDefault();
+    }
+  }
 };
 
 function mapUserToProps(state) {
@@ -6854,7 +6912,7 @@ var templateFunction = _handlebars.default.template({
       return undefined;
     };
 
-    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "main") : stack1, depth0)) + ">\n  <div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\n    <div title=\"Изменить аватар\" class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "avatar") : stack1, depth0)) + ">\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    return "<div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "main") : stack1, depth0)) + ">\r\n  <div class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\r\n    <div title=\"Изменить аватар\" class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "avatar") : stack1, depth0)) + ">\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "avatar",
       "hash": {},
       "data": data,
@@ -6868,7 +6926,7 @@ var templateFunction = _handlebars.default.template({
           "column": 18
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "changeAvatar") || (depth0 != null ? lookupProperty(depth0, "changeAvatar") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "changeAvatar") || (depth0 != null ? lookupProperty(depth0, "changeAvatar") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "changeAvatar",
       "hash": {},
       "data": data,
@@ -6882,7 +6940,7 @@ var templateFunction = _handlebars.default.template({
           "column": 24
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n    </div>\n    <form class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n    </div>\r\n    <form class=" + alias2(alias1((stack1 = depth0 != null ? lookupProperty(depth0, "styles") : depth0) != null ? lookupProperty(stack1, "field-conteiner") : stack1, depth0)) + ">\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "firstName") || (depth0 != null ? lookupProperty(depth0, "firstName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "firstName",
       "hash": {},
       "data": data,
@@ -6896,7 +6954,7 @@ var templateFunction = _handlebars.default.template({
           "column": 21
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "secondName") || (depth0 != null ? lookupProperty(depth0, "secondName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "secondName") || (depth0 != null ? lookupProperty(depth0, "secondName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "secondName",
       "hash": {},
       "data": data,
@@ -6910,7 +6968,7 @@ var templateFunction = _handlebars.default.template({
           "column": 22
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "displayName") || (depth0 != null ? lookupProperty(depth0, "displayName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "displayName") || (depth0 != null ? lookupProperty(depth0, "displayName") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "displayName",
       "hash": {},
       "data": data,
@@ -6924,7 +6982,7 @@ var templateFunction = _handlebars.default.template({
           "column": 23
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "login") || (depth0 != null ? lookupProperty(depth0, "login") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "login") || (depth0 != null ? lookupProperty(depth0, "login") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "login",
       "hash": {},
       "data": data,
@@ -6938,7 +6996,7 @@ var templateFunction = _handlebars.default.template({
           "column": 17
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "email") || (depth0 != null ? lookupProperty(depth0, "email") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "email") || (depth0 != null ? lookupProperty(depth0, "email") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "email",
       "hash": {},
       "data": data,
@@ -6952,7 +7010,7 @@ var templateFunction = _handlebars.default.template({
           "column": 17
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "phone") || (depth0 != null ? lookupProperty(depth0, "phone") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "phone") || (depth0 != null ? lookupProperty(depth0, "phone") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "phone",
       "hash": {},
       "data": data,
@@ -6966,7 +7024,7 @@ var templateFunction = _handlebars.default.template({
           "column": 17
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "oldPassword") || (depth0 != null ? lookupProperty(depth0, "oldPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "oldPassword") || (depth0 != null ? lookupProperty(depth0, "oldPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "oldPassword",
       "hash": {},
       "data": data,
@@ -6980,7 +7038,7 @@ var templateFunction = _handlebars.default.template({
           "column": 23
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "newPassword") || (depth0 != null ? lookupProperty(depth0, "newPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "newPassword") || (depth0 != null ? lookupProperty(depth0, "newPassword") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "newPassword",
       "hash": {},
       "data": data,
@@ -6994,7 +7052,7 @@ var templateFunction = _handlebars.default.template({
           "column": 23
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "save") || (depth0 != null ? lookupProperty(depth0, "save") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "save") || (depth0 != null ? lookupProperty(depth0, "save") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "save",
       "hash": {},
       "data": data,
@@ -7008,7 +7066,7 @@ var templateFunction = _handlebars.default.template({
           "column": 16
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "cancel") || (depth0 != null ? lookupProperty(depth0, "cancel") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
+    }) : helper)) != null ? stack1 : "") + "\r\n      " + ((stack1 = (helper = (helper = lookupProperty(helpers, "cancel") || (depth0 != null ? lookupProperty(depth0, "cancel") : depth0)) != null ? helper : alias4, _typeof(helper) === alias5 ? helper.call(alias3, {
       "name": "cancel",
       "hash": {},
       "data": data,
@@ -7022,7 +7080,7 @@ var templateFunction = _handlebars.default.template({
           "column": 18
         }
       }
-    }) : helper)) != null ? stack1 : "") + "\n    </form>\n  </div>\n</div>\n";
+    }) : helper)) != null ? stack1 : "") + "\r\n    </form>\r\n  </div>\r\n</div>\r\n";
   },
   "useData": true
 });
@@ -7874,7 +7932,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54641" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50104" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

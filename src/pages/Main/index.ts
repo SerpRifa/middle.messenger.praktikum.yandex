@@ -44,6 +44,22 @@ const addChatButton = new Button({
 const message = new TextField({
   placeholder: "Type text...",
   name: "message",
+  events: {
+    keypress: (event) => {
+      // if (event.key === "Enter") {
+      //   event.target.value
+      //   if (this.activeSocket) {
+      //     this.activeSocket.send(
+      //       JSON.stringify({
+      //         content: message,
+      //         time: new Date(),
+      //         type: 'message',
+      //       })
+      //     );
+      //   }
+      // }
+    }
+  }
 });
 
 const logout = new Button({
@@ -115,12 +131,38 @@ export class MainBase extends BaseBlock<MainProps> {
         const id = event.currentTarget.getAttribute("data-id");
 
         const currentUser = store.getState().profile;
+        store.set('chat.messages', []);
         console.log("currentUser", currentUser);
         chatApi.getChatToken(id).then((data) => {
           this.openSocket(currentUser.id, id, data.token);
         });
       });
     });
+
+    // @ts-ignore
+    let message  =  document.querySelector("[name='message']");
+    message.outerHTML = message.outerHTML;
+    message  =  document.querySelector("[name='message']");
+    message?.addEventListener('keypress', (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        e.stopPropagation();
+        if(e?.target?.value){
+          const content = e.target.value;
+          if (this.activeSocket) {
+            this.activeSocket.send(
+              JSON.stringify({
+                content: content,
+                time: new Date(),
+                type: 'message',
+              })
+            );
+          };
+          e.target.value = '';
+        }
+      }
+    });
+    console.log('message', message)
   }
 
   openSocket(userId: any, chatId: number, token: string) {
@@ -178,6 +220,11 @@ export const mainProps = {
     logout,
   },
   styles,
+  events: {
+    submit: (e: Event) => {
+      e.preventDefault();
+    },
+  },
 };
 
 function mapUserToProps(state: any) {
