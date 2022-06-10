@@ -3,3 +3,4 @@ export * from './Button';
 export * from './Input';
 export * from './Contact';
 export * from './Message';
+export * from './ChangeAvatar';

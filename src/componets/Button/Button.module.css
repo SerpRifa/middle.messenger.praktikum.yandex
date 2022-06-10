@@ -1,5 +1,6 @@
+@import "../../styles/main.css";
 .button {
-  background-color: #4d47c3;
+  background-color: var(--background-button);
   border-radius: 9px;
   color: #ffff;
   font-size: 16px;

@@ -1,3 +1,5 @@
+@import "../../styles/main.css";
+
 .contact {
   display: flex;
   flex-direction: row;
@@ -51,7 +53,7 @@
   justify-content: center;
   border-radius: 50%;
   font-size: 14px;
-  background-color: #2d9cdb;
+  background-color: var(--blue);
   color: #fff;
   text-align: center;
   padding: 2px;

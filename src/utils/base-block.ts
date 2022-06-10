@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { EventBus } from './event-bus';
 import { BaseComponetProps } from '../types/types';
 
-export class BaseBlock<TProps = any> {
+export class BaseBlock<TProps = BaseComponetProps> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -17,7 +17,7 @@ export class BaseBlock<TProps = any> {
 
   _events = {};
 
-  props: any;
+  props: TProps;
 
   eventBus = null;
 
@@ -40,7 +40,7 @@ export class BaseBlock<TProps = any> {
     eventBus.emit(BaseBlock.EVENTS.INIT);
   }
 
-  _registerEvents(eventBus) {
+  private _registerEvents(eventBus) {
     eventBus.on(BaseBlock.EVENTS.INIT, this.init.bind(this));
     eventBus.on(BaseBlock.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(BaseBlock.EVENTS.FLOW_RENDER, this._render.bind(this));
@@ -66,7 +66,6 @@ export class BaseBlock<TProps = any> {
 
   private _componentDidMount() {
     this.componentDidMount();
-    this.eventBus().emit(BaseBlock.EVENTS.FLOW_CDM);
   }
 
   componentDidMount() {
@@ -82,8 +81,7 @@ export class BaseBlock<TProps = any> {
     return response;
   }
 
-  componentDidUpdate(oldProps: TProps, newProps: TProps) {
-    return oldProps !== newProps;
+  componentDidUpdate(oldProps: TProps, newProps: TProps): void {
   }
 
   private _addEvents() {
@@ -91,6 +89,9 @@ export class BaseBlock<TProps = any> {
     this._events = events;
     const element = this._element;
     Object.entries(events).forEach(([name, callback]) => {
+      if(name == 'click') {
+        window.selectedEement = element;
+      }
       element?.addEventListener(name, callback as any);
     });
   }
@@ -131,6 +132,7 @@ export class BaseBlock<TProps = any> {
       } else {
         const target = fragment.content.querySelector(`[data-id="${component.id}"]`);
         target?.replaceWith(component.getContent());
+        component.dispatchComponentDidMount();
       }
     });
 
@@ -142,6 +144,8 @@ export class BaseBlock<TProps = any> {
       return;
     }
     this.props = Object.assign(this.props, nextProps);
+    this._makePropsProxy(this.props);
+    this._render()
     this.eventBus().emit(BaseBlock.EVENTS.FLOW_CDU);
   };
 
@@ -171,7 +175,15 @@ export class BaseBlock<TProps = any> {
   }
 
   _makePropsProxy(props: any) {
-    props = new Proxy(props, {});
+    props = new Proxy(props, {
+      set: (target, propName: string, value) => {
+        if (target[propName] !== value) {
+          target[propName] = value
+          this.eventBus().emit(BaseBlock.EVENTS.FLOW_CDU);
+        }
+        return true
+      }
+    });
     return props;
   }
 

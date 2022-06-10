@@ -2,13 +2,17 @@ import registerTmpl from './Register.hbs';
 import * as styles from '../Login/Login.module.css';
 import { BaseComponetProps } from '../../types/types';
 import { BaseBlock } from '../../utils/base-block';
-import { render } from '../../utils/render';
 import {
   TextField, EmailField, PasswordField, Button, Input,
 } from '../../componets';
 import {
   emailValidator, loginValidator, nameValidator, passwordValidator, phoneValidator,
 } from '../../utils/validators';
+import {
+  getServerUrl
+} from '../../utils/url';
+import {Router, withRouter} from "../../utils/router";
+import { Fetch } from '../../utils/fetch';
 
 export interface RegisterProps extends BaseComponetProps {
   styles: any
@@ -67,8 +71,7 @@ export class Register extends BaseBlock<RegisterProps> {
   }
 }
 
-export const renderRegister = (selector: string) => {
-  const register = new Register({
+export const registerProp: RegisterProps = {
     components: {
       firstName,
       secondName,
@@ -98,8 +101,20 @@ export const renderRegister = (selector: string) => {
         });
 
         console.log(data)
+
+        const fetch = new Fetch();
+        const url = getServerUrl('/auth/signup');
+        fetch
+          .post<any>(url, {data})
+          .then((response) => {
+            console.log(response);
+            const router = new Router();
+            router.go('/main')
+          })
+          .catch((e) => console.error(e))
+
       },
     },
-  });
-  render(selector, register);
-};
+  }
+// @ts-ignore
+export default (withRouter(Register));

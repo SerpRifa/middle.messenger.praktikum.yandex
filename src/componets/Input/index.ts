@@ -8,7 +8,7 @@ import { createError } from '../../utils/validators';
 export interface InputProps extends BaseComponetProps {
   placeholder?: string;
   error?: string;
-  value?: string;
+  value?: string | null;
   type?: string;
   className?: string;
 }

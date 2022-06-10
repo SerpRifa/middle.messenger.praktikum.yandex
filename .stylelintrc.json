@@ -3,6 +3,9 @@
   "rules": {
     "selector-class-pattern": null,
     "at-rule-no-unknown": null,
-    "no-descending-specificity": null
+    "no-descending-specificity": null,
+    "block-no-empty": false,
+    "rule-empty-line-before": false,
+    "length-zero-no-unit": null
   }
 }

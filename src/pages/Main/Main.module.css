@@ -1,7 +1,7 @@
 .conteiner {
   display: flex;
   flex-direction: row;
-  height: 100vh;
+  height: calc(100vh - 80px);
 }
 
 .panel-left {
@@ -30,4 +30,24 @@
 .chat-list {
   padding-inline-start: 0;
   list-style: none;
+}
+
+.tool-bar {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  height: 80px;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.logout {
+  width: 100px;
+}
+.logout button {
+  margin-top: 0px;
 }

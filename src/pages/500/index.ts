@@ -2,7 +2,7 @@ import page500Tmpl from './500.hbs';
 import * as styles from './500.module.css';
 import { BaseComponetProps } from '../../types/types';
 import { BaseBlock } from '../../utils/base-block';
-import { render } from '../../utils/render';
+import {withRouter} from "../../utils/router";
 
 export interface Page500Props extends BaseComponetProps {
   styles: any
@@ -14,7 +14,7 @@ export class Page500 extends BaseBlock<Page500Props> {
   }
 }
 
-export const render500 = (selector: string) => {
-  const page500 = new Page500({ styles });
-  render(selector, page500);
-};
+export const propsPage500 = { styles };
+
+// @ts-ignore
+export default (withRouter(Page500));

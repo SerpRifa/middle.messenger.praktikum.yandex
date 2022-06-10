@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 export class EventBus {
   listeners: Object;
 
