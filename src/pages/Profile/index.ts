@@ -6,7 +6,7 @@ import { Avatar, Input } from "../../componets";
 import { withRouter } from "../../utils/router";
 import { profileApi } from "../../api/profile";
 import { store, TState } from "../../store/shitstore";
-import { connect } from "../../store/connect";
+import { connectFactory } from "../../store/connectFactory";
 import {
   avatar,
   cancel,
@@ -122,4 +122,4 @@ function mapUserToProps(state: TState) {
   };
 }
 
-export const Profile = withRouter(connect(ProfileBase, mapUserToProps));
+export const Profile = withRouter(connectFactory(ProfileBase, mapUserToProps));

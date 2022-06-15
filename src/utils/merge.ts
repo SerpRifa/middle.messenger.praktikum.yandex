@@ -1,6 +1,3 @@
-type Indexed<T = unknown> = {
-  [key in string]: T;
-};
 export function merge(lhs: Indexed<any>, rhs: Indexed<any>): Indexed<any> {
   for (const p in rhs) {
     if (!rhs.hasOwnProperty(p)) {
@@ -14,7 +11,7 @@ export function merge(lhs: Indexed<any>, rhs: Indexed<any>): Indexed<any> {
         lhs[p] = rhs[p];
       }
     } catch (e) {
-      lhs[p] = rhs[p];
+      console.error(e);
     }
   }
 

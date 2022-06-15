@@ -1,7 +1,7 @@
 import { store, StoreEvents } from "./shitstore";
 import { isEqual } from "../utils/is-equal";
 
-export function connect(
+export function connectFactory(
   Component: any,
   mapStateToProps: (state: Record<string, any>) => Record<string, any>
 ) {

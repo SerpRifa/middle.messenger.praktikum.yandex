@@ -5,7 +5,7 @@ import { BaseBlock } from "../../utils/base-block";
 import { BaseComponetProps, BaseMessage, Message as MessageWS, IUserInfo } from "../../types/types";
 import { Contact, Message, MessageProps } from "../../componets";
 import { withRouter } from "../../utils/router";
-import { connect } from "../../store/connect";
+import { connectFactory } from "../../store/connectFactory";
 import { chatApi } from "../../api/chat";
 import { store, TState } from "../../store/shitstore";
 import { profileApi } from "../../api/profile";
@@ -166,4 +166,4 @@ function mapUserToProps(state: TState) {
   };
 }
 
-export const Main = withRouter(connect(MainBase, mapUserToProps));
+export const Main = withRouter(connectFactory(MainBase, mapUserToProps));

@@ -1,10 +1,9 @@
 import * as styles from "./Main.module.css";
-import {Button, TextField} from "../../componets";
+import { Button, TextField } from "../../componets";
 import { Router } from "../../utils/router";
-import { Fetch } from "../../utils/fetch";
-import { getServerUrl } from "../../utils/url";
 import { chatApi } from "../../api/chat";
-import {store} from "../../store/shitstore";
+import { store } from "../../store/shitstore";
+import { authApi } from "../../api/auth";
 
 export const addChatInput = new TextField({
   placeholder: "Добавить чат...",
@@ -41,10 +40,8 @@ export const logout = new Button({
   events: {
     click: (e) => {
       e.preventDefault();
-      const fetch = new Fetch();
-      const url = getServerUrl("/auth/logout");
-      fetch
-        .post(url, {})
+      authApi
+        .logout()
         .then((response) => {
           console.log(response);
           const router = new Router();
@@ -54,5 +51,3 @@ export const logout = new Button({
     },
   },
 });
-
-

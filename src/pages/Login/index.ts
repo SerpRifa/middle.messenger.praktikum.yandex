@@ -5,6 +5,7 @@ import { BaseComponetProps } from "../../types/types";
 import { Router, withRouter } from "../../utils/router";
 import { Fetch } from "../../utils/fetch";
 import { button, emailField, passwordField } from "./components";
+import { authApi } from "../../api/auth";
 
 export interface LoginProps extends BaseComponetProps {
   styles: any;
@@ -36,11 +37,7 @@ export const loginProps = {
         data[input.name] = input.value;
       });
 
-      console.log(data);
-
-      const fetch = new Fetch();
-      fetch
-        .post<{ reason: string }>("/auth/signin", { data })
+      authApi.signIn({login: data.login, password: data.password})
         .then((response) => {
           console.log("response", response);
           const router = new Router();

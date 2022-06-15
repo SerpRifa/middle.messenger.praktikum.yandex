@@ -1,11 +1,12 @@
 import registerTmpl from "./Register.hbs";
 import * as styles from "../Login/Login.module.css";
-import { BaseComponetProps } from "../../types/types";
+import { BaseComponetProps, SignupOptions } from "../../types/types";
 import { BaseBlock } from "../../utils/base-block";
 import { getServerUrl } from "../../utils/url";
 import { Router, withRouter } from "../../utils/router";
-import { Fetch } from "../../utils/fetch";
+import { fetch } from "../../utils/fetch";
 import { button, email, firstName, login, password, phone, secondName } from "./components";
+import { authApi } from "../../api/auth";
 
 export interface RegisterProps extends BaseComponetProps {
   styles: any;
@@ -38,20 +39,25 @@ export const registerProp: RegisterProps = {
       password.validateInput();
       phone.validateInput();
 
-      const data: Record<string, string> = {};
+      const data: SignupOptions = {
+        first_name: "",
+        second_name: "",
+        login: "",
+        email: "",
+        password: "",
+        phone: "",
+      };
 
       const inputFields = document.querySelectorAll("input");
 
       inputFields.forEach((input: HTMLInputElement) => {
-        data[input.name] = input.value;
+        if (input.name in data) {
+          data[input.name] = input.value;
+        }
       });
 
-      const fetch = new Fetch();
-      const url = getServerUrl("/auth/signup");
-      fetch
-        .post(url, { data })
-        .then((response) => {
-          console.log(response);
+      authApi.signUp(data as SignupOptions)
+        .then(() => {
           const router = new Router();
           router.go("/main");
         })

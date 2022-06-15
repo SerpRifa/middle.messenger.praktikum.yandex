@@ -192,10 +192,10 @@ export class BaseBlock<TProps = BaseComponetProps> {
   }
 
   show() {
-    this.getContent().style.display = 'block';
+    this.getContent().style.visibility = 'visible';
   }
 
   hide() {
-    this.getContent().style.display = 'none';
+    this.getContent().style.display = 'hidden';
   }
 }
