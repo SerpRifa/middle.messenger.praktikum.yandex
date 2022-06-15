@@ -1,11 +1,11 @@
-import introTmpl from './Intro.hbs';
-import * as styles from './Intro.module.css';
-import { BaseBlock } from '../../utils/base-block';
-import { BaseComponetProps } from '../../types/types';
-import {withRouter} from "../../utils/router";
+import introTmpl from "./Intro.hbs";
+import * as styles from "./Intro.module.css";
+import { BaseBlock } from "../../utils/base-block";
+import { BaseComponetProps } from "../../types/types";
+import { withRouter } from "../../utils/router";
 
 export interface IntroProps extends BaseComponetProps {
-  styles: any
+  styles: any;
 }
 
 export class Intro extends BaseBlock<IntroProps> {
@@ -14,7 +14,6 @@ export class Intro extends BaseBlock<IntroProps> {
   }
 }
 
-export const propsIntro: IntroProps = { styles }
+export const propsIntro: IntroProps = { styles };
 
-// @ts-ignore
-export default (withRouter(Intro));
+export default withRouter(Intro);

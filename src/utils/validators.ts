@@ -63,3 +63,5 @@ export const phoneValidator = (str: string): string | null => {
 };
 
 export const messageValidator = (str: string): string | null => (str.length > 0 ? null : 'Некорректный текст');
+
+export type TValidate = (str: string) =>  string | null;

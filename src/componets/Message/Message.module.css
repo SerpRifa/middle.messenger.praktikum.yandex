@@ -20,7 +20,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 8px;
-  background-color: #c4c4c4;
+  background-color: var(--message);
   min-height: 70px;
   box-sizing: border-box;
   border-radius: 8px;

@@ -1,11 +1,11 @@
-import page500Tmpl from './500.hbs';
-import * as styles from './500.module.css';
-import { BaseComponetProps } from '../../types/types';
-import { BaseBlock } from '../../utils/base-block';
-import {withRouter} from "../../utils/router";
+import page500Tmpl from "./500.hbs";
+import * as styles from "./500.module.css";
+import { BaseComponetProps } from "../../types/types";
+import { BaseBlock } from "../../utils/base-block";
+import { withRouter } from "../../utils/router";
 
 export interface Page500Props extends BaseComponetProps {
-  styles: any
+  styles: any;
 }
 
 export class Page500 extends BaseBlock<Page500Props> {
@@ -14,7 +14,6 @@ export class Page500 extends BaseBlock<Page500Props> {
   }
 }
 
-export const propsPage500 = { styles };
+export const propsPage500: Page500Props = { styles };
 
-// @ts-ignore
-export default (withRouter(Page500));
+export default withRouter(Page500);

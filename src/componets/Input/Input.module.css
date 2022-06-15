@@ -1,7 +1,7 @@
 .input {
-  background-color: #f0efff;
+  background-color: var(--background-input);
   box-sizing: border-box;
-  border-color: #f0efff;
+  border-color: var(--background-input);
   border-width: 0;
   border-radius: 8px;
   padding: 0 26px;
@@ -10,6 +10,6 @@
 }
 
 .input:placeholder-shown {
-  color: #a7a3ff;
+  color:var(--placeholder);
   padding: 0 26px;
 }

@@ -7,7 +7,7 @@ import { BaseComponetProps } from "../../types/types";
 import { fetch } from "../../utils/fetch";
 
 export interface AvatarProps extends BaseComponetProps {
-  avatar?: any;
+  avatar?: string | null;
   title?: string;
   className?: string;
 }

@@ -1,1 +1,1 @@
-export default (...rest: any[]) => rest.join(' ');
+export default (...rest: Array<string | undefined>) => rest.join(" ");

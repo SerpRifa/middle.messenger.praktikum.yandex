@@ -7,8 +7,8 @@
 .panel-left {
   display: flex;
   flex-direction: column;
-  background-color: #ffff;
-  border-right: 1px solid #bdbdbd;
+  background-color: var(--white);
+  border-right: 1px solid var(--border);
 }
 
 .chat {

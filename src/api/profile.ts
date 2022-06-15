@@ -6,7 +6,7 @@ export class ProfileApi {
     return fetch.get("/auth/user");
   }
 
-  changeProfile(data: any): Promise<IUserInfo> {
+  changeProfile(data: Record<string, string>): Promise<IUserInfo> {
     return fetch.put("/user/profile", { data });
   }
 

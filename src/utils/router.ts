@@ -16,8 +16,8 @@ export class Router {
     Router.__instance = this;
   }
 
-  use(pathname: string, block: typeof BaseBlock, props: BaseComponetProps) {
-    const route = new Route(pathname, block, {rootQuery: '#root'}, props);
+  use(pathname: string, block: unknown, props: BaseComponetProps) {
+    const route = new Route(pathname, block as typeof BaseBlock, {rootQuery: '#root'}, props);
 
     this.routes.push(route);
 
@@ -66,7 +66,7 @@ export class Router {
   }
 }
 
-export function withRouter(Component: typeof BaseBlock) {
+export function withRouter(Component: any) {
   return class WithRouter extends Component {
     constructor(props: any) {
       const router = new Router()

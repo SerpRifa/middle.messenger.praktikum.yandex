@@ -40,7 +40,7 @@ export class BaseBlock<TProps = BaseComponetProps> {
     eventBus.emit(BaseBlock.EVENTS.INIT);
   }
 
-  private _registerEvents(eventBus) {
+  private _registerEvents(eventBus: EventBus) {
     eventBus.on(BaseBlock.EVENTS.INIT, this.init.bind(this));
     eventBus.on(BaseBlock.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(BaseBlock.EVENTS.FLOW_RENDER, this._render.bind(this));
@@ -92,7 +92,7 @@ export class BaseBlock<TProps = BaseComponetProps> {
       if(name == 'click') {
         window.selectedEement = element;
       }
-      element?.addEventListener(name, callback as any);
+      element?.addEventListener(name, callback);
     });
   }
 
@@ -108,7 +108,7 @@ export class BaseBlock<TProps = BaseComponetProps> {
 
   compile(template: any, props: TProps) {
     const { components = {}, ...restProps } = (props as BaseComponetProps);
-    const propsWithCompile: any = { ...restProps };
+    const propsWithCompile = { ...restProps };
     Object.entries(components).forEach(([componentName, component]) => {
       if (Array.isArray(component)) {
         propsWithCompile[componentName] = [];
@@ -168,9 +168,9 @@ export class BaseBlock<TProps = BaseComponetProps> {
     this.eventBus().emit(BaseBlock.EVENTS.FLOW_CAR);
   }
 
-  render(): any {}
+  render() {}
 
-  getContent(): any {
+  getContent():  HTMLElement | null {
     return this.element;
   }
 

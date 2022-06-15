@@ -12,7 +12,7 @@ export interface ContactProps extends BaseComponetProps {
   message: string
   unreadMessages: number
   id: number
-  avatar?: any
+  avatar?: string
   styles?: any
 }
 

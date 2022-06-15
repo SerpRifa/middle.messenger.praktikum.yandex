@@ -2,7 +2,7 @@ import avatar from '../../../static/img/avatar.png';
 import noAvatar from '../../../static/img/no_avatar.jpg';
 
 export interface IContact {
-  avatar: any
+  avatar: string
   firstName: string
   lastName: string
   message: string
@@ -10,7 +10,7 @@ export interface IContact {
 }
 
 export interface IMessage {
-  avatar: any
+  avatar: string
   firstName: string
   lastName: string
   message: string

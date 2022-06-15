@@ -6,7 +6,7 @@ import { BaseBlock } from '../../utils/base-block';
 import { Avatar } from '../Avatar';
 
 export interface MessageProps extends BaseComponetProps {
-  avatar: any
+  avatar: string
   firstName: string
   lastName: string
   content: string

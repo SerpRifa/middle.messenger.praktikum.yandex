@@ -5,7 +5,7 @@ import { BaseBlock } from "../../utils/base-block";
 import { BaseComponetProps } from "../../types/types";
 
 export class ChangeAvatar extends BaseBlock<BaseComponetProps> {
-  constructor(props: any) {
+  constructor(props: BaseComponetProps) {
     super(props);
   }
 

@@ -3140,7 +3140,7 @@ var _parse = _interopRequireDefault(require("./parse.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 },{"./v1.js":"../node_modules/uuid/dist/esm-browser/v1.js","./v3.js":"../node_modules/uuid/dist/esm-browser/v3.js","./v4.js":"../node_modules/uuid/dist/esm-browser/v4.js","./v5.js":"../node_modules/uuid/dist/esm-browser/v5.js","./nil.js":"../node_modules/uuid/dist/esm-browser/nil.js","./version.js":"../node_modules/uuid/dist/esm-browser/version.js","./validate.js":"../node_modules/uuid/dist/esm-browser/validate.js","./stringify.js":"../node_modules/uuid/dist/esm-browser/stringify.js","./parse.js":"../node_modules/uuid/dist/esm-browser/parse.js"}],"../src/utils/event-bus.ts":[function(require,module,exports) {
-"use strict"; // @ts-nocheck
+"use strict";
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -3506,110 +3506,227 @@ BaseBlock.EVENTS = {
   FLOW_RENDER: 'flow:render',
   FLOW_CAR: 'flow: component-after-render'
 };
-},{"uuid":"../node_modules/uuid/dist/esm-browser/index.js","./event-bus":"../src/utils/event-bus.ts"}],"img/no_avatar.jpg":[function(require,module,exports) {
-module.exports = "/no_avatar.2d9919a2.jpg";
-},{}],"../src/componets/Avatar/Avatar.hbs":[function(require,module,exports) {
+},{"uuid":"../node_modules/uuid/dist/esm-browser/index.js","./event-bus":"../src/utils/event-bus.ts"}],"../src/utils/render.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.render = void 0;
 
-var _handlebars = _interopRequireDefault(require("handlebars/dist/handlebars.runtime"));
+var render = function render(rootSelector, component) {
+  var root = document.querySelector(rootSelector);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  if (root != null) {
+    root.appendChild(component.getContent());
+    component.dispatchComponentDidMount();
+  }
+
+  return root;
+};
+
+exports.render = render;
+},{}],"../src/utils/Route.ts":[function(require,module,exports) {
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var render_1 = require("./render");
+
+var Route = /*#__PURE__*/function () {
+  function Route(pathname, view, props, componentProps) {
+    _classCallCheck(this, Route);
+
+    this.pathname = pathname;
+    this._blockClass = view;
+    this._props = props;
+    this._componentProps = componentProps;
+  }
+
+  _createClass(Route, [{
+    key: "navigate",
+    value: function navigate(pathname) {
+      if (pathname === this.pathname) {
+        this.pathname = pathname;
+        this.render();
+      }
+    }
+  }, {
+    key: "leave",
+    value: function leave() {
+      this._block.hide();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (!this._block) {
+        this._block = new this._blockClass(Object.assign({}, this._componentProps));
+        (0, render_1.render)(this._props.rootQuery, this._block);
+        return;
+      }
+
+      this._block.show();
+    }
+  }, {
+    key: "match",
+    value: function match(pathname) {
+      return pathname == this.pathname;
+    }
+  }]);
+
+  return Route;
+}();
+
+exports.default = Route;
+},{"./render":"../src/utils/render.ts"}],"../src/utils/router.ts":[function(require,module,exports) {
+"use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
-var templateFunction = _handlebars.default.template({
-  "compiler": [8, ">= 4.3.0"],
-  "main": function main(container, depth0, helpers, partials, data) {
-    var helper,
-        alias1 = depth0 != null ? depth0 : container.nullContext || {},
-        alias2 = container.hooks.helperMissing,
-        alias3 = "function",
-        alias4 = container.escapeExpression,
-        lookupProperty = container.lookupProperty || function (parent, propertyName) {
-      if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-        return parent[propertyName];
-      }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
-      return undefined;
-    };
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-    return "<div class=" + alias4((helper = (helper = lookupProperty(helpers, "className") || (depth0 != null ? lookupProperty(depth0, "className") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
-      "name": "className",
-      "hash": {},
-      "data": data,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 11
-        },
-        "end": {
-          "line": 1,
-          "column": 24
-        }
-      }
-    }) : helper)) + ">\r\n    <img alt=\"avatar\" src=\"" + alias4((helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
-      "name": "avatar",
-      "hash": {},
-      "data": data,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 27
-        },
-        "end": {
-          "line": 2,
-          "column": 37
-        }
-      }
-    }) : helper)) + "\" class=" + alias4((helper = (helper = lookupProperty(helpers, "className") || (depth0 != null ? lookupProperty(depth0, "className") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
-      "name": "className",
-      "hash": {},
-      "data": data,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 45
-        },
-        "end": {
-          "line": 2,
-          "column": 58
-        }
-      }
-    }) : helper)) + " />\r\n</div>\r\n";
-  },
-  "useData": true
-});
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
 
-var _default = templateFunction;
-exports.default = _default;
-},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/componets/Avatar/Avatar.module.css":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-module.exports = {
-  "avatar": "src-componets-Avatar-__Avatar-module__avatar__3ztDY"
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
 };
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/utils/classnames.ts":[function(require,module,exports) {
-"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.withRouter = exports.Router = void 0;
 
-exports.default = function () {
-  for (var _len = arguments.length, rest = new Array(_len), _key = 0; _key < _len; _key++) {
-    rest[_key] = arguments[_key];
+var Route_1 = __importDefault(require("./Route"));
+
+var Router = /*#__PURE__*/function () {
+  function Router() {
+    _classCallCheck(this, Router);
+
+    this.routes = [];
+    this.history = window.history;
+    this.currentRoute = undefined;
+
+    if (Router.__instance) {
+      return Router.__instance;
+    }
+
+    Router.__instance = this;
   }
 
-  return rest.join(' ');
-};
-},{}],"../src/utils/fetch.ts":[function(require,module,exports) {
+  _createClass(Router, [{
+    key: "use",
+    value: function use(pathname, block, props) {
+      var route = new Route_1.default(pathname, block, {
+        rootQuery: '#root'
+      }, props);
+      this.routes.push(route);
+      return this;
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      var _this = this;
+
+      window.onpopstate = function () {
+        _this._onRoute(window.location.pathname);
+      };
+
+      this._onRoute(window.location.pathname);
+    }
+  }, {
+    key: "_onRoute",
+    value: function _onRoute(pathname) {
+      var route = this.getRoute(pathname);
+
+      if (!route) {
+        route = this.getRoute('/404');
+      }
+
+      if (this.currentRoute) {
+        this.currentRoute.leave();
+      }
+
+      this.currentRoute = route;
+      route === null || route === void 0 ? void 0 : route.render();
+    }
+  }, {
+    key: "go",
+    value: function go(pathname) {
+      this.history.pushState({}, '', pathname);
+
+      this._onRoute(pathname);
+    }
+  }, {
+    key: "getRoute",
+    value: function getRoute(pathname) {
+      return this.routes.find(function (route) {
+        return route.match(pathname);
+      });
+    }
+  }, {
+    key: "back",
+    value: function back() {
+      this.history.back();
+    }
+  }, {
+    key: "forward",
+    value: function forward() {
+      this.history.forward();
+    }
+  }]);
+
+  return Router;
+}();
+
+exports.Router = Router;
+
+function withRouter(Component) {
+  return /*#__PURE__*/function (_Component) {
+    _inherits(WithRouter, _Component);
+
+    var _super = _createSuper(WithRouter);
+
+    function WithRouter(props) {
+      _classCallCheck(this, WithRouter);
+
+      var router = new Router();
+      return _super.call(this, Object.assign(Object.assign({}, props), {
+        router: router
+      }));
+    }
+
+    return _createClass(WithRouter);
+  }(Component);
+}
+
+exports.withRouter = withRouter;
+},{"./Route":"../src/utils/Route.ts"}],"../src/utils/fetch.ts":[function(require,module,exports) {
 "use strict";
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -3758,6 +3875,109 @@ var Fetch = /*#__PURE__*/function () {
 
 exports.Fetch = Fetch;
 exports.fetch = new Fetch();
+},{}],"img/no_avatar.jpg":[function(require,module,exports) {
+module.exports = "/no_avatar.2d9919a2.jpg";
+},{}],"../src/componets/Avatar/Avatar.hbs":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _handlebars = _interopRequireDefault(require("handlebars/dist/handlebars.runtime"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+var templateFunction = _handlebars.default.template({
+  "compiler": [8, ">= 4.3.0"],
+  "main": function main(container, depth0, helpers, partials, data) {
+    var helper,
+        alias1 = depth0 != null ? depth0 : container.nullContext || {},
+        alias2 = container.hooks.helperMissing,
+        alias3 = "function",
+        alias4 = container.escapeExpression,
+        lookupProperty = container.lookupProperty || function (parent, propertyName) {
+      if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+        return parent[propertyName];
+      }
+
+      return undefined;
+    };
+
+    return "<div class=" + alias4((helper = (helper = lookupProperty(helpers, "className") || (depth0 != null ? lookupProperty(depth0, "className") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "name": "className",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 11
+        },
+        "end": {
+          "line": 1,
+          "column": 24
+        }
+      }
+    }) : helper)) + ">\r\n    <img alt=\"avatar\" src=\"" + alias4((helper = (helper = lookupProperty(helpers, "avatar") || (depth0 != null ? lookupProperty(depth0, "avatar") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "name": "avatar",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 27
+        },
+        "end": {
+          "line": 2,
+          "column": 37
+        }
+      }
+    }) : helper)) + "\" class=" + alias4((helper = (helper = lookupProperty(helpers, "className") || (depth0 != null ? lookupProperty(depth0, "className") : depth0)) != null ? helper : alias2, _typeof(helper) === alias3 ? helper.call(alias1, {
+      "name": "className",
+      "hash": {},
+      "data": data,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 45
+        },
+        "end": {
+          "line": 2,
+          "column": 58
+        }
+      }
+    }) : helper)) + " />\r\n</div>\r\n";
+  },
+  "useData": true
+});
+
+var _default = templateFunction;
+exports.default = _default;
+},{"handlebars/dist/handlebars.runtime":"../node_modules/handlebars/dist/handlebars.runtime.js"}],"../src/componets/Avatar/Avatar.module.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+module.exports = {
+  "avatar": "src-componets-Avatar-__Avatar-module__avatar__3ztDY"
+};
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/utils/classnames.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function () {
+  for (var _len = arguments.length, rest = new Array(_len), _key = 0; _key < _len; _key++) {
+    rest[_key] = arguments[_key];
+  }
+
+  return rest.join(" ");
+};
 },{}],"../src/componets/Avatar/index.ts":[function(require,module,exports) {
 "use strict";
 
@@ -4363,13 +4583,13 @@ var Input = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _createClass(Input, [{
     key: "render",
     value: function render() {
-      var _a;
+      var _a, _b;
 
-      var className = (0, classnames_1.default)(styles.input, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
+      var className = (0, classnames_1.default)(styles.input, (_b = (_a = this.props) === null || _a === void 0 ? void 0 : _a.className) !== null && _b !== void 0 ? _b : '');
       return this.compile(Input_hbs_1.default, Object.assign(Object.assign({
-        placeholder: '',
-        value: '',
-        type: 'text'
+        placeholder: "",
+        value: "",
+        type: "text"
       }, this.props), {
         className: className
       }));
@@ -4381,10 +4601,10 @@ var Input = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 
       var _a, _b;
 
-      (_a = this.element) === null || _a === void 0 ? void 0 : _a.addEventListener('focus', function () {
+      (_a = this.element) === null || _a === void 0 ? void 0 : _a.addEventListener("focus", function () {
         return _this2.validateInput();
       });
-      (_b = this.element) === null || _b === void 0 ? void 0 : _b.addEventListener('blur', function () {
+      (_b = this.element) === null || _b === void 0 ? void 0 : _b.addEventListener("blur", function () {
         return _this2.validateInput();
       });
     }
@@ -4424,10 +4644,10 @@ var TextField = /*#__PURE__*/function (_Input) {
 
       var className = (0, classnames_1.default)(styles.input, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
       return this.compile(Input_hbs_1.default, Object.assign(Object.assign({
-        placeholder: '',
-        value: ''
+        placeholder: "",
+        value: ""
       }, this.props), {
-        type: 'text',
+        type: "text",
         className: className
       }));
     }
@@ -4456,10 +4676,10 @@ var PasswordField = /*#__PURE__*/function (_TextField) {
 
       var className = (0, classnames_1.default)(styles.input, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
       return this.compile(Input_hbs_1.default, Object.assign(Object.assign({
-        placeholder: '',
-        value: ''
+        placeholder: "",
+        value: ""
       }, this.props), {
-        type: 'password',
+        type: "password",
         className: className
       }));
     }
@@ -4488,10 +4708,10 @@ var EmailField = /*#__PURE__*/function (_TextField2) {
 
       var className = (0, classnames_1.default)(styles.input, (_a = this.props) === null || _a === void 0 ? void 0 : _a.className);
       return this.compile(Input_hbs_1.default, Object.assign(Object.assign({
-        placeholder: '',
-        value: ''
+        placeholder: "",
+        value: ""
       }, this.props), {
-        type: 'text',
+        type: "text",
         className: className
       }));
     }
@@ -5251,227 +5471,73 @@ __exportStar(require("./Contact"), exports);
 __exportStar(require("./Message"), exports);
 
 __exportStar(require("./ChangeAvatar"), exports);
-},{"./Avatar":"../src/componets/Avatar/index.ts","./Button":"../src/componets/Button/index.ts","./Input":"../src/componets/Input/index.ts","./Contact":"../src/componets/Contact/index.ts","./Message":"../src/componets/Message/index.ts","./ChangeAvatar":"../src/componets/ChangeAvatar/index.ts"}],"../src/utils/render.ts":[function(require,module,exports) {
+},{"./Avatar":"../src/componets/Avatar/index.ts","./Button":"../src/componets/Button/index.ts","./Input":"../src/componets/Input/index.ts","./Contact":"../src/componets/Contact/index.ts","./Message":"../src/componets/Message/index.ts","./ChangeAvatar":"../src/componets/ChangeAvatar/index.ts"}],"../src/pages/Login/components.ts":[function(require,module,exports) {
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.render = void 0;
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
 
-var render = function render(rootSelector, component) {
-  var root = document.querySelector(rootSelector);
-
-  if (root != null) {
-    root.appendChild(component.getContent());
-    component.dispatchComponentDidMount();
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
   }
 
-  return root;
-};
-
-exports.render = render;
-},{}],"../src/utils/Route.ts":[function(require,module,exports) {
-"use strict";
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
 });
 
-var render_1 = require("./render");
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
 
-var Route = /*#__PURE__*/function () {
-  function Route(pathname, view, props, componentProps) {
-    _classCallCheck(this, Route);
-
-    this.pathname = pathname;
-    this._blockClass = view;
-    this._props = props;
-    this._componentProps = componentProps;
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
   }
 
-  _createClass(Route, [{
-    key: "navigate",
-    value: function navigate(pathname) {
-      if (pathname === this.pathname) {
-        this.pathname = pathname;
-        this.render();
-      }
-    }
-  }, {
-    key: "leave",
-    value: function leave() {
-      this._block.hide();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      if (!this._block) {
-        this._block = new this._blockClass(Object.assign({}, this._componentProps));
-        (0, render_1.render)(this._props.rootQuery, this._block);
-        return;
-      }
+  __setModuleDefault(result, mod);
 
-      this._block.show();
-    }
-  }, {
-    key: "match",
-    value: function match(pathname) {
-      return pathname == this.pathname;
-    }
-  }]);
-
-  return Route;
-}();
-
-exports.default = Route;
-},{"./render":"../src/utils/render.ts"}],"../src/utils/router.ts":[function(require,module,exports) {
-"use strict";
-
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-var __importDefault = this && this.__importDefault || function (mod) {
-  return mod && mod.__esModule ? mod : {
-    "default": mod
-  };
+  return result;
 };
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.withRouter = exports.Router = void 0;
+exports.button = exports.passwordField = exports.emailField = void 0;
 
-var Route_1 = __importDefault(require("./Route"));
+var styles = __importStar(require("./Login.module.css"));
 
-var Router = /*#__PURE__*/function () {
-  function Router() {
-    _classCallCheck(this, Router);
+var componets_1 = require("../../componets");
 
-    this.routes = [];
-    this.history = window.history;
-    this.currentRoute = undefined;
+var validators_1 = require("../../utils/validators");
 
-    if (Router.__instance) {
-      return Router.__instance;
-    }
-
-    Router.__instance = this;
-  }
-
-  _createClass(Router, [{
-    key: "use",
-    value: function use(pathname, block, props) {
-      var route = new Route_1.default(pathname, block, {
-        rootQuery: '#root'
-      }, props);
-      this.routes.push(route);
-      return this;
-    }
-  }, {
-    key: "start",
-    value: function start() {
-      var _this = this;
-
-      window.onpopstate = function () {
-        _this._onRoute(window.location.pathname);
-      };
-
-      this._onRoute(window.location.pathname);
-    }
-  }, {
-    key: "_onRoute",
-    value: function _onRoute(pathname) {
-      var route = this.getRoute(pathname);
-
-      if (!route) {
-        route = this.getRoute('/404');
-      }
-
-      if (this.currentRoute) {
-        this.currentRoute.leave();
-      }
-
-      this.currentRoute = route;
-      route === null || route === void 0 ? void 0 : route.render();
-    }
-  }, {
-    key: "go",
-    value: function go(pathname) {
-      this.history.pushState({}, '', pathname);
-
-      this._onRoute(pathname);
-    }
-  }, {
-    key: "getRoute",
-    value: function getRoute(pathname) {
-      return this.routes.find(function (route) {
-        return route.match(pathname);
-      });
-    }
-  }, {
-    key: "back",
-    value: function back() {
-      this.history.back();
-    }
-  }, {
-    key: "forward",
-    value: function forward() {
-      this.history.forward();
-    }
-  }]);
-
-  return Router;
-}();
-
-exports.Router = Router;
-
-function withRouter(Component) {
-  return /*#__PURE__*/function (_Component) {
-    _inherits(WithRouter, _Component);
-
-    var _super = _createSuper(WithRouter);
-
-    function WithRouter(props) {
-      _classCallCheck(this, WithRouter);
-
-      var router = new Router();
-      return _super.call(this, Object.assign(Object.assign({}, props), {
-        router: router
-      }));
-    }
-
-    return _createClass(WithRouter);
-  }(Component);
-}
-
-exports.withRouter = withRouter;
-},{"./Route":"../src/utils/Route.ts"}],"../src/pages/Login/index.ts":[function(require,module,exports) {
+exports.emailField = new componets_1.EmailField({
+  placeholder: "Enter email or user name",
+  name: "login"
+}, [validators_1.emailValidator]);
+exports.passwordField = new componets_1.PasswordField({
+  placeholder: "Password",
+  name: "password",
+  className: styles["text-field"]
+}, [validators_1.passwordValidator]);
+exports.button = new componets_1.Button({
+  title: "Sign in"
+});
+},{"./Login.module.css":"../src/pages/Login/Login.module.css","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/Login/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -5553,26 +5619,11 @@ var styles = __importStar(require("./Login.module.css"));
 
 var base_block_1 = require("../../utils/base-block");
 
-var componets_1 = require("../../componets");
-
-var validators_1 = require("../../utils/validators");
-
 var router_1 = require("../../utils/router");
 
 var fetch_1 = require("../../utils/fetch");
 
-var emailField = new componets_1.EmailField({
-  placeholder: 'Enter email or user name',
-  name: 'login'
-}, [validators_1.emailValidator]);
-var passwordField = new componets_1.PasswordField({
-  placeholder: 'Password',
-  name: 'password',
-  className: styles['text-field']
-}, [validators_1.passwordValidator]);
-var button = new componets_1.Button({
-  title: 'Sign in'
-});
+var components_1 = require("./components");
 
 var Login = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Login, _base_block_1$BaseBlo);
@@ -5598,38 +5649,37 @@ var Login = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 exports.Login = Login;
 exports.loginProps = {
   components: {
-    EmailField: emailField,
-    PasswordField: passwordField,
-    Button: button
+    EmailField: components_1.emailField,
+    PasswordField: components_1.passwordField,
+    Button: components_1.button
   },
   styles: styles,
   events: {
     submit: function submit(e) {
       e.preventDefault();
-      emailField.validateInput();
-      passwordField.validateInput();
+      components_1.emailField.validateInput();
+      components_1.passwordField.validateInput();
       var data = {};
-      var inputFields = document.querySelectorAll('input');
+      var inputFields = document.querySelectorAll("input");
       inputFields.forEach(function (input) {
         data[input.name] = input.value;
       });
       console.log(data);
       var fetch = new fetch_1.Fetch();
-      fetch.post('/auth/signin', {
+      fetch.post("/auth/signin", {
         data: data
       }).then(function (response) {
-        console.log('response', response);
+        console.log("response", response);
         var router = new router_1.Router();
-        router.go('/main');
+        router.go("/main");
       }).catch(function (e) {
         return console.error(e);
       });
     }
   }
-}; // @ts-ignore
-
+};
 exports.default = (0, router_1.withRouter)(Login);
-},{"./Login.hbs":"../src/pages/Login/Login.hbs","./Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts"}],"../src/pages/Register/Register.hbs":[function(require,module,exports) {
+},{"./Login.hbs":"../src/pages/Login/Login.hbs","./Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts","./components":"../src/pages/Login/components.ts"}],"../src/pages/Register/Register.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5794,7 +5844,94 @@ var getServerUrl = function getServerUrl(uri) {
 };
 
 exports.getServerUrl = getServerUrl;
-},{}],"../src/pages/Register/index.ts":[function(require,module,exports) {
+},{}],"../src/pages/Register/components.ts":[function(require,module,exports) {
+"use strict";
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.button = exports.phone = exports.password = exports.email = exports.login = exports.secondName = exports.firstName = void 0;
+
+var styles = __importStar(require("../Login/Login.module.css"));
+
+var componets_1 = require("../../componets");
+
+var validators_1 = require("../../utils/validators");
+
+exports.firstName = new componets_1.Input({
+  placeholder: 'First Name',
+  name: 'first_name',
+  className: styles['text-field']
+}, [validators_1.nameValidator]);
+exports.secondName = new componets_1.TextField({
+  placeholder: 'Second Name',
+  name: 'second_name',
+  className: styles['text-field']
+}, [validators_1.nameValidator]);
+exports.login = new componets_1.TextField({
+  placeholder: 'Create User name',
+  name: 'login',
+  className: styles['text-field']
+}, [validators_1.loginValidator]);
+exports.email = new componets_1.EmailField({
+  placeholder: 'Enter Emai',
+  name: 'email',
+  className: styles['text-field']
+}, [validators_1.emailValidator]);
+exports.password = new componets_1.PasswordField({
+  placeholder: 'Password',
+  name: 'password',
+  className: styles['text-field']
+}, [validators_1.passwordValidator]);
+exports.phone = new componets_1.PasswordField({
+  placeholder: 'Phone',
+  name: 'phone',
+  className: styles['text-field']
+}, [validators_1.phoneValidator]);
+exports.button = new componets_1.Button({
+  title: 'Register'
+});
+},{"../Login/Login.module.css":"../src/pages/Login/Login.module.css","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts"}],"../src/pages/Register/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -5876,49 +6013,13 @@ var styles = __importStar(require("../Login/Login.module.css"));
 
 var base_block_1 = require("../../utils/base-block");
 
-var componets_1 = require("../../componets");
-
-var validators_1 = require("../../utils/validators");
-
 var url_1 = require("../../utils/url");
 
 var router_1 = require("../../utils/router");
 
 var fetch_1 = require("../../utils/fetch");
 
-var firstName = new componets_1.Input({
-  placeholder: 'First Name',
-  name: 'first_name',
-  className: styles['text-field']
-}, [validators_1.nameValidator]);
-var secondName = new componets_1.TextField({
-  placeholder: 'Second Name',
-  name: 'second_name',
-  className: styles['text-field']
-}, [validators_1.nameValidator]);
-var login = new componets_1.TextField({
-  placeholder: 'Create User name',
-  name: 'login',
-  className: styles['text-field']
-}, [validators_1.loginValidator]);
-var email = new componets_1.EmailField({
-  placeholder: 'Enter Emai',
-  name: 'email',
-  className: styles['text-field']
-}, [validators_1.emailValidator]);
-var password = new componets_1.PasswordField({
-  placeholder: 'Password',
-  name: 'password',
-  className: styles['text-field']
-}, [validators_1.passwordValidator]);
-var phone = new componets_1.PasswordField({
-  placeholder: 'Phone',
-  name: 'phone',
-  className: styles['text-field']
-}, [validators_1.phoneValidator]);
-var button = new componets_1.Button({
-  title: 'Register'
-});
+var components_1 = require("./components");
 
 var Register = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(Register, _base_block_1$BaseBlo);
@@ -5944,47 +6045,45 @@ var Register = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 exports.Register = Register;
 exports.registerProp = {
   components: {
-    firstName: firstName,
-    secondName: secondName,
-    login: login,
-    email: email,
-    password: password,
-    phone: phone,
-    button: button
+    firstName: components_1.firstName,
+    secondName: components_1.secondName,
+    login: components_1.login,
+    email: components_1.email,
+    password: components_1.password,
+    phone: components_1.phone,
+    button: components_1.button
   },
   styles: styles,
   events: {
     submit: function submit(e) {
       e.preventDefault();
-      firstName.validateInput();
-      secondName.validateInput();
-      login.validateInput();
-      email.validateInput();
-      password.validateInput();
-      phone.validateInput();
+      components_1.firstName.validateInput();
+      components_1.secondName.validateInput();
+      components_1.login.validateInput();
+      components_1.email.validateInput();
+      components_1.password.validateInput();
+      components_1.phone.validateInput();
       var data = {};
-      var inputFields = document.querySelectorAll('input');
+      var inputFields = document.querySelectorAll("input");
       inputFields.forEach(function (input) {
         data[input.name] = input.value;
       });
-      console.log(data);
       var fetch = new fetch_1.Fetch();
-      var url = (0, url_1.getServerUrl)('/auth/signup');
+      var url = (0, url_1.getServerUrl)("/auth/signup");
       fetch.post(url, {
         data: data
       }).then(function (response) {
         console.log(response);
         var router = new router_1.Router();
-        router.go('/main');
+        router.go("/main");
       }).catch(function (e) {
         return console.error(e);
       });
     }
   }
-}; // @ts-ignore
-
+};
 exports.default = (0, router_1.withRouter)(Register);
-},{"./Register.hbs":"../src/pages/Register/Register.hbs","../Login/Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts","../../utils/url":"../src/utils/url.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts"}],"../src/pages/Main/Main.hbs":[function(require,module,exports) {
+},{"./Register.hbs":"../src/pages/Register/Register.hbs","../Login/Login.module.css":"../src/pages/Login/Login.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/url":"../src/utils/url.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts","./components":"../src/pages/Register/components.ts"}],"../src/pages/Main/Main.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6172,7 +6271,7 @@ exports.set = void 0;
 var merge_1 = require("./merge");
 
 function set(obj, path, value) {
-  var result = path.split('.').reduceRight(function (acc, key) {
+  var result = path.split(".").reduceRight(function (acc, key) {
     return _defineProperty({}, key, acc);
   }, value);
   return (0, merge_1.merge)(obj, result);
@@ -6271,14 +6370,12 @@ var Store = /*#__PURE__*/function (_event_bus_1$EventBus) {
   }, {
     key: "set",
     value: function set(prop, value) {
-      // @ts-ignore
       this.state = (0, set_1.set)(this.state, prop, value);
       this.emit(StoreEvents.Updated);
     }
   }, {
     key: "addMassage",
     value: function addMassage(addMessages) {
-      // @ts-ignore
       this.state.chat.messages = [].concat(_toConsumableArray(this.state.chat.messages), _toConsumableArray(addMessages));
       this.emit(StoreEvents.Updated);
     }
@@ -6391,14 +6488,13 @@ function connect(Component, mapStateToProps) {
 
       _classCallCheck(this, _class);
 
-      var state = mapStateToProps(shitstore_1.store.getState()); // @ts-ignore
-
+      var state = mapStateToProps(shitstore_1.store.getState());
       _this = _super.call(this, Object.assign(Object.assign({}, props), state));
       shitstore_1.store.on(shitstore_1.StoreEvents.Updated, function () {
         var newState = mapStateToProps(shitstore_1.store.getState());
 
         if (!(0, is_equal_1.isEqual)(state, newState)) {
-          console.log('newState', newState);
+          console.log("newState", newState);
 
           _this.setProps(Object.assign({}, mapStateToProps(shitstore_1.store.getState())));
 
@@ -6540,7 +6636,117 @@ var ProfileApi = /*#__PURE__*/function () {
 
 exports.ProfileApi = ProfileApi;
 exports.profileApi = new ProfileApi();
-},{"../utils/fetch":"../src/utils/fetch.ts"}],"../src/pages/Main/index.ts":[function(require,module,exports) {
+},{"../utils/fetch":"../src/utils/fetch.ts"}],"../src/pages/Main/components.ts":[function(require,module,exports) {
+"use strict";
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.logout = exports.message = exports.addChatButton = exports.addChatInput = void 0;
+
+var styles = __importStar(require("./Main.module.css"));
+
+var componets_1 = require("../../componets");
+
+var router_1 = require("../../utils/router");
+
+var fetch_1 = require("../../utils/fetch");
+
+var url_1 = require("../../utils/url");
+
+var chat_1 = require("../../api/chat");
+
+var shitstore_1 = require("../../store/shitstore");
+
+exports.addChatInput = new componets_1.TextField({
+  placeholder: "Добавить чат...",
+  name: "newChat",
+  className: styles["search-input"]
+});
+exports.addChatButton = new componets_1.Button({
+  title: "+",
+  name: "addChatButton",
+  events: {
+    click: function click(e) {
+      e.preventDefault();
+      var newChat = document.querySelector("[name=\"newChat\"]");
+
+      if (newChat === null || newChat === void 0 ? void 0 : newChat.value) {
+        chat_1.chatApi.createChat({
+          title: newChat === null || newChat === void 0 ? void 0 : newChat.value
+        }).then(function () {
+          return chat_1.chatApi.loadChats();
+        }).then(function (responce) {
+          return shitstore_1.store.set("chat.chats", responce);
+        });
+      }
+    }
+  }
+});
+exports.message = new componets_1.TextField({
+  placeholder: "Type text...",
+  name: "message"
+});
+exports.logout = new componets_1.Button({
+  title: "Log out",
+  name: "button",
+  className: styles["logout"],
+  events: {
+    click: function click(e) {
+      e.preventDefault();
+      var fetch = new fetch_1.Fetch();
+      var url = (0, url_1.getServerUrl)("/auth/logout");
+      fetch.post(url, {}).then(function (response) {
+        console.log(response);
+        var router = new router_1.Router();
+        router.go("/login");
+      }).catch(function (e) {
+        return console.error(e);
+      });
+    }
+  }
+});
+},{"./Main.module.css":"../src/pages/Main/Main.module.css","../../componets":"../src/componets/index.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts","../../utils/url":"../src/utils/url.ts","../../api/chat":"../src/api/chat.ts","../../store/shitstore":"../src/store/shitstore.ts"}],"../src/pages/Main/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -6626,10 +6832,6 @@ var componets_1 = require("../../componets");
 
 var router_1 = require("../../utils/router");
 
-var fetch_1 = require("../../utils/fetch");
-
-var url_1 = require("../../utils/url");
-
 var connect_1 = require("../../store/connect");
 
 var chat_1 = require("../../api/chat");
@@ -6638,69 +6840,7 @@ var shitstore_1 = require("../../store/shitstore");
 
 var profile_1 = require("../../api/profile");
 
-var addChatInput = new componets_1.TextField({
-  placeholder: "Добавить чат...",
-  name: "newChat",
-  className: styles["search-input"]
-});
-var addChatButton = new componets_1.Button({
-  title: "+",
-  name: "addChatButton",
-  events: {
-    click: function click(e) {
-      e.preventDefault();
-      var newChat = document.querySelector("[name=\"newChat\"]");
-
-      if (newChat === null || newChat === void 0 ? void 0 : newChat.value) {
-        chat_1.chatApi.createChat({
-          title: newChat === null || newChat === void 0 ? void 0 : newChat.value
-        }).then(function () {
-          return chat_1.chatApi.loadChats();
-        }).then(function (responce) {
-          return shitstore_1.store.set("chat.chats", responce);
-        });
-      }
-    }
-  }
-});
-var message = new componets_1.TextField({
-  placeholder: "Type text...",
-  name: "message",
-  events: {
-    keypress: function keypress(event) {// if (event.key === "Enter") {
-      //   event.target.value
-      //   if (this.activeSocket) {
-      //     this.activeSocket.send(
-      //       JSON.stringify({
-      //         content: message,
-      //         time: new Date(),
-      //         type: 'message',
-      //       })
-      //     );
-      //   }
-      // }
-    }
-  }
-});
-var logout = new componets_1.Button({
-  title: "Log out",
-  name: "button",
-  className: styles["logout"],
-  events: {
-    click: function click(e) {
-      e.preventDefault();
-      var fetch = new fetch_1.Fetch();
-      var url = (0, url_1.getServerUrl)("/auth/logout");
-      fetch.post(url, {}).then(function (response) {
-        console.log(response);
-        var router = new router_1.Router();
-        router.go("/login");
-      }).catch(function (e) {
-        return console.error(e);
-      });
-    }
-  }
-});
+var components_1 = require("./components");
 
 var MainBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(MainBase, _base_block_1$BaseBlo);
@@ -6765,25 +6905,24 @@ var MainBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
       var _this2 = this;
 
       var contacts = document.querySelectorAll(".contact");
-      console.log('componentDidUpdate');
+      console.log("componentDidUpdate");
       contacts.forEach(function (contact) {
         contact.addEventListener("click", function (event) {
           event.preventDefault();
           event.stopPropagation();
           var id = event.currentTarget.getAttribute("data-id");
           var currentUser = shitstore_1.store.getState().profile;
-          shitstore_1.store.set('chat.messages', []);
+          shitstore_1.store.set("chat.messages", []);
           console.log("currentUser", currentUser);
           chat_1.chatApi.getChatToken(id).then(function (data) {
             _this2.openSocket(currentUser.id, id, data.token);
           });
         });
-      }); // @ts-ignore
-
+      });
       var message = document.querySelector("[name='message']");
       message.outerHTML = message.outerHTML;
       message = document.querySelector("[name='message']");
-      message === null || message === void 0 ? void 0 : message.addEventListener('keypress', function (e) {
+      message === null || message === void 0 ? void 0 : message.addEventListener("keypress", function (e) {
         var _a;
 
         if (e.key === "Enter") {
@@ -6797,16 +6936,15 @@ var MainBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
               _this2.activeSocket.send(JSON.stringify({
                 content: content,
                 time: new Date(),
-                type: 'message'
+                type: "message"
               }));
             }
 
-            ;
-            e.target.value = '';
+            e.target.value = "";
           }
         }
       });
-      console.log('message', message);
+      console.log("message", message);
     }
   }, {
     key: "openSocket",
@@ -6819,8 +6957,8 @@ var MainBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
         console.log("Соединение установлено");
 
         _this3.activeSocket.send(JSON.stringify({
-          content: '0',
-          type: 'get old'
+          content: "0",
+          type: "get old"
         }));
       });
       this.activeSocket.addEventListener("message", function (event) {
@@ -6858,10 +6996,10 @@ var MainBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 exports.MainBase = MainBase;
 exports.mainProps = {
   components: {
-    addChatInput: addChatInput,
-    addChatButton: addChatButton,
-    message: message,
-    logout: logout
+    addChatInput: components_1.addChatInput,
+    addChatButton: components_1.addChatButton,
+    message: components_1.message,
+    logout: components_1.logout
   },
   styles: styles,
   events: {
@@ -6876,11 +7014,10 @@ function mapUserToProps(state) {
     contacts: state.chat.chats,
     messages: state.chat.messages
   };
-} // @ts-ignore
-
+}
 
 exports.Main = (0, router_1.withRouter)((0, connect_1.connect)(MainBase, mapUserToProps));
-},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/router":"../src/utils/router.ts","../../utils/fetch":"../src/utils/fetch.ts","../../utils/url":"../src/utils/url.ts","../../store/connect":"../src/store/connect.ts","../../api/chat":"../src/api/chat.ts","../../store/shitstore":"../src/store/shitstore.ts","../../api/profile":"../src/api/profile.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
+},{"./Main.hbs":"../src/pages/Main/Main.hbs","./Main.module.css":"../src/pages/Main/Main.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/router":"../src/utils/router.ts","../../store/connect":"../src/store/connect.ts","../../api/chat":"../src/api/chat.ts","../../store/shitstore":"../src/store/shitstore.ts","../../api/profile":"../src/api/profile.ts","./components":"../src/pages/Main/components.ts"}],"../src/pages/Profile/Profile.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7098,7 +7235,125 @@ module.exports = {
   "text-field": "src-pages-Profile-__Profile-module__text-field__230FV",
   "avatar": "src-pages-Profile-__Profile-module__avatar__HS1w1"
 };
-},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/pages/Profile/index.ts":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../src/pages/Profile/components.ts":[function(require,module,exports) {
+"use strict";
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) {
+    if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  }
+
+  __setModuleDefault(result, mod);
+
+  return result;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.cancel = exports.save = exports.phone = exports.newPassword = exports.oldPassword = exports.email = exports.login = exports.displayName = exports.secondName = exports.firstName = exports.changeAvatar = exports.avatar = void 0;
+
+var styles = __importStar(require("./Profile.module.css"));
+
+var componets_1 = require("../../componets");
+
+var validators_1 = require("../../utils/validators");
+
+var profile_1 = require("../../api/profile");
+
+exports.avatar = new componets_1.Avatar({
+  name: "avatar",
+  title: "Изменить аватар"
+});
+exports.changeAvatar = new componets_1.ChangeAvatar({
+  events: {
+    submit: function submit(event) {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log("event.currentTarget", event.currentTarget);
+      var form = new FormData(event.currentTarget);
+      console.log("form", form);
+      profile_1.profileApi.changeProfileAvatar(form);
+    }
+  }
+});
+exports.firstName = new componets_1.Input({
+  placeholder: "First Name",
+  name: "first_name",
+  className: styles["text-field"]
+}, [validators_1.nameValidator]);
+exports.secondName = new componets_1.TextField({
+  placeholder: "Second Name",
+  name: "second_name",
+  className: styles["text-field"]
+}, [validators_1.nameValidator]);
+exports.displayName = new componets_1.TextField({
+  placeholder: "Display name",
+  name: "display_name",
+  className: styles["text-field"]
+});
+exports.login = new componets_1.TextField({
+  placeholder: "Create User name",
+  name: "login",
+  className: styles["text-field"]
+}, [validators_1.loginValidator]);
+exports.email = new componets_1.EmailField({
+  placeholder: "Enter Emai",
+  name: "email",
+  className: styles["text-field"]
+}, [validators_1.emailValidator]);
+exports.oldPassword = new componets_1.PasswordField({
+  placeholder: "Password",
+  name: "oldPassword",
+  className: styles["text-field"]
+}, [validators_1.passwordValidator]);
+exports.newPassword = new componets_1.PasswordField({
+  placeholder: "New Password",
+  name: "newPassword",
+  className: styles["text-field"]
+}, [validators_1.passwordValidator]);
+exports.phone = new componets_1.TextField({
+  placeholder: "Phone",
+  name: "phone",
+  className: styles["text-field"]
+}, [validators_1.phoneValidator]);
+exports.save = new componets_1.Button({
+  title: "Save"
+});
+exports.cancel = new componets_1.Button({
+  title: "Cancel"
+});
+},{"./Profile.module.css":"../src/pages/Profile/Profile.module.css","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts","../../api/profile":"../src/api/profile.ts"}],"../src/pages/Profile/index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -7180,10 +7435,6 @@ var styles = __importStar(require("./Profile.module.css"));
 
 var base_block_1 = require("../../utils/base-block");
 
-var componets_1 = require("../../componets");
-
-var validators_1 = require("../../utils/validators");
-
 var router_1 = require("../../utils/router");
 
 var profile_1 = require("../../api/profile");
@@ -7192,68 +7443,7 @@ var shitstore_1 = require("../../store/shitstore");
 
 var connect_1 = require("../../store/connect");
 
-var avatar = new componets_1.Avatar({
-  name: "avatar",
-  title: "Изменить аватар"
-});
-var changeAvatar = new componets_1.ChangeAvatar({
-  events: {
-    submit: function submit(event) {
-      event.preventDefault();
-      event.stopPropagation();
-      console.log("event.currentTarget", event.currentTarget);
-      var form = new FormData(event.currentTarget);
-      console.log("form", form);
-      profile_1.profileApi.changeProfileAvatar(form);
-    }
-  }
-});
-var firstName = new componets_1.Input({
-  placeholder: "First Name",
-  name: "first_name",
-  className: styles["text-field"]
-}, [validators_1.nameValidator]);
-var secondName = new componets_1.TextField({
-  placeholder: "Second Name",
-  name: "second_name",
-  className: styles["text-field"]
-}, [validators_1.nameValidator]);
-var displayName = new componets_1.TextField({
-  placeholder: "Display name",
-  name: "display_name",
-  className: styles["text-field"]
-});
-var login = new componets_1.TextField({
-  placeholder: "Create User name",
-  name: "login",
-  className: styles["text-field"]
-}, [validators_1.loginValidator]);
-var email = new componets_1.EmailField({
-  placeholder: "Enter Emai",
-  name: "email",
-  className: styles["text-field"]
-}, [validators_1.emailValidator]);
-var oldPassword = new componets_1.PasswordField({
-  placeholder: "Password",
-  name: "oldPassword",
-  className: styles["text-field"]
-}, [validators_1.passwordValidator]);
-var newPassword = new componets_1.PasswordField({
-  placeholder: "New Password",
-  name: "newPassword",
-  className: styles["text-field"]
-}, [validators_1.passwordValidator]);
-var phone = new componets_1.TextField({
-  placeholder: "Phone",
-  name: "phone",
-  className: styles["text-field"]
-}, [validators_1.phoneValidator]);
-var save = new componets_1.Button({
-  title: "Save"
-});
-var cancel = new componets_1.Button({
-  title: "Cancel"
-});
+var components_1 = require("./components");
 
 var ProfileBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   _inherits(ProfileBase, _base_block_1$BaseBlo);
@@ -7285,7 +7475,7 @@ var ProfileBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate() {
-      console.log('componentDidUpdate');
+      console.log("componentDidUpdate");
       this.setComponents(this.props.profile);
     }
   }, {
@@ -7331,30 +7521,30 @@ var ProfileBase = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 
 exports.propsProfile = {
   components: {
-    avatar: avatar,
-    changeAvatar: changeAvatar,
-    firstName: firstName,
-    secondName: secondName,
-    displayName: displayName,
-    login: login,
-    email: email,
-    oldPassword: oldPassword,
-    newPassword: newPassword,
-    phone: phone,
-    save: save,
-    cancel: cancel
+    avatar: components_1.avatar,
+    changeAvatar: components_1.changeAvatar,
+    firstName: components_1.firstName,
+    secondName: components_1.secondName,
+    displayName: components_1.displayName,
+    login: components_1.login,
+    email: components_1.email,
+    oldPassword: components_1.oldPassword,
+    newPassword: components_1.newPassword,
+    phone: components_1.phone,
+    save: components_1.save,
+    cancel: components_1.cancel
   },
   styles: styles,
   events: {
     submit: function submit(e) {
       e.preventDefault();
-      firstName.validateInput();
-      secondName.validateInput();
-      login.validateInput();
-      email.validateInput();
-      oldPassword.validateInput();
-      newPassword.validateInput();
-      phone.validateInput();
+      components_1.firstName.validateInput();
+      components_1.secondName.validateInput();
+      components_1.login.validateInput();
+      components_1.email.validateInput();
+      components_1.oldPassword.validateInput();
+      components_1.newPassword.validateInput();
+      components_1.phone.validateInput();
       var data = {};
       var inputFields = document.querySelectorAll("input");
       inputFields.forEach(function (input) {
@@ -7372,11 +7562,10 @@ function mapUserToProps(state) {
   return {
     profile: Object.assign({}, state.profile)
   };
-} // @ts-ignore
-
+}
 
 exports.Profile = (0, router_1.withRouter)((0, connect_1.connect)(ProfileBase, mapUserToProps));
-},{"./Profile.hbs":"../src/pages/Profile/Profile.hbs","./Profile.module.css":"../src/pages/Profile/Profile.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../componets":"../src/componets/index.ts","../../utils/validators":"../src/utils/validators.ts","../../utils/router":"../src/utils/router.ts","../../api/profile":"../src/api/profile.ts","../../store/shitstore":"../src/store/shitstore.ts","../../store/connect":"../src/store/connect.ts"}],"../src/pages/404/404.hbs":[function(require,module,exports) {
+},{"./Profile.hbs":"../src/pages/Profile/Profile.hbs","./Profile.module.css":"../src/pages/Profile/Profile.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/router":"../src/utils/router.ts","../../api/profile":"../src/api/profile.ts","../../store/shitstore":"../src/store/shitstore.ts","../../store/connect":"../src/store/connect.ts","./components":"../src/pages/Profile/components.ts"}],"../src/pages/404/404.hbs":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7530,8 +7719,7 @@ var Page404 = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 exports.Page404 = Page404;
 exports.propsPage404 = {
   styles: styles
-}; // @ts-ignore
-
+};
 exports.default = (0, router_1.withRouter)(Page404);
 },{"./404.hbs":"../src/pages/404/404.hbs","./404.module.css":"../src/pages/404/404.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/router":"../src/utils/router.ts"}],"../src/pages/500/500.hbs":[function(require,module,exports) {
 "use strict";
@@ -7687,8 +7875,7 @@ var Page500 = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 exports.Page500 = Page500;
 exports.propsPage500 = {
   styles: styles
-}; // @ts-ignore
-
+};
 exports.default = (0, router_1.withRouter)(Page500);
 },{"./500.hbs":"../src/pages/500/500.hbs","./500.module.css":"../src/pages/500/500.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/router":"../src/utils/router.ts"}],"../src/pages/Intro/Intro.hbs":[function(require,module,exports) {
 "use strict";
@@ -7841,8 +8028,7 @@ var Intro = /*#__PURE__*/function (_base_block_1$BaseBlo) {
 exports.Intro = Intro;
 exports.propsIntro = {
   styles: styles
-}; // @ts-ignore
-
+};
 exports.default = (0, router_1.withRouter)(Intro);
 },{"./Intro.hbs":"../src/pages/Intro/Intro.hbs","./Intro.module.css":"../src/pages/Intro/Intro.module.css","../../utils/base-block":"../src/utils/base-block.ts","../../utils/router":"../src/utils/router.ts"}],"../src/pages/index.ts":[function(require,module,exports) {
 "use strict";
@@ -7894,7 +8080,7 @@ __exportStar(require("./Intro"), exports);
 
 Object.defineProperty(exports, "__esModule", {
   value: true
-}); // @ts-nocheck
+});
 
 require("normalize.css");
 
@@ -7932,7 +8118,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52914" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56257" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

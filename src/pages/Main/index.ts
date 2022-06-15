@@ -3,85 +3,19 @@ import * as styles from "./Main.module.css";
 import { Chat } from "./mock";
 import { BaseBlock } from "../../utils/base-block";
 import { BaseComponetProps, BaseMessage, Message as MessageWS, IUserInfo } from "../../types/types";
-import { Button, Contact, Message, TextField } from "../../componets";
-import { Router, withRouter } from "../../utils/router";
-import { fetch, Fetch } from "../../utils/fetch";
-import { getServerUrl } from "../../utils/url";
+import { Contact, Message, MessageProps } from "../../componets";
+import { withRouter } from "../../utils/router";
 import { connect } from "../../store/connect";
 import { chatApi } from "../../api/chat";
-import { store } from "../../store/shitstore";
+import { store, TState } from "../../store/shitstore";
 import { profileApi } from "../../api/profile";
+import { addChatButton, addChatInput, logout, message } from "./components";
 
 export interface MainProps extends BaseComponetProps {
   contacts: Chat[];
-  messages: any[];
+  messages: MessageProps[];
   styles: any;
 }
-
-const addChatInput = new TextField({
-  placeholder: "Добавить чат...",
-  name: "newChat",
-  className: styles["search-input"],
-});
-
-const addChatButton = new Button({
-  title: "+",
-  name: "addChatButton",
-  events: {
-    click: (e) => {
-      e.preventDefault();
-      const newChat = document.querySelector(`[name="newChat"]`) as HTMLInputElement;
-      if (newChat?.value) {
-        chatApi
-          .createChat({ title: newChat?.value })
-          .then(() => chatApi.loadChats())
-          .then((responce) => store.set("chat.chats", responce));
-      }
-    },
-  },
-});
-
-const message = new TextField({
-  placeholder: "Type text...",
-  name: "message",
-  events: {
-    keypress: (event) => {
-      // if (event.key === "Enter") {
-      //   event.target.value
-      //   if (this.activeSocket) {
-      //     this.activeSocket.send(
-      //       JSON.stringify({
-      //         content: message,
-      //         time: new Date(),
-      //         type: 'message',
-      //       })
-      //     );
-      //   }
-      // }
-    }
-  }
-});
-
-const logout = new Button({
-  title: "Log out",
-  name: "button",
-  className: styles["logout"],
-  events: {
-    click: (e) => {
-      e.preventDefault();
-      const fetch = new Fetch();
-      const url = getServerUrl("/auth/logout");
-      fetch
-        .post<any>(url, {})
-        .then((response) => {
-          console.log(response);
-          const router = new Router();
-          router.go("/login");
-        })
-        .catch((e) => console.error(e));
-    },
-  },
-});
 
 export class MainBase extends BaseBlock<MainProps> {
   activeSocket: WebSocket;
@@ -122,7 +56,7 @@ export class MainBase extends BaseBlock<MainProps> {
   componentDidUpdate() {
     const contacts = document.querySelectorAll(".contact");
 
-    console.log('componentDidUpdate')
+    console.log("componentDidUpdate");
 
     contacts.forEach((contact) => {
       contact.addEventListener("click", (event: Event) => {
@@ -131,7 +65,7 @@ export class MainBase extends BaseBlock<MainProps> {
         const id = event.currentTarget.getAttribute("data-id");
 
         const currentUser = store.getState().profile;
-        store.set('chat.messages', []);
+        store.set("chat.messages", []);
         console.log("currentUser", currentUser);
         chatApi.getChatToken(id).then((data) => {
           this.openSocket(currentUser.id, id, data.token);
@@ -139,33 +73,32 @@ export class MainBase extends BaseBlock<MainProps> {
       });
     });
 
-    // @ts-ignore
-    let message  =  document.querySelector("[name='message']");
+    let message = document.querySelector("[name='message']");
     message.outerHTML = message.outerHTML;
-    message  =  document.querySelector("[name='message']");
-    message?.addEventListener('keypress', (e: KeyboardEvent) => {
+    message = document.querySelector("[name='message']");
+    message?.addEventListener("keypress", (e: KeyboardEvent) => {
       if (e.key === "Enter") {
         e.preventDefault();
         e.stopPropagation();
-        if(e?.target?.value){
+        if (e?.target?.value) {
           const content = e.target.value;
           if (this.activeSocket) {
             this.activeSocket.send(
               JSON.stringify({
                 content: content,
                 time: new Date(),
-                type: 'message',
+                type: "message",
               })
             );
-          };
-          e.target.value = '';
+          }
+          e.target.value = "";
         }
       }
     });
-    console.log('message', message)
+    console.log("message", message);
   }
 
-  openSocket(userId: any, chatId: number, token: string) {
+  openSocket(userId: number, chatId: number, token: string) {
     console.log(`wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`);
     this.activeSocket = new WebSocket(`wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`);
 
@@ -174,15 +107,14 @@ export class MainBase extends BaseBlock<MainProps> {
 
       this.activeSocket.send(
         JSON.stringify({
-          content: '0',
-          type: 'get old',
+          content: "0",
+          type: "get old",
         })
       );
     });
 
     this.activeSocket.addEventListener("message", (event) => {
       const response = JSON.parse(event.data);
-
 
       if (response.type === "user connected") {
         console.log(`User connected: `, response.content);
@@ -195,7 +127,7 @@ export class MainBase extends BaseBlock<MainProps> {
 
         store.addMassage(addmessages);
 
-        console.log(store)
+        console.log(store);
       }
     });
 
@@ -227,12 +159,11 @@ export const mainProps = {
   },
 };
 
-function mapUserToProps(state: any) {
+function mapUserToProps(state: TState) {
   return {
     contacts: state.chat.chats,
     messages: state.chat.messages,
   };
 }
 
-// @ts-ignore
 export const Main = withRouter(connect(MainBase, mapUserToProps));

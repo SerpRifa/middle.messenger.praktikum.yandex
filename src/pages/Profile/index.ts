@@ -2,22 +2,29 @@ import profileTmpl from "./Profile.hbs";
 import * as styles from "./Profile.module.css";
 import { BaseBlock } from "../../utils/base-block";
 import { BaseComponetProps, IUserInfo } from "../../types/types";
-import { Avatar, Button, ChangeAvatar, EmailField, Input, PasswordField, TextField } from "../../componets";
-import {
-  emailValidator,
-  loginValidator,
-  nameValidator,
-  passwordValidator,
-  phoneValidator,
-} from "../../utils/validators";
+import { Avatar, Input } from "../../componets";
 import { withRouter } from "../../utils/router";
 import { profileApi } from "../../api/profile";
-import { store, StoreEvents } from "../../store/shitstore";
+import { store, TState } from "../../store/shitstore";
 import { connect } from "../../store/connect";
+import {
+  avatar,
+  cancel,
+  changeAvatar,
+  displayName,
+  email,
+  firstName,
+  login,
+  newPassword,
+  oldPassword,
+  phone,
+  save,
+  secondName,
+} from "./components";
 
 export interface ProfileProps extends BaseComponetProps {
   styles: any;
-  profile: any;
+  profile: IUserInfo;
   components: {
     avatar: Avatar;
     firstName: Input;
@@ -33,98 +40,8 @@ export interface ProfileProps extends BaseComponetProps {
   };
 }
 
-const avatar = new Avatar({
-  name: "avatar",
-  title: "Изменить аватар",
-});
-
-const changeAvatar = new ChangeAvatar({
-  events: {
-    submit: (event: any) => {
-      event.preventDefault();
-      event.stopPropagation();
-      console.log("event.currentTarget", event.currentTarget);
-      const form = new FormData(event.currentTarget);
-      console.log("form", form);
-      profileApi.changeProfileAvatar(form);
-    },
-  },
-});
-
-const firstName = new Input(
-  {
-    placeholder: "First Name",
-    name: "first_name",
-    className: styles["text-field"],
-  },
-  [nameValidator]
-);
-
-const secondName = new TextField(
-  {
-    placeholder: "Second Name",
-    name: "second_name",
-    className: styles["text-field"],
-  },
-  [nameValidator]
-);
-
-const displayName = new TextField({
-  placeholder: "Display name",
-  name: "display_name",
-  className: styles["text-field"],
-});
-
-const login = new TextField(
-  {
-    placeholder: "Create User name",
-    name: "login",
-    className: styles["text-field"],
-  },
-  [loginValidator]
-);
-
-const email = new EmailField(
-  {
-    placeholder: "Enter Emai",
-    name: "email",
-    className: styles["text-field"],
-  },
-  [emailValidator]
-);
-
-const oldPassword = new PasswordField(
-  {
-    placeholder: "Password",
-    name: "oldPassword",
-    className: styles["text-field"],
-  },
-  [passwordValidator]
-);
-
-const newPassword = new PasswordField(
-  {
-    placeholder: "New Password",
-    name: "newPassword",
-    className: styles["text-field"],
-  },
-  [passwordValidator]
-);
-
-const phone = new TextField(
-  {
-    placeholder: "Phone",
-    name: "phone",
-    className: styles["text-field"],
-  },
-  [phoneValidator]
-);
-
-const save = new Button({ title: "Save" });
-const cancel = new Button({ title: "Cancel" });
-
 class ProfileBase extends BaseBlock<ProfileProps> {
-  constructor(props: any) {
+  constructor(props: ProfileProps) {
     super(props);
     console.log("props", props);
   }
@@ -139,7 +56,7 @@ class ProfileBase extends BaseBlock<ProfileProps> {
   }
 
   componentDidUpdate(): void {
-    console.log('componentDidUpdate')
+    console.log("componentDidUpdate");
     this.setComponents(this.props.profile);
   }
 
@@ -199,11 +116,10 @@ export const propsProfile = {
   },
 };
 
-function mapUserToProps(state: any) {
+function mapUserToProps(state: TState) {
   return {
-    profile: {...state.profile},
+    profile: { ...state.profile },
   };
 }
 
-// @ts-ignore
 export const Profile = withRouter(connect(ProfileBase, mapUserToProps));

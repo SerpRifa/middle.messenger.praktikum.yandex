@@ -1,6 +1,6 @@
 import { EventBus } from "../utils/event-bus";
 import { set } from "../utils/set";
-import {Message as MessageWS} from "../types/types";
+import { Message as MessageWS } from "../types/types";
 
 export enum StoreEvents {
   Updated = "updated",
@@ -19,16 +19,16 @@ const defaultState = {
   },
   chat: {
     chats: [],
-    messages: []
+    messages: [] as MessageWS[],
   },
 };
 
-type TState = typeof defaultState;
+export type TState = typeof defaultState;
 
 class Store extends EventBus {
   private state: TState;
 
-  constructor(defaultState: any) {
+  constructor(defaultState: TState) {
     super();
     this.state = defaultState;
   }
@@ -36,14 +36,12 @@ class Store extends EventBus {
     return this.state;
   }
   set(prop: string, value: any): void {
-    // @ts-ignore
-    this.state = set(this.state, prop, value)
+    this.state = set<TState>(this.state, prop, value);
     this.emit(StoreEvents.Updated);
   }
 
   addMassage(addMessages: MessageWS[]) {
-    // @ts-ignore
-    this.state.chat.messages = [...this.state.chat.messages, ...addMessages ];
+    this.state.chat.messages = [...this.state.chat.messages, ...addMessages];
     this.emit(StoreEvents.Updated);
   }
 }

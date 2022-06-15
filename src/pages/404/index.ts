@@ -14,7 +14,6 @@ export class Page404 extends BaseBlock<Page404Props> {
   }
 }
 
-export const propsPage404 = { styles };
+export const propsPage404: Page404Props = { styles };
 
-// @ts-ignore
 export default (withRouter(Page404));
