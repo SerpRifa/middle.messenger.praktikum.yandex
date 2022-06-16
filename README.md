@@ -2,7 +2,6 @@
 * `npm run dev` - запуск проекта,
 * `npm run build` - сборка проекта,
 * `npm run server` - запуск сервера,
-* * `npm run test` - запуск тестов,
 
 ## Technologies
 * [postcss](https://postcss.org/) - процессор CSS
@@ -27,9 +26,4 @@ https://github.com/SerpRifa/middle.messenger.praktikum.yandex/pull/1
 https://github.com/SerpRifa/middle.messenger.praktikum.yandex/pull/2
 
 ## PR sprint 3
-https://github.com/SerpRifa/middle.messenger.praktikum.yandex/pull/3
-
-- Добавлена работа с роутером, роутами
-- Добавлена работа с авторизацией и редактированеим профиля
-- Добавлена работа с чатами
-- Добавлены сокеты для работы с сообщениями в реальном времени
+https://github.com/SerpRifa/middle.messenger.praktikum.yandex/pull/5
