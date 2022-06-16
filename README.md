@@ -26,4 +26,4 @@ https://github.com/SerpRifa/middle.messenger.praktikum.yandex/pull/1
 https://github.com/SerpRifa/middle.messenger.praktikum.yandex/pull/2
 
 ## PR sprint 3
-https://github.com/SerpRifa/middle.messenger.praktikum.yandex/pull/4
+https://github.com/SerpRifa/middle.messenger.praktikum.yandex/pull/5
