@@ -10,6 +10,6 @@
 }
 
 .input:placeholder-shown {
-  color:var(--placeholder);
+  color: var(--placeholder);
   padding: 0 26px;
 }
