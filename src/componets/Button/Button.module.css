@@ -1,8 +1,8 @@
-@import '../../styles/main.css';
+@import "../../styles/main.css";
 .button {
   background-color: var(--background-button);
   border-radius: 9px;
-  color: #ffff;
+  color: var(--white);
   font-size: 16px;
   height: 60px;
   margin-top: 38px;

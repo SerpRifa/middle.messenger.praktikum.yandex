@@ -1,65 +1,16 @@
-import registerTmpl from './Register.hbs';
-import * as styles from '../Login/Login.module.css';
-import { BaseComponetProps } from '../../types/types';
-import { BaseBlock } from '../../utils/base-block';
-import { render } from '../../utils/render';
-import {
-  TextField, EmailField, PasswordField, Button, Input,
-} from '../../componets';
-import {
-  emailValidator, loginValidator, nameValidator, passwordValidator, phoneValidator,
-} from '../../utils/validators';
+import registerTmpl from "./Register.hbs";
+import * as styles from "../Login/Login.module.css";
+import { BaseComponetProps, SignupOptions } from "../../types/types";
+import { BaseBlock } from "../../utils/base-block";
+import { getServerUrl } from "../../utils/url";
+import { Router, withRouter } from "../../utils/router";
+import { fetch } from "../../utils/fetch";
+import { button, email, firstName, login, password, phone, secondName } from "./components";
+import { authApi } from "../../api/auth";
 
 export interface RegisterProps extends BaseComponetProps {
-  styles: any
+  styles: any;
 }
-
-const firstName = new Input(
-  {
-    placeholder: 'First Name',
-    name: 'first_name',
-    className: styles['text-field'],
-  },
-  [nameValidator],
-);
-
-const secondName = new TextField(
-  {
-    placeholder: 'Second Name',
-    name: 'second_name',
-    className: styles['text-field'],
-  },
-  [nameValidator],
-);
-
-const login = new TextField(
-  {
-    placeholder: 'Create User name',
-    name: 'login',
-    className: styles['text-field'],
-  },
-  [loginValidator],
-);
-
-const email = new EmailField({
-  placeholder: 'Enter Emai',
-  name: 'email',
-  className: styles['text-field'],
-}, [emailValidator]);
-
-const password = new PasswordField({
-  placeholder: 'Password',
-  name: 'password',
-  className: styles['text-field'],
-}, [passwordValidator]);
-
-const phone = new PasswordField({
-  placeholder: 'Phone',
-  name: 'phone',
-  className: styles['text-field'],
-}, [phoneValidator]);
-
-const button = new Button({ title: 'Register' });
 
 export class Register extends BaseBlock<RegisterProps> {
   render() {
@@ -67,39 +18,51 @@ export class Register extends BaseBlock<RegisterProps> {
   }
 }
 
-export const renderRegister = (selector: string) => {
-  const register = new Register({
-    components: {
-      firstName,
-      secondName,
-      login,
-      email,
-      password,
-      phone,
-      button,
-    },
-    styles,
-    events: {
-      submit: (e) => {
-        e.preventDefault();
-        firstName.validateInput();
-        secondName.validateInput();
-        login.validateInput();
-        email.validateInput();
-        password.validateInput();
-        phone.validateInput();
+export const registerProp: RegisterProps = {
+  components: {
+    firstName,
+    secondName,
+    login,
+    email,
+    password,
+    phone,
+    button,
+  },
+  styles,
+  events: {
+    submit: (e) => {
+      e.preventDefault();
+      firstName.validateInput();
+      secondName.validateInput();
+      login.validateInput();
+      email.validateInput();
+      password.validateInput();
+      phone.validateInput();
 
-        const data: Record<string, string> = {};
+      const data: SignupOptions = {
+        first_name: "",
+        second_name: "",
+        login: "",
+        email: "",
+        password: "",
+        phone: "",
+      };
 
-        const inputFields = document.querySelectorAll('input');
+      const inputFields = document.querySelectorAll("input");
 
-        inputFields.forEach((input: HTMLInputElement) => {
+      inputFields.forEach((input: HTMLInputElement) => {
+        if (input.name in data) {
           data[input.name] = input.value;
-        });
+        }
+      });
 
-        console.log(data)
-      },
+      authApi.signUp(data as SignupOptions)
+        .then(() => {
+          const router = new Router();
+          router.go("/main");
+        })
+        .catch((e) => console.error(e));
     },
-  });
-  render(selector, register);
+  },
 };
+export default withRouter(Register);

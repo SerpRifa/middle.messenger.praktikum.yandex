@@ -1,27 +1,15 @@
-import loginTmpl from './Login.hbs';
-import * as styles from './Login.module.css';
-import { BaseBlock } from '../../utils/base-block';
-import { EmailField, PasswordField, Button } from '../../componets';
-import { BaseComponetProps } from '../../types/types';
-import { render } from '../../utils/render';
-import { emailValidator, passwordValidator } from '../../utils/validators';
+import loginTmpl from "./Login.hbs";
+import * as styles from "./Login.module.css";
+import { BaseBlock } from "../../utils/base-block";
+import { BaseComponetProps } from "../../types/types";
+import { Router, withRouter } from "../../utils/router";
+import { Fetch } from "../../utils/fetch";
+import { button, emailField, passwordField } from "./components";
+import { authApi } from "../../api/auth";
 
 export interface LoginProps extends BaseComponetProps {
-  styles: any
+  styles: any;
 }
-
-const emailField = new EmailField({
-  placeholder: 'Enter email or user name',
-  name: 'login',
-}, [emailValidator]);
-
-const passwordField = new PasswordField({
-  placeholder: 'Password',
-  name: 'password',
-  className: styles['text-field'],
-}, [passwordValidator]);
-
-const button = new Button({ title: 'Sign in' });
 
 export class Login extends BaseBlock<LoginProps> {
   render() {
@@ -29,30 +17,35 @@ export class Login extends BaseBlock<LoginProps> {
   }
 }
 
-export const renderLogin = (selector: string) => {
-  const login = new Login({
-    components: {
-      EmailField: emailField,
-      PasswordField: passwordField,
-      Button: button,
+export const loginProps = {
+  components: {
+    EmailField: emailField,
+    PasswordField: passwordField,
+    Button: button,
+  },
+  styles,
+  events: {
+    submit: (e: Event) => {
+      e.preventDefault();
+      emailField.validateInput();
+      passwordField.validateInput();
+      const data: Record<string, string> = {};
+
+      const inputFields = document.querySelectorAll("input");
+
+      inputFields.forEach((input: HTMLInputElement) => {
+        data[input.name] = input.value;
+      });
+
+      authApi.signIn({login: data.login, password: data.password})
+        .then((response) => {
+          console.log("response", response);
+          const router = new Router();
+          router.go("/main");
+        })
+        .catch((e) => console.error(e));
     },
-    styles,
-    events: {
-      submit: (e) => {
-        e.preventDefault();
-        emailField.validateInput();
-        passwordField.validateInput();
-        const data: Record<string, string> = {};
-
-        const inputFields = document.querySelectorAll('input');
-
-        inputFields.forEach((input: HTMLInputElement) => {
-          data[input.name] = input.value;
-        });
-
-        console.log(data)
-      },
-    },
-  });
-  render(selector, login);
+  },
 };
+
+export default withRouter(Login);

@@ -1,5 +1,5 @@
 .wrapper {
-  background-color: #000;
+  background-color: black;
 }
 
 .main {
@@ -28,10 +28,10 @@
 }
 
 .title {
-  color: #fff;
+  color: var(--white);
 }
 
 .home {
-  color: #fff;
+  color: var(--white);
   font-size: 20px;
 }

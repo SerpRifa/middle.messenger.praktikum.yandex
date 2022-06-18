@@ -1,32 +1,30 @@
 import 'normalize.css';
 import {
-  renderIntro, renderLogin, renderRegister, renderProfile, renderMain, render404, render500,
+  Intro,
+  propsIntro,
+  Login,
+  loginProps,
+  Profile,
+  propsProfile,
+  Register,
+  registerProp,
+  Page500,
+  propsPage500,
+  Page404,
+  propsPage404,
+  Main,
+  mainProps
 } from './pages';
+import { Router } from './utils/router';
 
-const { pathname } = window.location;
-const rootSelector = '#root';
+const router = new Router();
 
-switch (pathname) {
-  case '/':
-    renderIntro(rootSelector);
-    break;
-  case '/login':
-    renderLogin(rootSelector);
-    break;
-  case '/register':
-    renderRegister(rootSelector);
-    break;
-  case '/main':
-    renderMain(rootSelector);
-    break;
-  case '/profile':
-    renderProfile(rootSelector);
-    break;
-  case '/404':
-    render404(rootSelector);
-    break;
-  case '/500':
-    render500(rootSelector);
-    break;
-  default: renderLogin('#root');
-}
+router.use('/login', Login, loginProps)
+  .use('/', Intro, propsIntro)
+  .use('/main', Main, mainProps)
+  .use('/profile', Profile, propsProfile)
+  .use('/register', Register, registerProp)
+  .use('/500', Page500, propsPage500)
+  .use('/404', Page404, propsPage404)
+  .start()
+

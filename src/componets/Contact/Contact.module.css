@@ -1,4 +1,4 @@
-@import '../../styles/main.css';
+@import "../../styles/main.css";
 
 .contact {
   display: flex;
@@ -6,11 +6,11 @@
   justify-content: space-between;
   align-items: center;
   min-width: 240px;
-  background-color: #fff;
+  background-color: var(--white);
   height: 70px;
   padding: 12px;
   width: 100%;
-  border-bottom: 1px solid #bdbdbd;
+  border-bottom: 1px solid var(--border);
   box-sizing: border-box;
 }
 
@@ -54,7 +54,7 @@
   border-radius: 50%;
   font-size: 14px;
   background-color: var(--blue);
-  color: #fff;
+  color: var(--white);
   text-align: center;
   padding: 2px;
   min-width: 16px;

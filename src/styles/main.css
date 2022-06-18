@@ -1,4 +1,9 @@
-:root{
+:root {
   --background-button: #4d47c3;
   --blue: #2d9cdb;
+  --white: #ffff;
+  --border: #bdbdbd;
+  --background-input: #f0efff;
+  --placeholder: #a7a3ff;
+  --message: #c4c4c4;
 }
